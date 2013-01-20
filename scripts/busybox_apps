@@ -1,0 +1,16 @@
+#!/bin/sh
+cat busybox/Config.h | awk '
+BEGIN {
+    output = 1
+}
+/\/\/ BusyBox Applications/ {
+    print $0
+    output = 0
+}
+/\/\/ End of Applications List/ {
+    output = 1
+}
+output == 1 {
+    print $0
+}
+'

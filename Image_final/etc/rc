@@ -1,0 +1,58 @@
+#!/bin/sh
+#
+# rc
+#
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+export PATH
+
+# Bypass to custom startup Scripts?
+for custom in /cf/etc/rc /etc/rw/rc
+do
+    if [ -x $custom ]
+    then
+        exec $custom $*
+    fi
+done
+
+# Where is our configuration ?
+if [ -d /etc/conf ]
+then
+    CFGD=/etc/conf
+else
+    CFGD=/etc/rw
+fi
+export CFGD
+
+if [ "$1" ]
+then
+    lvl=$1
+else
+    lvl=`cat $CFGD/runlevel`
+fi
+
+if [ "$lvl" = "" ]
+then
+    echo "Nothing to do ..."
+    exit 0
+fi
+
+echo "Entering runlevel $lvl"
+
+# Custom Startup by level?
+# Take the first one that works
+for rcdir in /etc/rw/rc.d /etc/rc.d
+do
+    if [ -d $rcdir ]
+    then
+        cd $rcdir
+        for spgm in `ls $lvl 2> /dev/null`
+        do
+            if [ -x $lvl/$spgm ]
+            then
+                echo "$spgm:"
+                $lvl/$spgm $lvl
+            fi
+        done
+        exit 0;
+    fi
+done

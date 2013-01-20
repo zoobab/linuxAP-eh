@@ -1,0 +1,33 @@
+#
+# kernel_aodv
+#
+
+# Use kernel AODV
+kaodv=disabled
+
+# Use internet gatewaying mode
+kaodv_gw=disabled
+
+# Use loopback
+kaodv_lo=disabled
+
+# NORMAL MODE
+
+# AODV interfaces sparated by commas,
+# if no interfaces present, will use all
+kaodv_if=wlan0
+
+# Block interfaces' Hello Messages
+kaodv_bl=eth0
+
+# GATEWAY MODE
+
+# Gatewaying interface
+# (will disable hello sending)
+kaodv_gw_gif=eth0
+
+# AODV interface
+kaodv_gw_aif=wlan0
+
+# AODV subnet (0's as wildcards)
+kaodv_gw_subnet=10.0.1.0

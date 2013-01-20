@@ -1,0 +1,67 @@
+#!/bin/sh
+#
+# kernel aodv
+#
+
+MODULE=/lib/modules/`uname -r`/net/kernel_aodv.o
+
+[ -f $CFGD/kaodv ] && . $CFGD/kaodv
+
+if [ ! "$kaodv" = "enabled" ]; then
+    exit 0
+fi
+
+case "$1" in
+    start|2|3|4)
+	echo "Loading AODV..."
+	echo "  Enabling IP forwarding"
+	echo "1" > /proc/sys/net/ipv4/ip_forward
+	echo "  Zero MIN_DELAY for routing table changes"
+	echo "0" > /proc/sys/net/ipv4/route/min_delay
+	if [ "$kaodv_gw" = "enabled" ]; then
+	    echo "  Gatewaying mode..."
+	    echo "    Gateway Interface: $kaodv_gw_gif"
+	    echo "    AODV Interface: $kaodv_gw_aif"
+	    echo "    AODV Subnet: $kaodv_gw_subnet"
+	    iptables -A FORWARD -i $kaodv_gw_gif -o $kaodv_gw_aif -m state --state ESTABLISHED,RELATED -j ACCEPT
+	    iptables -A FORWARD -i $kaodv_gw_aif -o $kaodv_gw_gif -j ACCEPT
+	    echo "    Enabling Masquerading on $kaodv_gw_gif"
+	    iptables -t nat -A POSTROUTING -o $kaodv_gw_gif -j MASQUERADE
+	    BLOCK_DEV="block_dev=$kaodv_gw_gif"
+	    USE_DEV="aodv_dev=$kaodv_gw_aif"
+	    SUBNET="aodv_subnet=$kaodv_gw_subnet"
+	else
+	    echo "  Normal mode..."
+	    echo -n "    Using interfaces: "
+	    if [ -z "$kaodv_if" ]; then
+		echo "all"
+	    else
+		echo $kaodv_if
+		USE_DEV="aodv_dev=$kaodv_if"
+	    fi
+	    echo "    Blocking interfaces: $kaodv_ibl"
+	    if [ ! -z "$kaodv_bl" ]; then
+		BLOCK_DEV="block_dev=$kaodv_bl"
+	    fi
+	fi
+	if [ "$kaodv_lo" = "enabled" ]; then
+	    echo "    Using loopback"
+	    LOOPBACK="use_lo=1"
+	else
+	    echo "    Not using loopback"
+	fi
+	if [ -z "$USE_DEV" -o ! -z "`echo $USE_DEV | grep wlan0`" ]; then
+	    echo "  Forcing ad-hoc mode on wlan0"
+	    iwconfig wlan0 mode ad-hoc
+	fi
+	insmod $MODULE $USE_DEV $BLOCK_DEV $SUBNET $LOOPBACK
+        ;;
+    stop|0)
+        rmmod kernel_aodv
+        ;;
+    restart)
+        $0 start
+	sleep 1
+        $0 stop
+	;;
+esac

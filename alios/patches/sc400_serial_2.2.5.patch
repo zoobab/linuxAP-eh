@@ -1,0 +1,86 @@
+--- linux/drivers/char/serial.c.orig	Tue Mar 23 22:13:58 1999
++++ linux/drivers/char/serial.c	Wed Jan 17 12:07:42 2001
+@@ -3,6 +3,8 @@
+  *
+  *  Copyright (C) 1991, 1992  Linus Torvalds
+  *
++ *  AMD Elan SC400 changes (7/00): Copyright (c), 2000 telos GmbH
++ *
+  *  Extensively rewritten by Theodore Ts'o, 8/16/92 -- 9/14/92.  Now
+  *  much more extensible to support other serial cards based on the
+  *  16450/16550A UART's.  Added support for the AST FourPort and the
+@@ -32,6 +34,9 @@
+  *  4/98: Added changes to support the ARM architecture proposed by
+  * 	  Russell King
+  *
++ *  7/00: AMD Elan SC400 support
++ *        Markus Thiesmeyer
++ *
+  * This module exports the following rs232 io functions:
+  *
+  *	int rs_init(void);
+@@ -57,12 +62,16 @@
+  * CONFIG_SERIAL_DETECT_IRQ
+  *		Enable the autodetection of IRQ on standart ports
+  *
++ * CONFIG_SERIAL__SC400
++ *		Enable workaround for late LSR update in AMD Elan SC400
++ *
+  * SERIAL_PARANOIA_CHECK
+  * 		Check the magic number for the async_structure where
+  * 		ever possible.
+  */
+ 
+ #undef SERIAL_PARANOIA_CHECK
++#define CONFIG_SERIAL_AMD_SC400
+ #define CONFIG_SERIAL_NOPAUSE_IO
+ #define SERIAL_DO_RESTART
+ 
+@@ -648,6 +657,9 @@
+ static void rs_interrupt_single(int irq, void *dev_id, struct pt_regs * regs)
+ {
+ 	int status;
++#ifdef CONFIG_SERIAL_AMD_SC400
++	int sc400txflag = 0, iid = 0;
++#endif
+ 	int pass_counter = 0;
+ 	struct async_struct * info;
+ #ifdef CONFIG_SERIAL_MULTIPORT	
+@@ -670,6 +682,7 @@
+ #endif
+ 
+ 	do {
++
+ 		status = serial_inp(info, UART_LSR);
+ #ifdef SERIAL_DEBUG_INTR
+ 		printk("status = %x...", status);
+@@ -677,7 +690,13 @@
+ 		if (status & UART_LSR_DR)
+ 			receive_chars(info, &status);
+ 		check_modem_status(info);
++
++#ifdef CONFIG_SERIAL_AMD_SC400
++		if (((iid  == UART_IIR_THRI) || (status & UART_LSR_THRE))
++			&& !sc400txflag++)
++#else
+ 		if (status & UART_LSR_THRE)
++#endif
+ 			transmit_chars(info, 0);
+ 		if (pass_counter++ > RS_ISR_PASS_LIMIT) {
+ #if 0
+@@ -685,7 +704,15 @@
+ #endif
+ 			break;
+ 		}
++
++#ifdef CONFIG_SERIAL_AMD_SC400
++		iid = serial_in(info, UART_IIR) 
++			& (UART_IIR_NO_INT | UART_IIR_ID);
++	} while (!(iid & UART_IIR_NO_INT));
++#else
+ 	} while (!(serial_in(info, UART_IIR) & UART_IIR_NO_INT));
++#endif
++
+ 	info->last_active = jiffies;
+ #ifdef CONFIG_SERIAL_MULTIPORT	
+ 	if (multi->port_monitor)

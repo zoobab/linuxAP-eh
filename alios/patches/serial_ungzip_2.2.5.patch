@@ -1,0 +1,130 @@
+--- linux/arch/i386/boot/compressed/misc.c.orig	Tue Feb  6 11:40:43 2001
++++ linux/arch/i386/boot/compressed/misc.c	Tue Feb  6 11:40:52 2001
+@@ -9,8 +9,14 @@
+  * High loaded stuff by Hans Lermen & Werner Almesberger, Feb. 1996
+  */
+ 
++#define SERIAL_CONSOLE
++
+ #include <asm/segment.h>
+ #include <asm/io.h>
++#ifdef SERIAL_CONSOLE
++#include <linux/serial_reg.h>
++#endif
++
+ 
+ /*
+  * gzip declarations
+@@ -21,6 +27,8 @@
+ 
+ #undef memset
+ #undef memcpy
++void* memset(void*, int, size_t);
++void* memcpy(void*, __const void*, size_t);
+ #define memzero(s, n)     memset ((s), 0, (n))
+ 
+ typedef unsigned char  uch;
+@@ -66,7 +74,10 @@
+ #endif
+ 
+ static int  fill_inbuf(void);
++static void flush_window_low(void);
++static void flush_window_high(void);
+ static void flush_window(void);
++void setup_normal_output_buffer(void);
+ static void error(char *m);
+ static void gzip_mark(void **);
+ static void gzip_release(void **);
+@@ -108,9 +119,13 @@
+ static int high_loaded =0;
+ static uch *high_buffer_start /* = (uch *)(((ulg)&end) + HEAP_SIZE)*/;
+ 
++#ifndef SERIAL_CONSOLE
+ static char *vidmem = (char *)0xb8000;
+ static int vidport;
+ static int lines, cols;
++#else SERIAL_CONSOLE
++#define UART_BASE 0x03F8
++#endif
+ 
+ #include "../../../../lib/inflate.c"
+ 
+@@ -146,6 +161,7 @@
+ 	free_mem_ptr = (long) *ptr;
+ }
+  
++#ifndef SERIAL_CONSOLE
+ static void scroll()
+ {
+ 	int i;
+@@ -191,6 +207,33 @@
+ 	outb_p(15, vidport);
+ 	outb_p(0xff & (pos >> 1), vidport+1);
+ }
++#else
++#define BOTH_EMPTY (UART_LSR_TEMT | UART_LSR_THRE)
++static void putchar(const char c)
++{
++	int lsr;
++	unsigned int tmout = 1000000;
++
++	do {
++		lsr = inb(UART_BASE + UART_LSR);
++		if (--tmout == 0) break;
++	} while ((lsr & BOTH_EMPTY) != BOTH_EMPTY);
++
++	outb(c, UART_BASE + UART_TX);
++}
++
++static void puts(const char *s)
++{
++	char c;
++
++	while (( c = *s++ ) != '\0') {
++		if (c == '\n')
++			putchar('\r');
++		putchar(c);
++	}
++
++}
++#endif
+ 
+ void* memset(void* s, int c, size_t n)
+ {
+@@ -198,6 +241,7 @@
+ 	char *ss = (char*)s;
+ 
+ 	for (i=0;i<n;i++) ss[i] = c;
++	return s;
+ }
+ 
+ void* memcpy(void* __dest, __const void* __src,
+@@ -207,6 +251,7 @@
+ 	char *d = (char *)__dest, *s = (char *)__src;
+ 
+ 	for (i=0;i<__n;i++) d[i] = s[i];
++	return __dest;
+ }
+ 
+ /* ===========================================================================
+@@ -334,6 +379,7 @@
+ 
+ int decompress_kernel(struct moveparams *mv)
+ {
++#ifndef SERIAL_CONSOLE
+ 	if (SCREEN_INFO.orig_video_mode == 7) {
+ 		vidmem = (char *) 0xb0000;
+ 		vidport = 0x3b4;
+@@ -344,6 +390,7 @@
+ 
+ 	lines = SCREEN_INFO.orig_video_lines;
+ 	cols = SCREEN_INFO.orig_video_cols;
++#endif
+ 
+ 	if (free_mem_ptr < 0x100000) setup_normal_output_buffer();
+ 	else setup_output_buffer_if_we_run_high(mv);
+@@ -355,4 +402,3 @@
+ 	if (high_loaded) close_output_buffer_if_we_run_high(mv);
+ 	return high_loaded;
+ }
+-

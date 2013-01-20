@@ -1,0 +1,159 @@
+diff -Nur busybox-1.00-pre7/networking/httpd.c busybox-1.00-pre7.new/networking/httpd.c
+--- busybox-1.00-pre7/networking/httpd.c	2003-07-14 23:20:55.000000000 +0200
++++ busybox-1.00-pre7.new/networking/httpd.c	2003-08-22 22:04:42.000000000 +0200
+@@ -805,6 +805,59 @@
+   }
+ }
+ 
++#ifdef CONFIG_FEATURE_HTTPD_SET_CGI_VARS_TO_ENV
++/****************************************************************************
++ *
++ > $Function: addEnvCgi
++ *
++ * $Description: Create environment variables given a URL encoded arg list.
++ *   For each variable setting the URL encoded arg list, create a corresponding
++ *   environment variable.  URL encoded arguments have the form 
++ *      name1=value1&name2=value2&name3=&ignores
++ *       from this example, name3 set empty value, tail without '=' skiping
++ *
++ * $Parameters:
++ *      (char *) pargs . . . . A pointer to the URL encoded arguments.
++ *
++ * $Return: None
++ *
++ * $Errors: None
++ *
++ ****************************************************************************/
++static void addEnvCgi(const char *pargs)
++{
++    char *args;
++    char *memargs;
++    char *namelist; /* space separated list of arg names */
++    if (pargs==0) return;
++
++    /* args are a list of name=value&name2=value2 sequences */
++    namelist = (char *) malloc(strlen(pargs));
++    if (namelist) namelist[0]=0;
++    memargs = args = strdup(pargs);
++    while (args && *args) {
++	const char *name = args;
++	char *value = strchr(args, '=');
++
++	if (!value)         /* &XXX without '=' */
++	    break;
++	*value++ = 0;
++	args = strchr(value, '&');
++	if (args)
++	    *args++ = 0;
++	addEnv("CGI", name, decodeString(value, 1));
++	if (*namelist) strcat(namelist, " ");
++	strcat(namelist, name);
++    }
++    free(memargs);
++    if (namelist) {
++	addEnv("CGI", "ARGLIST_", namelist);
++	free(namelist);
++    }
++}
++#endif /* CONFIG_FEATURE_HTTPD_SET_CGI_VARS_TO_ENV */
++
++
+ #if defined(CONFIG_FEATURE_HTTPD_SET_REMOTE_PORT_TO_ENV) || !defined(CONFIG_FEATURE_HTTPD_USAGE_FROM_INETD_ONLY)
+ /* set environs SERVER_PORT and REMOTE_PORT */
+ static void addEnvPort(const char *port_name)
+@@ -1048,6 +1101,9 @@
+  ****************************************************************************/
+ static int sendCgi(const char *url,
+ 		   const char *request, const char *urlArgs,
++#if CONFIG_FEATURE_HTTPD_SET_CGI_VARS_TO_ENV
++		   const char *body,
++#endif
+ 		   int bodyLen, const char *cookie,
+ 		   const char *content_type)
+ {
+@@ -1157,6 +1213,14 @@
+       if(config->referer)
+ 	addEnv("HTTP", "REFERER", config->referer);
+ 
++#ifdef CONFIG_FEATURE_HTTPD_SET_CGI_VARS_TO_ENV
++      if (request != request_GET) {
++	  addEnvCgi(body);
++      } else {
++	  addEnvCgi(urlArgs);
++      }
++#endif 
++
+ 	/* set execve argp[0] without path */
+       argp[0] = strrchr( purl, '/' ) + 1;
+ 	/* but script argp[0] must have absolute path and chdiring to this */
+@@ -1193,6 +1257,13 @@
+     close(toCgi[0]);
+     signal(SIGPIPE, SIG_IGN);
+ 
++#ifdef CONFIG_FEATURE_HTTPD_SET_CGI_VARS_TO_ENV
++    if (body) {
++	bb_full_write(outFd, body, bodyLen);
++	bodyLen = 0;
++    }
++#endif
++
+     while (1) {
+       fd_set readSet;
+       fd_set writeSet;
+@@ -1248,7 +1319,7 @@
+ 		if(count > 0) {
+ 			post_readed_size += count;
+ 			bodyLen -= count;
+-      } else {
++		} else {
+ 			bodyLen = 0;    /* closed */
+ 		}
+       } else if(FD_ISSET(inFd, &readSet)) {
+@@ -1495,6 +1566,9 @@
+   long length=0;
+   char *cookie = 0;
+   char *content_type = 0;
++#ifdef CONFIG_FEATURE_HTTPD_SET_CGI_VARS_TO_ENV
++  char *body=0;
++#endif
+ #endif
+   char *test;
+   struct stat sb;
+@@ -1674,10 +1748,26 @@
+     if (length < 0)
+ 	break;
+ 
++#if CONFIG_FEATURE_HTTPD_SET_CGI_VARS_TO_ENV
++    if (length > 0) {
++	body = malloc(length + 1);
++	if (body) {
++	    length = bb_full_read(a_c_r, body, length);
++	    if(length < 0)          // closed
++		length = 0;
++	    body[length] = 0;       // always null terminate for safety
++	}
++    }
++#endif
++
+     if (strncmp(test, "cgi-bin", 7) == 0) {
+ 		if(test[7] == '/' && test[8] == 0)
+ 			goto FORBIDDEN;     // protect listing cgi-bin/
+-		sendCgi(url, prequest, urlArgs, length, cookie, content_type);
++		sendCgi(url, prequest, urlArgs, 
++#if CONFIG_FEATURE_HTTPD_SET_CGI_VARS_TO_ENV
++			body,
++#endif
++			length, cookie, content_type);
+     } else {
+ 	if (prequest != request_GET)
+ 		sendHeaders(HTTP_NOT_IMPLEMENTED);
+@@ -1712,6 +1802,9 @@
+   free(cookie);
+   free(content_type);
+   free(config->referer);
++#ifdef CONFIG_FEATURE_HTTPD_SET_CGI_VARS_TO_ENV
++  free(body);
++#endif
+ #ifdef CONFIG_FEATURE_HTTPD_BASIC_AUTH
+   free(config->remoteuser);
+ #endif

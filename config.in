@@ -1,0 +1,233 @@
+#
+# For a description of the syntax of this configuration file,
+# see Documentation/kbuild/config-language.txt.
+#
+
+mainmenu_name "linuxAP Configuration"
+
+#define_ustring CF_BASEDEV           /dev/sda
+#define_ustring CF_MOUNTPOINT        /mnt/cf
+
+# Some version defines we may ask for at a later date
+define_ustring BUSYBOX_VERSION      1.00-pre7
+define_ustring BUTILS_VERSION       0.9.6
+define_ustring CKERMIT_VERSION      206
+define_ustring CIPE_VERSION         1.5.4
+define_ustring GLIBC_VERSION        2.2.5
+#define_ustring HOSTAP_DRIVER_VERSION 0.1.3
+#define_ustring HOSTAP_UTILS_VERSION 0.1.3
+#define_ustring HOSTAPD_VERSION       0.1.3
+define_ustring IPROUTE2_VERSION     current
+define_ustring IPTABLES_VERSION     1.2.7a
+#define_ustring KERNEL_AODV_VERSION  v2.1
+define_ustring OPENVPN_VERSION      1.4.3
+define_ustring VTUN_VERSION         2.6
+define_ustring PCMCIA_VERSION       3.2.3
+define_ustring PSMISC_VERSION       21.2
+define_ustring SQUASHFS_VERSION      1.3r2
+define_ustring SYSLINUX_VERSION     2.00
+define_ustring SYSVINIT_VERSION     2.83
+define_ustring TINYLOGIN_VERSION    1.4
+define_ustring UCLIBC_VERSION       0.9.21
+define_ustring UDHCP_VERSION        0.9.8
+define_ustring UMSDOS_VERSION       1.32
+define_ustring WTOOLS_VERSION       25
+
+define_bool CONFIG_BUSYBOX y
+define_bool CONFIG_PCMCIA y
+define_bool CONFIG_UDHCP n
+define_bool CONFIG_WTOOLS y
+
+if [ "$CONFIG_HOSTAP_DRIVER" = "" ]; then
+    define_bool CONFIG_HOSTAP_DRIVER y
+fi
+if [ "$CONFIG_BUTILS" = "" ]; then
+    define_bool CONFIG_BUTILS y
+fi
+if [ "$CONFIG_GLIBC" = "" -a "$CONFIG_UCLIBC" = "" ]; then
+        define_bool CONFIG_UCLIBC y
+fi
+if [ "$CONFIG_WLSPD_SLOW" = "" -a \
+    "$CONFIG_WLSPD_NORMAL" = "" -a \
+    "$CONFIG_WLSPD_HYPER" = "" ]; then
+        define_bool CONFIG_WLSPD_NORMAL y
+fi
+if [ "$CONFIG_WLSPD_SLOW" = "y" ]; then
+  define_ustring ELAN_SPEED 8mhz 
+elif [ "$CONFIG_WLSPD_HYPER" = "y" ]; then
+  define_ustring ELAN_SPEED 66mhz
+else 
+  define_ustring ELAN_SPEED 33mhz
+fi
+
+if [ "$CONFIG_WL11000" = "" -a \
+    "$CONFIG_SOEKRIS" = "" -a \
+    "$CONFIG_ITX" = "" ]; then
+        define_bool CONFIG_WL11000 y
+fi
+if [ "$CONFIG_NBD" = "" ]; then
+        define_bool CONFIG_NBD y
+fi
+mainmenu_option next_comment
+ustring 'Tarfiles/Archive Directory' ARCHIVE_DIR "`pwd`/tarfiles"
+choice 'Target Platform' \
+   "Emuticom_WL11000SA-N            CONFIG_WL11000 \
+    Soekris_Engineering_net4511     CONFIG_SOEKRIS \
+    ITX/ATX_PC                      CONFIG_ITX"
+
+bool "Bridging Support?"    CONFIG_BUTILS
+if [ "$CONFIG_NOTUNNELING" = "" -a \
+    "$CONFIG_OPENVPN" = "" -a \
+    "$CONFIG_CIPE" = "" ]; then
+        define_bool CONFIG_NOTUNNELING y
+fi
+choice 'Tunneling Support' \
+	"None		CONFIG_NOTUNNELING \
+	 OpenVPN	CONFIG_OPENVPN	\
+	 Cipe		CONFIG_CIPE \
+         VTUN           CONFIG_VTUN"
+
+if [ "$CONFIG_HOSTAP_DRIVER" = "y" ]; then
+    bool "HOSTAP 802.1x daemon?" CONFIG_HOSTAPD
+fi
+
+if [ "$CONFIG_HTTPD" = "" ]; then
+    define_bool CONFIG_HTTPD y
+fi
+bool "HTTPD daemon?" CONFIG_HTTPD
+
+bool "IPTABLES Support?"    CONFIG_IPTABLES
+
+if [ "$CONFIG_IPTABLES" = "y" ]; then
+define_bool libipt_standard y
+define_bool libipt_REJECT y
+define_bool libipt_MASQUERADE y
+define_bool libipt_REDIRECT y
+define_bool libipt_multiport y
+define_bool libipt_conntrack y
+define_bool libipt_mac y
+define_bool libipt_state y
+define_bool libipt_unclean y
+define_bool libipt_LOG y
+mainmenu_option next_comment
+    comment "Iptables extensions"
+    bool 'libipt_ah' libipt_ah 
+    bool 'libipt_conntrack' libipt_conntrack
+    bool 'libipt_DNAT' libipt_DNAT
+    bool 'libipt_dscp' libipt_dscp
+    bool 'libipt_DSCP' libipt_DSCP
+    bool 'libipt_ecn' libipt_ecn
+    bool 'libipt_ECN' libipt_ECN
+    bool 'libipt_esp' libipt_esp
+    bool 'libipt_helper' libipt_helper
+    bool 'libipt_icmp' libipt_icmp
+    bool 'libipt_iplimit' libipt_iplimit
+    bool 'libipt_length' libipt_length
+    bool 'libipt_limit' libipt_limit
+    bool 'libipt_LOG' libipt_LOG
+    bool 'libipt_mac' libipt_mac
+    bool 'libipt_mark' libipt_mark
+    bool 'libipt_MARK' libipt_MARK
+    bool 'libipt_MASQUERADE' libipt_MASQUERADE
+    bool 'libipt_MIRROR' libipt_MIRROR
+    bool 'libipt_multiport' libipt_multiport
+    bool 'libipt_owner' libipt_owner
+    bool 'libipt_pkttype' libipt_pkttype
+    bool 'libipt_REDIRECT' libipt_REDIRECT
+    bool 'libipt_REJECT' libipt_REJECT
+    bool 'libipt_SAME' libipt_SAME
+    bool 'libipt_SNAT' libipt_SNAT
+    bool 'libipt_standard' libipt_standard
+    bool 'libipt_state' libipt_state
+    bool 'libipt_tcpmss' libipt_tcpmss
+    bool 'libipt_TCPMSS' libipt_TCPMSS
+    bool 'libipt_tcp' libipt_tcp
+    bool 'libipt_tos' libipt_tos
+    bool 'libipt_TOS' libipt_TOS
+    bool 'libipt_ttl' libipt_ttl
+    bool 'libipt_TTL' libipt_TTL
+    bool 'libipt_udp' libipt_udp
+    bool 'libipt_ULOG' libipt_ULOG
+    bool 'libipt_unclean' libipt_unclean
+endmenu
+fi
+
+if [ "$CONFIG_IPTABLES" = "y"]; then
+    bool "MAC" CONFIG_MAC
+fi
+if [ "$CONFIG_ITX" = "y" ]; then
+    bool "VGA/PC Keyboard Support?" CONFIG_VGA
+fi
+
+if [ "$CONFIG_WL11000" != "y" ]; then
+#    mainmenu_option next_comment
+#    comment 'CF/Disk Filesystem Options'
+        define_bool CONFIG_RAMDISK y
+        define_bool CONFIG_SYSLINUX y
+        define_bool CONFIG_UMSDOS y
+        define_ustring RAMFS './ramfs.img'
+        int  'Ramdisk Size'         RAMDISK_SIZE    16384
+        bool "Tiny Login?"          CONFIG_TINYLOGIN
+        bool "C-Kermit?"            CONFIG_CKERMIT
+        bool "QOS/Traffic Control?" CONFIG_TRAFFIC
+        choice 'C Library' \
+           "uClibc        CONFIG_UCLIBC \
+            GNU_Glibc     CONFIG_GLIBC"
+        if [ "$CONFIG_UCLIBC" = "y" ]; then
+            ustring 'uClibc Version' UCLIBC_VERSION '0.9.17'
+        fi
+        if [ "$CONFIG_GLIBC" = "y" ]; then
+            bool "System V Style Init?"     CONFIG_SYSVINIT
+        fi
+        bool "HostAP Driver?"   CONFIG_HOSTAP_DRIVER
+
+        if [ "$CONFIG_HOSTAP_DRIVER" = "y" ]; then
+            bool "PCI HostAP Driver?"   CONFIG_HOSTAP_PCI
+            bool "PCMCIA HostAP Driver?"   CONFIG_HOSTAP_PCMCIA
+        fi
+
+        ustring 'Compact Flash Base Device' CF_BASEDEV '/dev/sda'
+        ustring 'Compact Flash Mount Point' CF_MOUNTPOINT '/mnt/cf'
+#    endmenu
+fi
+
+if [ "$CONFIG_WL11000" = "y" ]; then
+    define_bool CONFIG_ALIOS y
+    define_bool CONFIG_SQUASHFS y
+    define_bool CONFIG_APTOOLS y
+    define_bool CONFIG_UCLIBC y
+    define_bool CONFIG_HOSTAP_DRIVER y
+    define_bool CONFIG_HOSTAP_UTILS y
+    #define_bool CONFIG_HOSTAPD y
+    define_bool CONFIG_HOSTAP_PCMCIA y
+    define_bool CONFIG_HOSTAP_PCI n
+    choice 'Elan Speed Selection' \
+   "WL_Normal-Speed         CONFIG_WLSPD_NORMAL \
+    WL_Hyper-Speed          CONFIG_WLSPD_HYPER \
+    WL_Slow-Speed           CONFIG_WLSPD_SLOW"
+fi
+
+if [ "$CONFIG_HOSTAP_DRIVER" = "y" ]; then
+    ustring 'Hostap Version' HOSTAP_DRIVER_VERSION 0.1.3
+fi
+if [ "$CONFIG_HOSTAP_UTILS" = "y" ]; then
+    ustring 'Hostap utils Version' HOSTAP_UTILS_VERSION 0.1.3
+fi
+if [ "$CONFIG_HOSTAPD" = "y" ]; then
+    ustring 'Hostapd Version' HOSTAPD_VERSION 0.1.3
+fi
+
+ustring 'Kernel Version' KERNEL_VERSION '2.4.20'
+
+bool "NBD/Swap Support?"    CONFIG_NBD
+
+bool "Kernel AODV dynamic routing?" CONFIG_KERNEL_AODV
+if [ "$CONFIG_KERNEL_AODV" = "y" ]; then
+    ustring 'Kernel AODV Version' KERNEL_AODV_VERSION v2.1
+fi
+
+if [ "$CONFIG_GLIBC" = "y" ]; then
+    define_bool CONFIG_PSMISC y
+else
+    define_bool CONFIG_PSMISC n
+fi

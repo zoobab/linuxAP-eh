@@ -1,0 +1,35 @@
+Q&D on How to configure the AP/STA
+
+Connect to AP make changes to file(s) in /etc/rw
+(with baby vi) && run 'save_config' script
+when done.
+
+Files:
+
+Somewhat dependent on runlevel
+
+runlevel
+    Should contain a '3' for AP mode '2' for STATION/ROUTER
+
+netcfg
+    This file is included by shell scripts
+    see the examples in tftp_bundle
+
+wlan0
+    SSID=something
+    CHANNEL=1
+
+telnetd.hosts
+** This is optional, if it does not exist ANYONE can
+** get a shell prompt
+    put in an IP or partial ip (to the dot) of machines
+    allowed to telnet in:
+    1.1.1.2  # Only this address
+    1.1.5.   # Anything starting with 1.1.5.
+    one line per address/net, no comments allowed
+
+resolv.conf
+    If you are not using dhcp and you want dns put
+    the normal stuff in here.
+
+

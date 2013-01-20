@@ -1,0 +1,633 @@
+######################## README #############################################
+
+  alios - boot loader for Linux OS
+          on embedded systems with AMD Elan SC400 uC but NO BIOS.
+
+  Copyright (C) 1999-2001 telos EDV Systementwicklung GmbH (telos)
+
+  alios is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+ 
+  alios is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ 
+  Author(s):
+
+    Kolja Waschk, telos (KW)
+    Marco Budde, telos (MB)
+
+  Contact:
+
+    mailto:alios@telos.de, http://www.telos.de/linux/
+
+
+  THANKS TO ADVANCED MICRO DEVICES (AMD) Inc., who allowed us to publish
+  this code under the terms of the GPL(*), and who contributed the automatic
+  DRAM detection code and basic concepts for chipset initialisation through
+  application notes available from http://www.amd.com!
+
+
+  (*) As noted by Mats Petersson at AMD, in
+
+    Message-ID: <FD47D00A3EC7D21193AB0008C71E53665E2918@fseuxmta.amd.com>
+    Received: by fseuxmta.amd.com with Internet Mail Service (5.5.2448.0)
+              id <S3VL6QSX>; Tue, 26 Oct 1999 14:14:22 +0100
+
+
+
+
+
+
+##### CONTENTS ##############################################################
+
+  1. Introduction
+
+     1.1 General
+     1.2 Target system requirements
+     1.3 Overview of alios' operation
+     1.4 alios vs. "real" BIOS
+     1.5 Definitions
+
+  2. System initialisation
+
+     2.1 Power-On-Reset (POR)
+     2.2 Initialisation of DRAM and on-chip I/O
+     2.3 Initialisation of UART, DMA, PIC
+     2.4 Moving to DRAM
+     2.5 Remaining initialisation
+
+  3. Linux bootstrap
+
+     3.1 Copying from ROM to RAM
+     3.2 Load ROM configuration
+     3.3 Load setup code
+     3.4 Load kernel and initrd
+     3.5 Boot Linux kernel
+
+  4. Using ALIOS
+
+     4.1 Building the boot loader and the configuration utility
+     4.2 Preparing the kernel image
+     4.3 Preparing the configuration block images
+     4.4 Copy the images to a PCMCIA card
+
+  5. Further Information
+
+
+
+
+##### 1. INTRODUCTION #######################################################
+
+ 1.1 General
+
+  The software described in this document as well as the document itself
+  are targeted to developers who want to build an embedded system running
+  the Linux OS. The "software", that is a program - named "alios" - for basic 
+  hardware initialisation and Linux OS bootstrap from ROM. It has been 
+  specifically designed for the AMD Elan SC400 microcontroller, but may serve
+  as a base for development of similar software to be used with others.
+
+  The goal when writing alios was to eliminate the need for a BIOS on small
+  embedded systems where the hardware setup is quite fixed. The Linux OS 
+  itself on such systems does not depend on the presence of a BIOS - once it
+  is loaded, all the low-level access to hardware is performed by the Linux
+  kernel itself.
+
+  alios will most probably not fit your needs out of the box. To configure
+  and use the software, working knowledge about your specific hardware setup
+  is required - such as memory layout and DRAM timing, and, obviously,
+  knowledge about the Linux kernel and general programming skills.
+ 
+  However, at telos, the company that created and maintains alios, there
+  are developers who have the general knowledge. If you provide us with the
+  details of your hardware, we will be able to assist you in getting your
+  system up and running, as we already did for other happy customers. 
+  
+  Please have a look at:
+
+       http://www.telos.de/linux/
+
+  There is no 'quick start' section in this document, because to use alios
+  you have quite a lot of things to do before it does something on your
+  hardware.  I suggest you learn about alios' operation (section 2 and 3) 
+  first; section 4 then describes tasks to do before you can actually make
+  use of alios. Well, you could read section 4 first if you're yet unsure
+  whether you will be able to use alios; it is a quite complete list of
+  tasks to be performed by you (and the knowledge required for these tasks).
+
+ 1.2 Target system requirements
+
+  alios is yet suited only for a very specific system configuration; on
+  the other hand, chances are good that your system configuration is
+  just exactly this. The following list defines a setup for which alios
+  code would not have to be enhanced (except for some numeric values):
+
+  - AMD Elan SC400 microcontroller
+
+  - (flash) ROM connected to the SC400, selected by ROMCS0
+     and/or a memory PC Card with linear address space
+
+  - enough DRAM to run the Linux OS (>= 4MB)
+
+  - serial console (no graphics adapter)
+
+  - no additional I/O chips (only the Super I/O chip as present
+     on the AMD evaluation board is currently supported)
+  
+
+ 1.3 Overview of alios operation
+
+  After power-on or system reset, alios is the first code to be executed
+  by the microcontroller. The AMD SC400 is able to read the code from 
+  either on-board memory or from a removable PC Card, thus enabling you
+  to boot systems without pre-programmed on-board memory.
+
+  alios initialises the DRAM using parameters from a fixed table, moves
+  itself to RAM and continues execution from there. It performs
+  initialisation of CMOS RAM, RTC, the PC Card interface and the UART
+  embedded in the AMD SC400. Further progress then can be reported on the
+  serial interface. 
+
+  Immediately afterwards the Linux OS bootstrap begins. alios transfers the
+  Linux kernel and the contents of a small filesystem for booting (the 
+  so-called initial RAM disk "initrd" image) into RAM, switches the processor
+  into protected 32-bit mode and passes control to the kernel setup code.
+  From that point, further operation is up to Linux.
+
+ 1.4 alios vs. 'real' BIOS
+
+  Full-featured BIOSes do a lot more than alios. However, in most embedded
+  systems such as those based on the AMD SC400 and derivatives, these
+  additional features aren't required - but you have to pay for them anyway,
+  usually per installed copy. The following list of features not yet 
+  implemented in alios might help you to decide whether you should go for
+  a commercial BIOS instead.
+
+  What alios can NOT do (yet):
+
+  - hardware checks (RAM etc; also known as POST - Power-On-Self-Test)
+
+  - advanced power management (APM)
+
+  - advanced chipset configuration (e.g. for PCI bridges)
+
+  - execute adapter BIOS code such as VGA or SCSI BIOS
+    (in other words, graphics adapters are not supported yet!)
+
+  Most of these features could be easily added if just the 
+  requirements are known and a little time for coding is available.
+
+ 1.5 Definitions
+
+  Some words in the following descriptions may be new to you. Although
+  this document is not meant to explain them in very detail, at least you
+  should have a basic understanding.
+
+  "kernel image"  - refers to the huge binary produced when you compile a
+                    Linux kernel. If you do a "make bzImage" in the root of
+                    the kernel tree, a file named "bzImage" is produced, which
+                    is just the "kernel image". Beside the kernel itself it
+                    contains some configuration parameters, boot sector code,
+                    and decompression code.
+
+  "initrd image"  - refers to another huge binary, this time an exact copy of
+                    the data that constitutes a filesystem on a (small) disk.
+                    "initrd" is short for "initial RAM disk", a pseudo-disk
+                    which may hold modules (driver) and setup scripts to be
+                    loaded or executed before anything else actually takes
+                    place. See Documentation/initrd.txt in the Linux kernel
+                    source tree for more information.
+
+  "memory window" - refers to a mechanism provided by the AMD SC400, which
+                    makes physical memory (ROM or RAM) appear at places in
+                    the processor address space where it actually isn't. 
+                    For instance, by mapping RAM 0x230000..0x23FFFF into 
+                    the so called special window "B", it appears to be 
+                    starting at 0x100000..0x10FFFF. Reading from 0x100000
+                    would yield the same value as reading from 0x230000.
+                    MMS A and MMS B are special in that the location where
+                    they appear is fixed (0xB0000..0xB7FFF resp. 0x100000...),
+                    but there are others, more flexible. alios uses only 
+                    MMS A and B due to the simplicity of their setup.
+
+  "ROM"           - be assured that whenever I'm talking of "ROM", this
+                    includes flash RAM, RAM with battery-backup, ... just
+                    everything that won't be written to by alios. Usually
+                    it'll be linear flash memory, but that depends on your
+                    system.
+
+
+
+
+
+
+##### 2. SYSTEM INITIALISATION ##############################################
+
+ 2.1 Power-On-Reset (POR)
+  
+  (code label "resetvec")
+
+  At POR, the SC400 starts executing code with all upper address lines
+  logically 'high', just 16 bytes below its top of address space. Your
+  hardware has to be designed so that ROM appears at this memory 
+  locations, and alios has to be placed in ROM so that its last 16 bytes
+  appear just as the 16 last bytes in the SC400's address space.
+
+  Dependent on the logical level at an input pin ("CFG2"), the SC400
+  is able to logically map ROM from a PC Card into this area. The card
+  is required to provide linearly mapped memory (ATA flash cards don't).
+  If you place alios at the top of the card's memory, the SC400 can
+  boot from there.
+
+  The SC400 will drop the level on the upper address lines as soon
+  as an absolute jump takes place, which would practically make the
+  bigger part of the alios code inaccessible. alios' reset code therefore
+  quickly programs the memory window A (MMS A, visible at 0xB0000..0xB7FFF)
+  to map ROM or PC Card memory where most of alios resides. It then 
+  jumps there "to itself". The SC400 switches to legacy "real mode".
+
+ 2.2 Initialisation of DRAM and on-chip I/O
+
+  (code label "alios")
+
+  With just a few instructions, a lot of the internal hardware of the SC400
+  can be configured. After making sure the PC Card slot continues being
+  powered (in case the system is booting from PC Card it wouldn't be
+  wise to turn it off), alios configures internal IO hardware such as 
+  keyboard, ISA, PS/2 and FDC. This is done by reading address/value 
+  pairs from a table and sending them to the CSC configuration ports.
+
+  That configuration table (labeled "t_cscinit") is where you will have
+  to start putting in values for your specific hardware setup.
+
+  After finishing this first configuration alios starts an automatic
+  DRAM dectection, which determines the installed DRAM modules.
+  The determined sizes and attributes are used to configure the
+  SC400 to use the installed modules. If you don't need the automatic
+  detection or it doesn't work for you (please report!), the setup 
+  may as well be hardcoded in the "t_cscinit" table.
+
+ 2.3 Initialisation of UART, DMA, PIC
+
+  alios soon configures the SC400's internal UART so it becomes able to
+  transmit information through a serial interface. The UART already has been 
+  generally enabled during the initialisation through the CSC registers
+  above (unless you commented that part out), just speed and formatting
+  have to be set up. After finishing that, alios transmit an asterisk
+  '*' (ASCII 0x2A) to report success up to this point. If you want a 
+  serial setup other than 8 bits, no parity, 1 stop bit at 38400 bps, you
+  want to modify the table labeled "t_uartinit". It is simply a list of
+  value/port address pairs, defining which value is to be written to
+  which port in the UART area.
+
+  The programmable interrupt controller (PIC) and the DMA controller are
+  set up with sane parameters. You don't want to change these in alios, as 
+  they are later set up more appropriately by the Linux kernel.
+
+ 2.4 Moving to DRAM
+
+  alios code is still read and executed directly from ROM at this time,
+  being visible to the processor in MMS A. For several reasons, MMS A 
+  is predestined to be used for other things later. Since DRAM should
+  be available right now, alios starts to use it by copying itself into
+  an memory area in DRAM (actually the top of the lowest MByte, which is
+  where alios is out of the way of anything else to happen later) and
+  then jumping there. Voila, MMS A is freed. Now relying on RAM, alios
+  selects an area for its stack, and the environment for the following
+  instructions becomes like application programmers are used to it, i.e.
+  call and ret work, push and pop, ...
+  
+  The reason why the UART has been initialised before (see 2.3) is so 
+  you can see at least a '*' if your DRAM setup was wrong. In that case,
+  alios would jump into uninitialised memory. Usually this simply locks
+  up the system.
+
+ 2.5 Remaining initialisation
+
+  (code label 'final_setup')
+
+  After the stack became available, alios could now do anything fancy that
+  "real" BIOSes do, i.e. perform further hardware checks, and search for
+  code to execute on adapter ROMs. I have added some yet completely untested
+  code that should call the initialisation routine of a graphics adapter
+  (code label 'init_video'), included in the binary if you define "GAROM".
+  Usually these foreign code expects at least basic BIOS calls to appear
+  to work, so for some of them you will have to add at least dummy BIOS
+  functions to alios. Yet there is only a "dummyBIOS" that should work for
+  some graphics adapters (again, completely untested. Please report success
+  or fixes to me - KW).
+
+  You might have expected better support for graphics initialisation. Our
+  development focused on black box systems where the only way for operator
+  access is to make use of a terminal connected to the serial port. Linux
+  is able to be operated with no graphics hardware at all after enabling
+  the "CONFIG_SERIAL_CONSOLE" option during kernel compilation.
+
+  Then, important for our development was to initialise the Super I/O chip
+  present on the AMD evaluation board (NS87306) (code label "init_super_io")
+  which is included in the binary if you define "EVAL_BRD", and the 
+  initialisation of the embedded RTC clock and CMOS memory to sane values.
+
+  The configuration tables that define initial setup for Super I/O, RTC and
+  CMOS NVRAM are labeled "t_suioinit" and "t_rtcinit" (the latter being 
+  used for CMOS NVRAM setup as well). alios is not very intelligent yet to
+  initialise the RTC date and time; either it does (define "FIXED_DATE") or
+  it leaves the date and time untouched, as found. The responsible code 
+  can be found scanning for the label "init_rtc".
+
+
+
+
+
+
+##### 3. LINUX BOOTSTRAP ####################################################
+  
+ 3.1 Copying from ROM to RAM
+
+  (code label "load_sector")
+
+  The core subroutine used throughout the bootstrap process is somewhat
+  modeled after common disk I/O subroutines; it puts data into RAM in units of
+  "sectors", consisting of 512 bytes each. This way alios can directly make
+  use of sizes presented in the kernel image header as "number of sectors".
+
+  Rather than reading from disk, it is merely a memory to memory copying
+  tool. Although being executed in "real mode" with address space limited
+  by 16 bit segment registers, it is able to put data from anywhere to 
+  anywhere within the whole range of memory addressable by the SC400 hardware.
+  This is accomplished by making use of the memory mapping functionality
+  present in the SC400. 
+
+  The interesting part of the source memory area, ROM, is mapped into MMS A,
+  and appears at 0xB0000..0xB7FFF within the memory range addressable in
+  real mode. The destination, RAM, appears in MMS B, which happens to be at
+  0x100000..0x10FFFF. Although this is above the 1 MByte limit, it can be 
+  addressed in real mode after the "A20 propagation" (also well-known as
+  "A20 gate") has been enabled. That has been done by alios very early, 
+  actually it is the first thing it does after POR.
+
+ 3.2 Load ROM configuration
+
+  (code label "load_config")
+
+  alios needs to know where to look for the kernel and initrd images within
+  the source memory (on-board or PC Card ROM). We first had these information
+  hard-coded in alios, and putting new images on the ROM always involved 
+  updating alios as well. For the sake of more reliable updating in a 
+  product's lifetime now alios has hard-coded only pointers to two possible
+  areas in ROM where this information can be stored. Each so-called
+  "configuration block" contains pointers to images and a flag saying whether
+  it is "valid". You may safely update part of the memory with new images,
+  not overwriting the old ones, and then update the configuration block if 
+  - and only if - all went well.
+
+  Using the two configuration blocks, you may implement a scenario like this:
+
+  1. assume block 1 points to good images.
+  2. assume block 2 points to images containing some updater code.
+
+  alios will use block 1 unless that is flagged "invalid".
+
+  3. invalidate block 1, initiate reboot
+  4. alios boots the "update" system using block 2
+  5. the updater overwrites the old images pointed to by block 1
+  
+  alios will always boot the "update" system unless...
+  
+  6. the updater successfully flags block 1 "valid" again.
+
+  The actual code implementing this functionality just copies the 
+  configuration block data from known (hard-coded) locations in ROM
+  into RAM using the load_sector subroutine described in 3.1. Block 2
+  is loaded if block 1 is invalid (determined from the "valid" flag).
+
+  If both blocks have no "valid" info set, alios issues a report
+  on the serial interface and switches the processor into HALT mode.
+
+  To be useful with flash ROM, the "valid" byte in the configuration 
+  block has to be zero in order for the whole block to be regarded 
+  as "valid". This is because on flash ROM after erasing usually all
+  data is set to nonzero (0xFF) values. It would be a good idea to
+  clear the "valid" byte not before everything else went well in an update.
+
+  Caveat: Flash ROM usually can be erased only in larger chunks of 
+  data, e.g. 128 kByte. You want to put all configuration blocks and
+  alios itself into separate areas on the chip that can be erased
+  independently...
+
+
+ 3.3 Load setup code
+
+  (code label "load_info")
+
+  With the information from the configuration block, alios knows where
+  to look for the kernel image and loads its first sectors into RAM.
+  This is exactly the same what the code contained in the first 512 bytes
+  of the kernel image would do, with the difference that alios uses the
+  "load_sector" subroutine instead of BIOS disk I/O functions.
+
+  The first sectors of the kernel image contain information about the
+  start of the actual kernel within the image as well as its length, and
+  some other information. This is used by alios in the next step (3.4).
+  On the other hand, the memory area where the first sectors are loaded
+  to are expected to contain system setup information later during
+  actual kernel startup. alios fills out missing information about
+  memory size and the presence, location and size of the initial RAM disk,
+  and, last but not least, the kernel command line contents.
+
+  Configuration of the console video mode would have to be done here as well,
+  but as mentioned earlier alios currently does not support systems with
+  graphics adapters.
+
+ 3.4 Load kernel and initrd
+
+  (code label "load_images")
+
+  Loading the images is straightforward. The destination for the kernel in
+  RAM is hard-coded in alios; it's either 0x1000 if you have built a small
+  kernel image ("make zImage") that fits below the 640 KByte limit or 
+  0x100000 for big images ("make bzImage"). The "KERNEL_S" definition in the
+  alios source has to be set accordingly.
+
+  The destination for the initrd image has be at the upper end of the
+  available memory due to the algorithm used by the kernel later to 
+  allocate memory to work with; alios selects roughly the top of the RAM
+  minus the size of the initrd image.
+
+  Both images are copied from ROM to RAM using the copy_sector subroutine,
+  with source addresses defined in the configuration block.
+
+ 3.5 Boot Linux kernel
+
+  The last action performed by alios during the boot process is to
+  disable the memory windows used during the image copying process,
+  enable the instruction cache and switch the processor into protected
+  mode. Setting up GDT and IDT is simple for Linux; the tables used here
+  by the lidt and lgdt instructions are very small and simple because 
+  an absolutely flat 4 GB memory model is used by Linux (labels "gdt", 
+  "idt_48" and "gdt_48"). The far jump to the kernel decompressor 
+  (now in protected mode) is coded using .data mnemonics so the assembler
+  gets it right. 
+
+  Anything further to be done is handled by the code in the kernel image;
+  alios has finished its part. 
+
+
+
+
+
+##### 4. USING ALIOS ########################################################
+
+ 4.1 Building the boot loader and the configuration utility
+
+  Before you can build the boot loader and the configuration utility,
+  you have to edit the Makefile distributed with the source code.
+  The Makefile contains some variables, which you have to adapt
+  to the configuration of you own SC400 system.
+
+  The most important variables are "CONFIGURATION_1" and "CONFIGURATION_2".
+  They specify the start addresses of both configuration blocks (see 
+  section 3.2) on the PCMCIA card used to boot the SC400. 
+
+  Another variable in the Makefile is "EVAL_BRD". If this variable
+  is defined, the assembler will include some additional initialization
+  code for the Super I/O IC which can be found on the SC400 evaluation
+  board. It is possible to start always with a fixed date and time 
+  (June 2d, 1971, 00:00am) by defining the variable "FIXED_DATE" in the 
+  Makefile - useful if yet you had no possibitity to set the date to
+  something reasonable or there is no RTC battery.
+
+  You are now ready to compile the sources by using the following
+  command:
+
+      make
+
+  This will create the boot loader "alios.bin" and the utility
+  "create_config_block", taht can be used to create configuration block
+  images.
+
+
+ 4.2 Preparing the kernel image
+
+  You have to create a Linux kernel image for the AMD SC400. Informations
+  about how to create kernel images could be found in most Linux books 
+  and in the Linux Kernel HOWTO. You can add those drivers to you kernel
+  image, which are necessary for your SC400 application. There are some 
+  options, which are necessary for alios.
+
+  You have to enable the follwing options in the "Processor type and 
+  features" section of the kernel configuration:
+
+     (486/Cx486) Processor family               
+     [*] Math emulation  
+
+  In the "Block devices" section you have to enable the initrd support:
+
+     [*] RAM disk support    
+     (4096)    Default RAM disk size  
+     [*]    Initial RAM disk (initrd) support 
+
+
+ 4.3 Preparing the configuration block images
+
+  As described in section 3.2 there are so called configuration blocks,
+  which are used to tell alios, where it can find the kernel and initrd 
+  images. Additional these blocks can be used to transfer boot 
+  parameters to the Linux kernel.
+ 
+  You can use the "create_config_block" utility to create a configuration
+  block. The utility has got several options:
+
+      -f <filename of the config block image>
+      -v <valid: 0 (yes), 1 (no)>
+      -k <kernel image start address>
+      -i <initrd image start address>
+      -s <size of the initrd image>
+      -c <kernel boot parameter>
+
+  Let us consider an example. We want to create a PCMCIA card 
+  (8 MByte) with the following organization:
+
+      start address       image type
+      ----------------------------------
+        0x000000        config block 1 
+        0x000200        config block 2 
+        0x000400        kernel 
+        0x049400        initrd 
+        0x3ff400        alios 
+  
+  Initially, both configuration blocks in our example point to the same
+  kernel and initrd images. The first is to be marked as valid (0), the 
+  second one as invalid (1). Now we would call "create_config_block" like that:
+
+      
+    create_config_block -f config1  -v 0 -i 0x049400 -s 1519274 \
+                        -k 0x400 \
+                        -c "console=ttyS0,38400 root=/dev/ram0" 
+
+    create_config_block -f config2  -v 1 -i 0x049400 -s 1519274 \
+                        -k 0x400 \
+                        -c "console=ttyS0,38400 root=/dev/ram0" 
+
+
+  You can find a description of all available kernel boot parameters in the 
+  Linux Bootprompt HOWTO.
+
+  All specified addresses have to be aligned to 512-byte boundaries because
+  the loader reads the data as "sectors" (i.e. address % 512 = 0).
+
+
+ 4.4 Copy the images to a PCMCIA card
+
+  After you have created all necessary images, you have to copy the
+  images to the specified addresses on a PCMCIA memory card (SRAM, 
+  linear flash) or directly to memory onboard your target system.
+
+  There are several tools available which could be used to copy
+  the data to the PCMCIA card. On Linux/Unix systems you can use
+  the "dd" command to write the data to SRAM cards:
+
+     dd obs=1 seek=<address> if=<image> of=/dev/mem0c0c
+
+  This will *not* work with flash cards, because they have to be
+  erased using special system calls before you can write new data on the
+  cards.  We have included a program named "wrflash" in the wrflash/ 
+  subdirectory for this purpose. It is based on the utils included in the
+  MTD subsystem for Linux (see 5. for source).
+
+
+  When you have copied all images to the card, you should now have
+  a working PCMCIA card, which could be used to boot Linux on
+  a SC400. Congratulation =:).
+
+
+
+
+##### 5. FURTHER INFORMATION ################################################
+
+
+  Updated versions of the "Memory Technology Devices (MTD) Subsystem" 
+  for Linux are available from
+
+     http://www.linux-mtd.infradead.org/
+
+
+  General information and Application Notes, including code, are 
+  available from
+    
+     http://www.amd.com
+
+
+  
+
+
+
+ 

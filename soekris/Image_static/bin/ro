@@ -1,0 +1,6 @@
+#!/bin/sh
+pgm=`basename $0`
+case "$pgm" in
+  rw) mount -o remount /cf -rw ;;
+  ro) mount -o remount /cf -r ;;
+esac

@@ -1,0 +1,22 @@
+#!/bin/sh
+
+set -e
+
+if [ -z "$1" ] | [ -z "$2" ] | [ -z "$3" ] ; then
+    echo "Usage: $0 interface channel seconds"
+    exit 1
+fi
+
+while :
+do
+    # Two known symptoms of dead driver/card:
+    # Either two lines are missing from iwconfig output (incl "Bit Rate")
+    # Or setting the channel returns false
+    if ( iwconfig $1 | grep Rate ) & ( iwconfig $1 channel $2 ) ; then
+	echo "iw_watchdog: OK"
+    else
+	echo "iw_watchdog: $1 appears dead! PANIC REBOOT!"
+	reboot
+    fi
+    sleep $3
+done

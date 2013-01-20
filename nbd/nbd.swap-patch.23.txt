@@ -1,0 +1,67 @@
+--- clean/mm/vmscan.c	Sat Oct 23 20:54:58 1999
++++ linux/mm/vmscan.c	Sat Oct 23 21:07:59 1999
+@@ -7,6 +7,7 @@
+  *  kswapd added: 7.1.96  sct
+  *  Removed kswapd_ctl limits, and swap out as many pages as needed
+  *  to bring the system back to freepages.high: 2.4.97, Rik van Riel.
++ *  kreclaimd by Pavel Machek <pavel@ucw.cz>
+  *  Version: $Id: nbd.swap-patch.23.txt,v 1.1.1.1 2003/09/27 20:12:55 kleynjans Exp $
+  */
+ 
+@@ -510,6 +511,48 @@
+ }
+ 
+ /*
++ * The background page discarder, started from the init process. 
++ *
++ * This basically executes once a second, trickling out pages
++ * so that we have _some_ free memory available even if there
++ * is no other activity that frees anything up.
++ * We want this to be separate from kswapd, because we do not
++ * want to block, no matter what happens. As long as there are
++ * some clean pages backed it file (which is true under normal
++ * conditions, SCT tells me), we can swap over anything.
++ *
++ * See comments on kswapd for more details.
++ */
++int kreclaimd(void *unused)
++{
++	struct task_struct *tsk = current;
++
++	kswapd_process = tsk;
++	tsk->session = 1;
++	tsk->pgrp = 1;
++	strcpy(tsk->comm, "kreclaimd");
++	sigfillset(&tsk->blocked);
++	
++	tsk->flags |= PF_MEMALLOC;
++
++	while (1) {
++		do {
++			int count = SWAP_CLUSTER_MAX;
++
++			/* Normally, lets let kswapd do its work. If memory gets really low,
++			   we'll want to clean up something to break the deadlock. */
++			if (nr_free_pages - nr_free_highpages >= freepages.low)
++				break;
++			while (do_try_to_free_pages(0) && count--)	/* We don't want it to do any I/O */
++				;
++//			printk( "kreclaimd: Freed %d pages\n", SWAP_CLUSTER_MAX - count );
++		} while (!tsk->need_resched);
++		tsk->state = TASK_INTERRUPTIBLE;
++		schedule_timeout(HZ);
++	}
++}
++
++/*
+  * Called by non-kswapd processes when they want more
+  * memory.
+  *
+@@ -539,6 +582,7 @@
+ 	printk("Starting kswapd v1.6\n");
+ 	swap_setup();
+ 	kernel_thread(kswapd, NULL, CLONE_FS | CLONE_FILES | CLONE_SIGHAND);
++	kernel_thread(kreclaimd, NULL, CLONE_FS | CLONE_FILES | CLONE_SIGHAND);
+ 	return 0;
+ }
+ 

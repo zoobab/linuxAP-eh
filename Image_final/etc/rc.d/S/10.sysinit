@@ -1,0 +1,36 @@
+#!/bin/ash
+#
+# sysinit
+#
+echo -e "re-mounting root filesystem in rw mode"
+mount -n -o remount,rw /
+echo -e "mounting proc filesystem"
+mount -n -t proc proc /proc
+echo -e "mounting var filesystem"
+mount -t ramfs none /var
+
+# set the links for the rw filesystems
+mkdir -p /var/tmp
+mkdir -p /var/etc/rw
+mkdir -p /var/run
+mkdir -p /var/lib/pcmcia
+
+if [ -d /proc/sys ]
+then
+# Lower some thresholds
+# bdflush doesn't need to really run at all
+# nfract un un un interval agebuff nfsync un un
+#cho  40  0  0  0      500    3000     60  0  0 > /proc/sys/vm/bdflush
+echo  10  0  0  0    60000  600000    100  0  0 > /proc/sys/vm/bdflush
+# Make kswapd less aggressive
+echo 32 32 4 > /proc/sys/vm/kswapd
+#
+echo 2 > /proc/sys/vm/max-readahead
+echo 1 > /proc/sys/vm/min-readahead
+# What the hell, we're doomed if it hits anyway.
+echo 1 > /proc/sys/vm/overcommit_memory
+# The default is 2 
+echo 1 > /proc/sys/vm/page-cluster
+# This is for SMP
+echo 0 0 > /proc/sys/vm/pagetable_cache
+fi

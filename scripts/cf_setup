@@ -1,0 +1,66 @@
+#!/bin/sh
+#
+# cf_setup
+#
+# Build a Compact Flash Image
+#
+# This is the CF device
+BASEDEV=/dev/sda
+MOUNT_DIR=/mnt/cf
+BOOT_CUTOFF=256000
+BOOT_SIZE=256
+
+#----------------------------------------------------------------------
+# SETUP_DISK
+#----------------------------------------------------------------------
+setup_disk() {
+sfdisk -l $BASEDEV | grep 'unable to read partition table' && \
+    echo -e "\n\nCF Not Inserted...\n" && exit 3
+
+# dd if=/dev/zero of=$BASEDEV bs=512 count=2
+size=`sfdisk -s $BASEDEV`
+echo "Got size = $size"
+
+if [ $size -gt $BOOT_CUTOFF ]
+then
+    ptable=",$BOOT_SIZE,6\n,,82\n;"
+else
+    ptable=",,6\n;"
+fi
+# echo -e $ptable
+echo -e $ptable | sfdisk -L -uM $BASEDEV
+sfdisk -A1 $BASEDEV
+# Load/Build the MBR
+cat ./syslinux/mbr.bin > $BASEDEV
+}
+
+#----------------------------------------------------------------------
+# MAIN
+#----------------------------------------------------------------------
+AP_BUILD=$1
+
+if [ ! -d $MOUNT_DIR ]
+then
+    mkdir -p $MOUNT_DIR
+fi
+
+mntcmd='mount -t vfat ${BASEDEV}1 $MOUNT_DIR > /dev/null 2>&1'
+echo "$mntcmd"
+eval $mntcmd || (
+    echo -e "\n\nMount Failed setting up disk from scratch"
+    setup_disk
+    if mkdosfs ${BASEDEV}1 
+    then
+        echo "$mntcmd"
+        eval $mntcmd || exit 2;
+    fi
+)
+echo "Mounted ${BASEDEV}1 on $MOUNT_DIR"
+cp -va $AP_BUILD/syslinux.cfg $MOUNT_DIR
+cp -va kernel ramdisk $MOUNT_DIR
+sync
+umount $MOUNT_DIR 
+echo "Initializing Syslinux"
+echo "./syslinux/syslinux -s ${BASEDEV}1"
+./syslinux/syslinux -s ${BASEDEV}1
+

@@ -1,0 +1,9 @@
+#
+# wlan0
+#
+essid=linuxAP-eh
+channel=11
+antsel_rx=0
+antsel_tx=0
+rate=auto
+txpower=auto

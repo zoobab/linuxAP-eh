@@ -1,0 +1,28 @@
+diff -urN uClibc/libc/sysdeps/linux/common/xstatconv.c uClibc.new/libc/sysdeps/linux/common/xstatconv.c
+--- uClibc/libc/sysdeps/linux/common/xstatconv.c	Fri Jan 24 09:10:28 2003
++++ uClibc.new/libc/sysdeps/linux/common/xstatconv.c	Tue Mar 11 08:40:55 2003
+@@ -50,6 +50,7 @@
+     buf->st_ctime = kbuf->st_ctime;
+ }
+ 
++#ifdef UCLIBC_HAS_LFS
+ void __xstat64_conv(struct kernel_stat64 *kbuf, struct stat64 *buf)
+ {
+     /* Convert to current kernel version of `struct stat64'.  */
+@@ -70,4 +71,4 @@
+     buf->st_mtime = kbuf->st_mtime;
+     buf->st_ctime = kbuf->st_ctime;
+ }
+-
++#endif
+diff -urN uClibc/libc/sysdeps/linux/common/xstatconv.h uClibc.new/libc/sysdeps/linux/common/xstatconv.h
+--- uClibc/libc/sysdeps/linux/common/xstatconv.h	Fri Jan 24 04:52:51 2003
++++ uClibc.new/libc/sysdeps/linux/common/xstatconv.h	Tue Mar 11 08:40:55 2003
+@@ -26,5 +26,6 @@
+ #include <bits/kernel_stat.h>
+ 
+ extern void __xstat_conv(struct kernel_stat *kbuf, struct stat *buf);
++#ifdef UCLIBC_HAS_LFS
+ extern void __xstat64_conv(struct kernel_stat64 *kbuf, struct stat64 *buf);
+-
++#endif

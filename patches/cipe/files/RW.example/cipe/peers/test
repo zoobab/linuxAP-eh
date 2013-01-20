@@ -1,0 +1,12 @@
+#
+# test
+#
+ipaddr  192.168.2.242
+ptpaddr 192.168.2.1
+peer    vpn.exterminate.com:4019
+cttl    64
+dynip   1
+ping    60
+maxerr  2
+mtu     1500
+key     

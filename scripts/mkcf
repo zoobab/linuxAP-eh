@@ -1,0 +1,134 @@
+#!/bin/sh
+#
+#
+#
+case "$CF_BASEDEV" in
+    /dev/*) CF_DEV=$CF_BASEDEV ;;
+    *) CF_DEV=/dev/sda
+esac
+
+if [ "$MOUNT_POINT" = "" ]
+then
+    MOUNT_POINT=/cf
+fi
+
+#/dev/sda1   *      0+     64      65-      8304    6  FAT16
+#/dev/sda2         65     489     425      54400   83  Linux
+#/dev/sda3          0       -       0          0    0  Empty
+#/dev/sda4          0       -       0          0    0  Empty
+
+
+failexit()
+{
+    echo -e "$1"
+    exit 1
+}
+
+
+#----------------------------------------------------------------------
+# BUILD_PARTITIONS
+# Check & Build needed partitions
+#----------------------------------------------------------------------
+build_partitions()
+{
+    size=`sfdisk -s $CF_DEV`
+    if [ $size -lt 60000 ]
+    then
+        boot_size=`expr $size / 1000`
+    else
+        boot_size=64
+    fi
+    echo "Size is $size boot_size is $boot_size"
+
+    sfdisk -l $CF_DEV | awk \
+        -v size=$size \
+        -v p1_size=$boot_size \
+'
+BEGIN {
+    ok = 0
+}
+! /^\/dev/ {
+    next
+}
+    {
+    partition = substr($1,9,1)
+}
+NF == 8 {
+    round = $6 % 1024 > 512 ? 1 : 0;
+    size = int($6/1024) + round
+    type = $7
+}
+NF == 7 {
+    round = $5 % 1024 > 512 ? 1 : 0;
+    size = int($5/1024) + round
+    type = $6
+}
+partition == 1 && ( type != 6 || size != p1_size ) {
+    printf "Partition 1 invalid type = %d || %d != %d\n",
+        type, size, p1_size
+    ok = 1
+    exit
+}
+partition == 2 && type != 83 {
+    print "Partition 2 invalid\n"
+    ok = 2
+    exit
+}
+partition == 3 && type != 0 {
+    print "Partition 3 invalid\n"
+    ok = 3
+    exit
+}
+partition == 4 && type != 0 {
+    print "Partition 4 invalid\n"
+    ok = 4;
+    exit
+}
+type != 0 {
+    printf "%s  %3d MB type=%3d\n", $1, size, type
+}
+END {
+    printf "Return %d\n", ok
+    exit ok
+}
+'
+    if [ $? -eq 0 ]
+    then
+        return 0
+    fi
+
+    /bin/echo "Rebuilding Partition Table"
+    sfdisk -L -uM $CF_DEV <<EOF
+,$boot_size,6,*
+,,83
+;
+;
+EOF
+    echo "Initializing/Installing Syslinux"
+    cat ./syslinux/mbr.bin > $CF_DEV
+    mkdosfs ${CF_DEV}1
+    ./syslinux/syslinux ${CF_DEV}1
+}
+
+
+#----------------------------------------------------------------------
+# MAIN
+#----------------------------------------------------------------------
+if [ "$1" ]
+then
+    AP_BUILD=$1
+fi
+eject ${CF_DEV}
+build_partitions
+mount -t umsdos ${CF_DEV}1 $MOUNT_POINT || failexit "Mount Failed"
+echo "Mounted ${CF_DEV}1 on $MOUNT_POINT"
+umssync -i+ -r99 $MOUNT_POINT
+cp -va $AP_BUILD/syslinux.cfg $MOUNT_POINT
+cp -va kernel ramdisk $MOUNT_POINT
+sync
+umount $MOUNT_POINT
+echo "unmounted $MOUNT_POINT"
+
+# Copying CRAMFS junk
+# dd if=./cramfs of=${CF_DEV}2 bs=4096
+

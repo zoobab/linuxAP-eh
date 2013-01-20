@@ -1,0 +1,65 @@
+diff -urN linux.old/drivers/block/nbd.c linux/drivers/block/nbd.c
+--- linux.old/drivers/block/nbd.c       Fri Aug  2 17:39:43 2002
++++ linux/drivers/block/nbd.c   Wed Feb 12 23:08:15 2003
+@@ -32,7 +32,7 @@
+  *          structure with userland
+  */
+
+-#define PARANOIA
++/* #define PARANOIA */
+ #include <linux/major.h>
+
+ #include <linux/module.h>
+diff -urN linux.old/drivers/mtd/chips/cfi_cmdset_0002.c linux/drivers/mtd/chips/cfi_cmdset_0002.c
+--- linux.old/drivers/mtd/chips/cfi_cmdset_0002.c	2002-08-10 13:46:13.000000000 -0700
++++ linux/drivers/mtd/chips/cfi_cmdset_0002.c	2002-04-09 23:33:21.000000000 -0700
+@@ -393,11 +393,11 @@
+ 	}
+ 	
+ 	if (Last[(Count - 1) % 4] != datum){
+-		printk(KERN_WARNING "Last[%ld] is %x, datum is %x\n",(Count - 1) % 4,Last[(Count - 1) % 4],datum);
++//		printk(KERN_WARNING "Last[%ld] is %x, datum is %x\n",(Count - 1) % 4,Last[(Count - 1) % 4],datum);
+ 	        cfi_send_gen_cmd(0xF0, 0, chip->start, map, cfi, cfi->device_type, NULL);
+ 		DISABLE_VPP(map);
+ 		if (tries_left > 0) { // dave
+-			printk(KERN_WARNING "mtd lowlevel write error: %d retries left: retrying\n", tries_left);
++//			printk(KERN_WARNING "mtd lowlevel write error: %d retries left: retrying\n", tries_left);
+ 			ret = 0;
+ 			tries_left--;
+ 			chip->state = FL_READY;
+diff -urN linux.old/include/linux/nbd.h linux/include/linux/nbd.h
+--- linux.old/include/linux/nbd.h	2002-08-10 13:57:06.000000000 -0700
++++ linux/include/linux/nbd.h	2002-07-16 22:14:31.000000000 -0700
+@@ -57,7 +57,7 @@
+ 	spin_unlock_irqrestore(&io_request_lock, flags);
+ }
+ 
+-#define MAX_NBD 128
++#define MAX_NBD 4
+ 
+ struct nbd_device {
+ 	int refcnt;	
+diff -urN linux/include/linux/limits.h linux.old/include/linux/limits.h
+--- linux/include/linux/limits.h	2003-08-29 10:38:44.000000000 -0700
++++ linux.old/include/linux/limits.h	2003-08-29 10:41:41.000000000 -0700
+@@ -4,15 +4,15 @@
+ #define NR_OPEN	        1024
+ 
+ #define NGROUPS_MAX       32	/* supplemental group IDs are available */
+-#define ARG_MAX       131072	/* # bytes of args + environ for exec() */
++#define ARG_MAX        65535	/* # bytes of args + environ for exec() */
+ #define CHILD_MAX        999    /* no limit :-) */
+-#define OPEN_MAX         256	/* # open files a process may have */
++#define OPEN_MAX          64	/* # open files a process may have */
+ #define LINK_MAX         127	/* # links a file may have */
+ #define MAX_CANON        255	/* size of the canonical input queue */
+ #define MAX_INPUT        255	/* size of the type-ahead buffer */
+-#define NAME_MAX         255	/* # chars in a file name */
+-#define PATH_MAX        4096	/* # chars in a path name including nul */
+-#define PIPE_BUF        4096	/* # bytes in atomic write to a pipe */
++#define NAME_MAX         127	/* # chars in a file name */
++#define PATH_MAX         512	/* # chars in a path name including nul */
++#define PIPE_BUF         512	/* # bytes in atomic write to a pipe */
+ #define XATTR_NAME_MAX   255	/* # chars in an extended attribute name */
+ #define XATTR_SIZE_MAX 65536	/* size of an extended attribute value (64k) */
+ #define XATTR_LIST_MAX 65536	/* size of extended attribute namelist (64k) */

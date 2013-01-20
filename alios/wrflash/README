@@ -1,0 +1,70 @@
+######################## README #############################################
+
+  wrflash - tool to erase/write on PCMCIA linear flash memory cards
+
+  Copyright (C) 1999-2001 telos EDV Systementwicklung GmbH (telos)
+
+  wrflash is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+ 
+  wrflash is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ 
+  Author(s):
+
+    Kolja Waschk, telos (KW)
+
+  Contact:
+
+    mailto:alios@telos.de, http://www.telos.de/linux/
+
+
+  THANKS TO THE DEVELOPERS OF LINUX MTD (Memory Technology Devices Subsystem),
+  which includes the utils on which this code bases. Go to
+ 
+    http://www.linux-mtd.infradead.org/
+
+  to find out more about them.
+
+
+
+
+##### USAGE #################################################################
+
+
+  We wrote "wrflash" to be able to easily re-program PCMCIA linear flash
+  cards. The Linux PCMCIA support basically includes all the low level
+  support for these devices, but to actually re-program the cards some
+  ioctl()s have to be used and therefore a simple 'dd' will not work.
+
+  Command line syntax:
+
+    wrflash {options} {device}
+
+  {device} will probably be something like /dev/mem0c0c to access the
+  "common" memory on a card inserted in a PCMCIA socket.
+
+  The following options are recognized:
+
+  -e              Perform all necessary block erasures before writing any data.
+                  By default, wrflash won't erase before writing.
+
+  -f {inputfile}  Use {inputfile} as the data source
+
+  -s {address}    Start writing at {address}, specified in decimal, octal
+                  (with leading 0) or hexadecimal (with leading 0x). 
+                  If you use "-e", the first byte actually modified is
+                  at {address} modulo flash block size (e.g. 128 kByte).
+
+  -q              Don't print informational messages
+
+  -i              Don't prompt.
+ 

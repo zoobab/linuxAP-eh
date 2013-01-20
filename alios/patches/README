@@ -1,0 +1,4 @@
+sc400_serial_*: patch to workaround a timing bug in the SC400 UART
+
+serial_ungzip*: patch to get the "Uncompressing Linux...",
+                "Ok, booting the kernel." output on serial console.

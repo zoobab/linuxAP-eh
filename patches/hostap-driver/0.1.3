@@ -1,0 +1,42 @@
+diff -Nur hostap-driver/driver/modules/hostap_config.h hostap-driver.new/driver/modules/hostap_config.h
+--- hostap-driver/driver/modules/hostap_config.h	2004-02-08 19:44:59.000000000 +0100
++++ hostap-driver.new/driver/modules/hostap_config.h	2004-02-18 02:54:06.000000000 +0100
+@@ -1,6 +1,7 @@
+ #ifndef HOSTAP_CONFIG_H
+ #define HOSTAP_CONFIG_H
+ 
++#define RAW_TXPOWER_SETTING
+ #define PRISM2_VERSION "0.1.3 - 2004-02-08"
+ 
+ /* In the previous versions of Host AP driver, support for user space version
+diff -Nur hostap-driver/Makefile hostap-driver.new/Makefile
+--- hostap-driver/Makefile	2003-08-03 20:50:09.000000000 +0200
++++ hostap-driver.new/Makefile	2004-02-18 02:48:19.000000000 +0100
+@@ -15,7 +15,7 @@
+ DESTDIR=
+ 
+ CC=gcc
+-CFLAGS=-O2 -D__KERNEL__ -DMODULE -Wall -g -c $(EXTRA_CFLAGS)
++CFLAGS=-Os -D__KERNEL__ -DMODULE -Wall -g -c $(EXTRA_CFLAGS)
+ 
+ include $(KERNEL_PATH)/.config
+ 
+@@ -242,15 +242,15 @@
+ 	mkdir -p $(MODPATH_CS)
+ 	cp -f $(MSRC)/$(MODULE_CS) $(MODPATH_CS)
+ ifndef DESTDIR
+-	/sbin/depmod -ae
++	#/sbin/depmod -ae
+ endif
+ 
+ install_conf:
+-	@if [ ! -r $(DESTDIR)/etc/pcmcia/hostap_cs.conf ]; then \
++	#@if [ ! -r $(DESTDIR)/etc/pcmcia/hostap_cs.conf ]; then \
+ 		echo "Installing $(DESTDIR)/etc/pcmcia/hostap_cs.conf"; \
+ 		cp -f driver/etc/hostap_cs.conf $(DESTDIR)/etc/pcmcia/hostap_cs.conf; \
+ 	fi
+-	@if [ -r $(DESTDIR)/etc/pcmcia/prism2.conf ]; then \
++	#@if [ -r $(DESTDIR)/etc/pcmcia/prism2.conf ]; then \
+ 		echo "You may need to remove old $(DESTDIR)/etc/pcmcia/prism2.conf"; \
+ 	fi
+ 

@@ -1,0 +1,28 @@
+#!/bin/sh
+#
+# httpd
+#
+case "$1" in
+start|2|3|4)
+    echo "Starting httpd daemon."
+    cd /html
+    sleep 2
+    if [ -f $CFGD/httpd.conf ]
+    then
+	httpd -c $CFGD/httpd.conf
+    else
+	httpd
+    fi
+    sleep 1
+    ;;
+stop|1)
+    echo "Stopping httpd daemon."
+    sleep 2
+    killall httpd
+    sleep 1
+    ;;
+restart)
+    $0 stop
+    $0 start
+    ;;
+esac

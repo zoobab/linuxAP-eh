@@ -1,0 +1,66 @@
+#
+# inittab
+#
+# Runlevels:
+#   S - Initial Bootup
+#   0 - Shutdown System
+#   1 - Single User Mode
+#   2 - Station / Router
+#   3 - Access Point / Bridge
+#   4 - Access Point / Router
+#   5 - Undefined
+#   6 - Reboot
+#
+
+# Default runlevel.
+id:2:initdefault:
+
+# System initialization (runs when system boots).
+si:S:sysinit:/etc/rc S
+
+# Script to run when going single user (runlevel 1).
+# su:1S:wait:/etc/rc 1
+
+# Runlevel 0 halts the system.
+l0:0:wait:/etc/rc 0
+
+# Station / Router
+l2:2:wait:/etc/rc 2
+
+# Access Point / Bridge
+l3:3:wait:/etc/rc 3
+
+# Access Point / Router
+l4:4:wait:/etc/rc 4
+
+# Runlevel 5 (Undefined)
+l5:4:wait:/etc/rc 5
+
+# Runlevel 6 reboots the system.
+l6:6:wait:/etc/rc 6
+
+# What to do at the "Three Finger Salute".
+# ca::ctrlaltdel:/sbin/shutdown -t5 -rf now
+
+#!LOCAL
+#----------------------------------------------------------------------
+# LOCAL STUFF
+#----------------------------------------------------------------------
+net1:345:off:/etc/ppp/routes
+mon1:345:off:/root/bin/monitor
+
+#!CONSOLE
+#----------------------------------------
+# Console Screens
+#----------------------------------------
+vc1:12345:off:/sbin/agetty tty1 9600
+vc2:12345:off:/sbin/agetty tty2 9600
+
+#!SERIAL
+#----------------------------------------
+# Standard Serial Ports
+#----------------------------------------
+s0:1234:respawn:/bin/do_shell < ttyS0 > /dev/ttyS0 2>&1
+s1:1234:off:/sbin/agetty ttyS1 19200
+
+#!END - End of inittab

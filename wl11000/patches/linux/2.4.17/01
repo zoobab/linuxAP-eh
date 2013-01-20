@@ -1,0 +1,1289 @@
+diff -urN linux.orig/Documentation/Configure.help linux/Documentation/Configure.help
+--- linux.orig/Documentation/Configure.help	Wed Jan  2 15:41:09 2002
++++ linux/Documentation/Configure.help	Wed Jan 16 11:13:11 2002
+@@ -3839,6 +3839,25 @@
+   Select this for a Pentium Classic processor with the RDTSC (Read
+   Time Stamp Counter) instruction for benchmarking.
+ 
++AMD ELAN (SC300/SC310/SC400/SC410/SC520)
++CONFIG_AMD_ELAN
++ Select this if your processor is an AMD ELAN 
++ (SC300/SC310/SC400/SC410/SC520)
++ 
++ If unsure, say N.
++
++Eutmicom WL11000 SA-N
++CONFIG_WL11000
++ Select this if your target is a Eumitcom WL11000SA-N Access Point.
++ These are resold as:
++ - US Robotics (USR 2450) (tested)
++ - SMC 2652W EZconnect Wireless AP (tested)
++ - Addtron AWS-100 (not tested)
++ 
++ There may be others that are based on the same board.
++
++ If unsure, say N.
++
+ 32-bit PDC
+ CONFIG_PDC_NARROW
+   Saying Y here will allow developers with a C180, C200, C240, C360,
+diff -urN linux.orig/arch/i386/Makefile linux/arch/i386/Makefile
+--- linux.orig/arch/i386/Makefile	Wed Nov  7 23:41:24 2001
++++ linux/arch/i386/Makefile	Mon Dec 10 13:56:51 2001
+@@ -98,6 +98,11 @@
+ DRIVERS += arch/i386/math-emu/math.o
+ endif
+ 
++ifdef CONFIG_WL11000
++SUBDIRS += arch/i386/wl11000
++CORE_FILES := $(CORE_FILES) arch/i386/wl11000/wl11000.o
++endif
++
+ arch/i386/kernel: dummy
+ 	$(MAKE) linuxsubdirs SUBDIRS=arch/i386/kernel
+ 
+diff -urN linux.orig/arch/i386/config.in linux/arch/i386/config.in
+--- linux.orig/arch/i386/config.in	Wed Jan  2 15:40:40 2002
++++ linux/arch/i386/config.in	Wed Jan 16 10:51:12 2002
+@@ -154,6 +154,15 @@
+    define_bool CONFIG_X86_TSC y
+    define_bool CONFIG_X86_USE_PPRO_CHECKSUM y
+ fi
++
++if [ "$CONFIG_M386" = "y" -o "$CONFIG_M486" = "y" -o "$CONFIG_M586" = "y" ]; then
++   bool 'AMD ELAN (SC300/SC310/SC400/SC410/SC520) support' CONFIG_AMD_ELAN
++fi
++
++if [ "$CONFIG_AMD_ELAN" = "y" ]; then
++   bool 'WL11000 SA-1 support' CONFIG_WL11000
++fi
++
+ tristate 'Toshiba Laptop support' CONFIG_TOSHIBA
+ tristate 'Dell laptop support' CONFIG_I8K
+ 
+diff -urN linux.orig/arch/i386/kernel/i386_ksyms.c linux/arch/i386/kernel/i386_ksyms.c
+--- linux.orig/arch/i386/kernel/i386_ksyms.c	Wed Jan  2 15:40:42 2002
++++ linux/arch/i386/kernel/i386_ksyms.c	Wed Jan  2 15:51:53 2002
+@@ -28,6 +28,9 @@
+ #include <asm/desc.h>
+ #include <asm/pgtable.h>
+ #include <asm/pgalloc.h>
++#ifdef CONFIG_WL11000
++#include <asm/wl11000.h>
++#endif
+ 
+ extern void dump_thread(struct pt_regs *, struct user *);
+ extern spinlock_t rtc_lock;
+@@ -155,6 +158,10 @@
+ EXPORT_SYMBOL(get_wchan);
+ 
+ EXPORT_SYMBOL(rtc_lock);
++
++#ifdef CONFIG_WL11000
++EXPORT_SYMBOL(wl11000_set_led);
++#endif
+ 
+ #undef memcpy
+ #undef memset
+diff -urN linux.orig/arch/i386/wl11000/Makefile linux/arch/i386/wl11000/Makefile
+--- linux.orig/arch/i386/wl11000/Makefile	Wed Dec 31 16:00:00 1969
++++ linux/arch/i386/wl11000/Makefile	Mon Dec 10 13:56:51 2001
+@@ -0,0 +1,14 @@
++#
++# Makefile for Linux arch/i386/wl11000 source directory
++#
++# Note! Dependencies are done automagically by 'make dep', which also
++# removes any old dependencies. DON'T put your own dependencies here
++# unless it's something special (ie not a .c file).
++#
++# Note 2! The CFLAGS definitions are now in the main makefile...
++
++O_TARGET := wl11000.o
++
++obj-y := config.o watchdog.o led.o
++
++include $(TOPDIR)/Rules.make
+diff -urN linux.orig/arch/i386/wl11000/config.c linux/arch/i386/wl11000/config.c
+--- linux.orig/arch/i386/wl11000/config.c	Wed Dec 31 16:00:00 1969
++++ linux/arch/i386/wl11000/config.c	Tue Jan 15 20:36:44 2002
+@@ -0,0 +1,38 @@
++/*
++   linux/arch/i386/wl11000/config.c 
++   
++   Initialize wl11000SA.
++   
++   Copyright (C) 2001-2002 Instant802 Networks Inc. , All Rights Reserved.
++
++   This program is free software; you can redistribute it and/or modify it
++   under the terms of the GNU General Public License as published by the Free
++   Software Foundation; either version 2 of the License, or (at your option)
++   any later version.  
++
++   David Kimdon <dwhedon@instant802.com>, January 15, 2001:
++     - Initial distribution.
++
++*/
++
++#include <linux/init.h>
++#include <linux/spinlock.h>
++#include <linux/time.h>
++
++extern int wl11000_led_init(void);
++extern int wl11000_watchdog_init(void);
++
++spinlock_t wl11000_io_lock = SPIN_LOCK_UNLOCKED;
++
++void __init wl11000_config(void) {
++	struct timeval tv;
++
++	/* We don't have a RTC on board.  The kernel doesn't know that and
++	 * gets a bogus value for the current time. Zero it. */
++	tv.tv_sec = 0;
++	tv.tv_usec = 0;
++	do_settimeofday(&tv);
++	
++	wl11000_led_init();
++	wl11000_watchdog_init();
++}
+diff -urN linux.orig/arch/i386/wl11000/led.c linux/arch/i386/wl11000/led.c
+--- linux.orig/arch/i386/wl11000/led.c	Wed Dec 31 16:00:00 1969
++++ linux/arch/i386/wl11000/led.c	Tue Jan 15 20:36:44 2002
+@@ -0,0 +1,139 @@
++/*
++   linux/arch/i386/wl11000/led.c 
++   
++   led driver for wl11000SA.
++   
++   Copyright (C) 2001-2002 Instant802 Networks Inc. , All Rights Reserved.
++
++   This program is free software; you can redistribute it and/or modify it
++   under the terms of the GNU General Public License as published by the Free
++   Software Foundation; either version 2 of the License, or (at your option)
++   any later version.  
++
++   This driver controls the two GPIO connected LEDs on the wl11000SA board :
++   wireless activity and wireless link.  
++   
++   There are three other LEDs that we don't touch : power, ethernet link and
++   ethernet activity.
++
++   David Kimdon <dwhedon@instant802.com>, January 15, 2001:
++     - Initial distribution.
++
++*/
++
++#include <linux/module.h>
++#include <linux/init.h>
++#include <linux/types.h>
++#include <linux/kernel.h>
++#include <asm/io.h>
++#include <linux/timer.h>
++#include <asm/wl11000.h>
++
++#define LED_BR_DELAY (HZ/2)
++#define LED_RX 0x04
++#define LED_BR 0x08
++
++static int led_initialized = 0;
++
++static struct timer_list led_timer;
++static int led_br_blinking = 0;
++
++
++void wl11000_set_led(unsigned int state)
++{
++	u16 leds = 0;
++	unsigned long flags;
++
++	if (!led_initialized)
++		return;
++
++	spin_lock_irqsave(&wl11000_io_lock, flags);
++	outb(0xa8, 0x22);
++	leds = 0xFF & inb(0x23);
++	spin_unlock_irqrestore(&wl11000_io_lock, flags);
++
++	switch (state) {
++
++	case WL11000_LED_RX_ON:
++		leds |= LED_RX;
++		break;
++
++	case WL11000_LED_RX_OFF:
++		leds &= ~LED_RX;
++		break;
++
++	case WL11000_LED_BR_ON:
++		led_br_blinking = 0;
++		del_timer_sync(&led_timer);
++		leds |= LED_BR;
++		break;
++
++	case WL11000_LED_BR_OFF:
++		led_br_blinking = 0;
++		del_timer_sync(&led_timer);
++		leds &= ~LED_BR;
++		break;
++
++	case WL11000_LED_BR_BLINK:
++		if (!led_br_blinking) {
++			led_br_blinking = 1;
++			led_timer.expires = jiffies + LED_BR_DELAY;
++			add_timer(&led_timer);
++		}
++		break;
++	}
++
++	outw(0xa8 | (leds << 8), 0x22);
++}
++
++
++
++static void led_br_blink(unsigned long unused)
++{
++	unsigned char led;
++	unsigned long flags;
++
++	spin_lock_irqsave(&wl11000_io_lock, flags);
++	outb(0xa8, 0x22);
++	led = inb(0x23);
++	spin_unlock_irqrestore(&wl11000_io_lock, flags);
++
++	if (led & LED_BR)
++		led &= ~LED_BR;
++	else
++		led |= LED_BR;
++
++	outw(0xa8 | (led << 8), 0x22);
++
++	if (led_br_blinking) {
++		led_timer.expires = jiffies + LED_BR_DELAY;
++		add_timer(&led_timer);
++	}
++}
++
++
++int __init wl11000_led_init(void)
++{
++	wl11000_set_led(WL11000_LED_RX_OFF);
++	wl11000_set_led(WL11000_LED_BR_OFF);
++
++	init_timer(&led_timer);
++	led_timer.function = led_br_blink;
++	led_timer.data = 0;
++
++	led_br_blinking = 0;
++	led_initialized = 1;
++
++	return 0;
++}
++
++static void __exit wl11000_led_cleanup(void)
++{
++	wl11000_set_led(WL11000_LED_RX_OFF);
++	wl11000_set_led(WL11000_LED_BR_OFF);
++	led_br_blinking = 0;
++	del_timer(&led_timer);
++}
++
++module_init(wl11000_led_init);
++module_exit(wl11000_led_cleanup);
+diff -urN linux.orig/arch/i386/wl11000/watchdog.c linux/arch/i386/wl11000/watchdog.c
+--- linux.orig/arch/i386/wl11000/watchdog.c	Wed Dec 31 16:00:00 1969
++++ linux/arch/i386/wl11000/watchdog.c	Tue Jan 15 20:36:44 2002
+@@ -0,0 +1,234 @@
++/*
++   linux/arch/i386/wl11000/watchdog.c 
++   
++   Watchdog driver for wl11000SA.
++   
++   Copyright (C) 2001-2002 Instant802 Networks Inc. , All Rights Reserved.
++
++   This program is free software; you can redistribute it and/or modify it
++   under the terms of the GNU General Public License as published by the Free
++   Software Foundation; either version 2 of the License, or (at your option)
++   any later version.  
++
++   The underlying watchdog is a Microchip Technology Inc. TC1232.  The TC1232
++   is connected to GPIO 30 (watchdog enable/disable) and 31 (watchdog clock).
++   The watchdog is disabled by the bootloader and enabeld here.  When the
++   watchdog is enabled (GPIO 31 = 1) the clock (GPIO 31) needs to be toggled
++   every 600 ms.
++
++   This driver is a combination of a software and a hardware watchdog.  This
++   allows us to monitor userspace without imposing timing requirements on it
++   that it can't commit to.  At very small intervals wl11000_watchdog_ack() is
++   called.  It considers whether or not we should ack the hardware watchdog.
++   If we have heard from userspace recently we'll ack the watchdog, otherwise
++   we don't and allow the machine to reboot.
++
++   To disable the watchdog (for example while reflashing the unit) an ioctl is
++   available.
++   
++   David Kimdon <dwhedon@instant802.com>, January 15, 2001:
++     - Initial distribution.
++
++*/
++
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/timer.h>
++#include <linux/module.h>
++#include <linux/fs.h>
++#include <linux/miscdevice.h>
++#include <linux/watchdog.h>
++
++#include <asm/uaccess.h>
++#include <asm/io.h>
++#include <asm/wl11000.h>
++
++#define OUR_NAME "wl11000 watchdog"
++#define KERNELSPACE_PERIOD (HZ/20)
++#define USERSPACE_PERIOD (HZ * 60)
++
++#define CONFIG_WATCHDOG_NOWAYOUT 1
++
++/* 
++ Cutoff for the next userspace ping.  If we don't get something in time we'll
++ allow the hardware watchdog to reboot us.
++*/
++static unsigned long next_userspace;
++
++static unsigned int watchdog_enabled = 0;
++static unsigned int watchdog_is_open = 0;
++static struct timer_list watchdog_timer;
++
++
++static inline void watchdog_schedule_ack(void)
++{
++	watchdog_timer.expires = jiffies + KERNELSPACE_PERIOD;
++	add_timer(&watchdog_timer);
++}
++
++
++void wl11000_watchdog_ack(unsigned long reschedule)
++{
++	unsigned long flags;
++	unsigned int dog;
++
++	if (watchdog_enabled) {
++
++		if (time_before(jiffies, next_userspace)) {
++			spin_lock_irqsave(&wl11000_io_lock, flags);
++			outb(0xa9, 0x22);
++			dog = 0xFF & inb(0x23);
++			spin_unlock_irqrestore(&wl11000_io_lock, flags);
++
++			if (dog & 0x80) {
++				outw(0x40a9, 0x22);
++			} else {
++				outw(0xC0a9, 0x22);
++			}
++
++		} else {
++			printk(OUR_NAME
++			       ": userspace ping not received.\n");
++		}
++
++		if (reschedule) {
++			watchdog_schedule_ack();
++		}
++	}
++}
++
++
++static ssize_t watchdog_write(struct file *file, const char *inbuf,
++			      size_t size, loff_t * off)
++{
++	if (size) {
++		next_userspace = jiffies + USERSPACE_PERIOD;
++		return 1;
++	}
++	return 0;
++}
++
++
++static void watchdog_enable(void)
++{
++	next_userspace = jiffies + USERSPACE_PERIOD;
++	watchdog_enabled = 1;
++	watchdog_schedule_ack();
++	outw(0x40a9, 0x22);	/* enable hardware watchdog */
++	printk(KERN_INFO OUR_NAME
++	       ": enabled. userspace %d s, kernelspace %d ms.\n",
++	       USERSPACE_PERIOD / HZ, KERNELSPACE_PERIOD * 1000 / HZ);
++}
++
++static int watchdog_open(struct inode *inode, struct file *file)
++{
++	switch (MINOR(inode->i_rdev)) {
++	case WATCHDOG_MINOR:
++		if (watchdog_is_open) {
++			return -EBUSY;
++		}
++
++		if (!watchdog_enabled) {
++			watchdog_enable();
++		}
++		watchdog_is_open = 1;
++		MOD_INC_USE_COUNT;
++		break;
++	default:
++		return -ENODEV;
++	}
++	return 0;
++}
++
++
++/*
++   If the watchdog is already disabled when the device is closed (presumably
++   because someone used the WDIOS_DISABLECARD ioctl) we don't touch the state
++   of the watchdog.  This way even if CONFIG_WATCHDOG_NOWAYOUT is defined it is
++   possible to disable the watchdog once it has been enabled, but it isn't as
++   simple as just closing the device.  
++*/
++static int watchdog_release(struct inode *inode, struct file *file)
++{
++	if (MINOR(inode->i_rdev) == WATCHDOG_MINOR) {
++		if (watchdog_enabled) {
++			watchdog_enabled = 0;
++			del_timer_sync(&watchdog_timer);
++#ifndef CONFIG_WATCHDOG_NOWAYOUT
++			outw(0x80a9, 0x22);	/* disable hardware watchdog */
++			printk(KERN_INFO OUR_NAME ": disabled.\n");
++#endif
++		}
++		watchdog_is_open = 0;
++		MOD_DEC_USE_COUNT;
++	}
++	return 0;
++}
++
++static int watchdog_ioctl(struct inode *inode, struct file *file,
++			  unsigned int cmd, unsigned long arg)
++{
++	int rv;
++
++	switch (cmd) {
++
++	default:
++		return -ENOTTY;
++
++	case WDIOC_SETOPTIONS:
++		if (copy_from_user(&rv, (int *) arg, sizeof(int)))
++			return -EFAULT;
++
++		if (rv & WDIOS_DISABLECARD) {
++			if (watchdog_enabled) {
++				watchdog_enabled = 0;
++				del_timer_sync(&watchdog_timer);
++				outw(0x80a9, 0x22);	/* disable hardware watchdog */
++				printk(KERN_INFO OUR_NAME ": disabled.\n");
++			}
++		}
++
++		if (rv & WDIOS_ENABLECARD) {
++			if (!watchdog_enabled) {
++				watchdog_enable();
++			}
++		}
++		return 0;
++	}
++
++}
++
++
++struct file_operations watchdog_fops = {
++	write:watchdog_write,
++	open:watchdog_open,
++	release:watchdog_release,
++	ioctl:watchdog_ioctl,
++};
++
++
++static struct miscdevice watchdog_miscdev = {
++	WATCHDOG_MINOR,
++	"watchdog",
++	&watchdog_fops
++};
++
++
++int __init wl11000_watchdog_init(void)
++{
++	misc_register(&watchdog_miscdev);
++	init_timer(&watchdog_timer);
++	watchdog_timer.function = wl11000_watchdog_ack;
++	watchdog_timer.data = 1;
++
++	return 0;
++}
++
++
++void __exit wl11000_watchdog_cleanup(void)
++{
++	misc_deregister(&watchdog_miscdev);
++}
++
++module_init(wl11000_watchdog_init);
++module_exit(wl11000_watchdog_cleanup);
+diff -urN linux.orig/drivers/block/rd.c linux/drivers/block/rd.c
+--- linux.orig/drivers/block/rd.c	Wed Jan  2 15:39:41 2002
++++ linux/drivers/block/rd.c	Wed Jan  2 15:51:53 2002
+@@ -47,6 +47,7 @@
+ #include <linux/minix_fs.h>
+ #include <linux/ext2_fs.h>
+ #include <linux/romfs_fs.h>
++#include <linux/cramfs_fs.h>
+ #include <linux/fs.h>
+ #include <linux/kernel.h>
+ #include <linux/hdreg.h>
+@@ -571,6 +572,7 @@
+ 	struct minix_super_block *minixsb;
+ 	struct ext2_super_block *ext2sb;
+ 	struct romfs_super_block *romfsb;
++	struct cramfs_super *cramfsb;
+ 	int nblocks = -1;
+ 	unsigned char *buf;
+ 
+@@ -581,6 +583,7 @@
+ 	minixsb = (struct minix_super_block *) buf;
+ 	ext2sb = (struct ext2_super_block *) buf;
+ 	romfsb = (struct romfs_super_block *) buf;
++	cramfsb = (struct cramfs_super *) buf;
+ 	memset(buf, 0xe5, size);
+ 
+ 	/*
+@@ -610,6 +613,15 @@
+ 		       "RAMDISK: romfs filesystem found at block %d\n",
+ 		       start_block);
+ 		nblocks = (ntohl(romfsb->size)+BLOCK_SIZE-1)>>BLOCK_SIZE_BITS;
++		goto done;
++	}
++
++	/* so is cramfs */
++	if (cramfsb->magic == CRAMFS_MAGIC) {
++		printk(KERN_NOTICE
++		       "RAMDISK: cramfs filesystem found at block %d\n",
++		       start_block);
++		nblocks = (cramfsb->size+BLOCK_SIZE-1)>>BLOCK_SIZE_BITS;
+ 		goto done;
+ 	}
+ 
+diff -urN linux.orig/drivers/char/serial.c linux/drivers/char/serial.c
+--- linux.orig/drivers/char/serial.c	Wed Jan  2 15:39:43 2002
++++ linux/drivers/char/serial.c	Wed Jan  2 15:51:53 2002
+@@ -881,6 +881,7 @@
+ {
+ 	int status;
+ 	int pass_counter = 0;
++	int iir;
+ 	struct async_struct * info;
+ #ifdef CONFIG_SERIAL_MULTIPORT	
+ 	int first_multi = 0;
+@@ -901,6 +902,7 @@
+ 		first_multi = inb(multi->port_monitor);
+ #endif
+ 
++	iir = serial_in(info, UART_IIR);
+ 	do {
+ 		status = serial_inp(info, UART_LSR);
+ #ifdef SERIAL_DEBUG_INTR
+@@ -909,8 +911,18 @@
+ 		if (status & UART_LSR_DR)
+ 			receive_chars(info, &status, regs);
+ 		check_modem_status(info);
++#ifdef CONFIG_AMD_ELAN
++		/* There is a bug in the UART on the AMD Elan SC4x0
++		  embedded processor series; the THRE bit of the line
++		  status register seems to be delayed one bit clock after
++		  the interrupt is generated, so kludge this if the
++		  IIR indicates a Transmit Holding Register Interrupt */
++		if (status & UART_LSR_THRE || (iir & UART_IIR_ID) == UART_IIR_THRI)
++			transmit_chars(info, 0);
++#else
+ 		if (status & UART_LSR_THRE)
+ 			transmit_chars(info, 0);
++#endif
+ 		if (pass_counter++ > RS_ISR_PASS_LIMIT) {
+ #if 0
+ 			printk("rs_single loop break.\n");
+diff -urN linux.orig/drivers/mtd/chips/cfi_cmdset_0002.c linux/drivers/mtd/chips/cfi_cmdset_0002.c
+--- linux.orig/drivers/mtd/chips/cfi_cmdset_0002.c	Wed Nov  7 23:41:23 2001
++++ linux/drivers/mtd/chips/cfi_cmdset_0002.c	Mon Nov 19 20:41:23 2001
+@@ -331,6 +331,7 @@
+ 	struct cfi_private *cfi = map->fldrv_priv;
+ 	DECLARE_WAITQUEUE(wait, current);
+ 	int ret = 0;
++	int tries_left = 5;
+ 
+  retry:
+ 	cfi_spin_lock(chip->mutex);
+@@ -395,6 +396,15 @@
+ 		printk(KERN_WARNING "Last[%ld] is %x, datum is %x\n",(Count - 1) % 4,Last[(Count - 1) % 4],datum);
+ 	        cfi_send_gen_cmd(0xF0, 0, chip->start, map, cfi, cfi->device_type, NULL);
+ 		DISABLE_VPP(map);
++		if (tries_left > 0) { // dave
++			printk(KERN_WARNING "mtd lowlevel write error: %d retries left: retrying\n", tries_left);
++			ret = 0;
++			tries_left--;
++			chip->state = FL_READY;
++			cfi_spin_unlock(chip->mutex);
++			cfi_udelay(10);
++			goto retry;
++		}
+ 		ret = -EIO;
+ 	}       
+ 	DISABLE_VPP(map);
+@@ -589,7 +599,7 @@
+ 	timeo = jiffies + (HZ*20);
+ 
+ 	cfi_spin_unlock(chip->mutex);
+-	schedule_timeout(HZ);
++	schedule_timeout(HZ/5);
+ 	cfi_spin_lock(chip->mutex);
+ 	
+ 	rdy_mask = CMD(0x80);
+diff -urN linux.orig/drivers/mtd/chips/jedec_probe.c linux/drivers/mtd/chips/jedec_probe.c
+--- linux.orig/drivers/mtd/chips/jedec_probe.c	Wed Nov  7 23:41:23 2001
++++ linux/drivers/mtd/chips/jedec_probe.c	Thu Nov  8 16:43:35 2001
+@@ -26,6 +26,7 @@
+ #define MANUFACTURER_ST		0x0020
+ #define MANUFACTURER_SST	0x00BF
+ #define MANUFACTURER_TOSHIBA	0x0098
++#define MANUFACTURER_MACRONIX   0x00C2
+ 
+ /* AMD */
+ #define AM29F800BB	0x2258
+@@ -56,6 +57,10 @@
+ #define TC58FVT160	0x00C2
+ #define TC58FVB160	0x0043
+ 
++/* Macronix */
++#define MX29F800Bx8     0x0058  // MX29F800B used as 8 bit device
++#define MX29F800Tx8     0x00D6  // MX29F800B used as 8 bit device
++
+ 
+ struct amd_flash_info {
+ 	const __u16 mfr_id;
+@@ -248,6 +253,30 @@
+                           ERASEINFO(0x08000,2),
+ 			  ERASEINFO(0x02000,8)
+                 }
++         }, {
++		mfr_id: MANUFACTURER_MACRONIX,
++		dev_id: MX29F800Bx8,
++		name: "Macronix MX29F800B - 8bit access",
++		DevSize: SIZE_1MiB,
++//		CmdSet:	P_ID_AMD_STD,
++		NumEraseRegions: 4,
++		regions: {ERASEINFO(0x04000,1),
++			  ERASEINFO(0x02000,2),
++			  ERASEINFO(0x08000,1),
++			  ERASEINFO(0x10000,15),
++		}
++	}, {
++		mfr_id: MANUFACTURER_MACRONIX,
++		dev_id: MX29F800Tx8,
++		name: "Macronix MX29F800T - 8bit access",
++		DevSize: SIZE_1MiB,
++//		CmdSet:	P_ID_AMD_STD,
++		NumEraseRegions: 4,
++		regions: {ERASEINFO(0x10000,15),
++			  ERASEINFO(0x08000,1),
++			  ERASEINFO(0x02000,2),
++			  ERASEINFO(0x04000,1)
++		}
+ 	} 
+ };
+ 
+diff -urN linux.orig/drivers/mtd/maps/Config.in linux/drivers/mtd/maps/Config.in
+--- linux.orig/drivers/mtd/maps/Config.in	Wed Nov  7 23:41:23 2001
++++ linux/drivers/mtd/maps/Config.in	Thu Nov  8 19:47:37 2001
+@@ -11,6 +11,14 @@
+    hex '    Physical start address of flash mapping' CONFIG_MTD_PHYSMAP_START 0x8000000
+    hex '    Physical length of flash mapping' CONFIG_MTD_PHYSMAP_LEN 0x4000000
+    int '    Bus width in octets' CONFIG_MTD_PHYSMAP_BUSWIDTH 2
++   string '    Probe type?' CONFIG_MTD_PHYSMAP_TYPE "cfi_probe"
++fi
++dep_mbool '  2nd physically mapped device?' CONFIG_MTD_PHYSMAP_2DEVICES $CONFIG_MTD_PHYSMAP
++if [ "$CONFIG_MTD_PHYSMAP_2DEVICES" = "y" ]; then
++   hex '    Physical start address of flash mapping' CONFIG_MTD_PHYSMAP_START2 0xc000000
++   hex '    Physical length of flash mapping' CONFIG_MTD_PHYSMAP_LEN2 0x4000000
++   int '    Bus width in octets' CONFIG_MTD_PHYSMAP_BUSWIDTH2 2
++   string '    Probe type?' CONFIG_MTD_PHYSMAP_TYPE2 "cfi_probe"
+ fi
+ 
+ if [ "$CONFIG_SPARC" = "y" -o "$CONFIG_SPARC64" = "y" ]; then
+diff -urN linux.orig/drivers/mtd/maps/physmap.c linux/drivers/mtd/maps/physmap.c
+--- linux.orig/drivers/mtd/maps/physmap.c	Wed Nov  7 23:41:23 2001
++++ linux/drivers/mtd/maps/physmap.c	Thu Nov  8 19:47:37 2001
+@@ -13,11 +13,22 @@
+ #include <linux/config.h>
+ 
+ 
+-#define WINDOW_ADDR CONFIG_MTD_PHYSMAP_START
+-#define WINDOW_SIZE CONFIG_MTD_PHYSMAP_LEN
+-#define BUSWIDTH CONFIG_MTD_PHYSMAP_BUSWIDTH
+-
+-static struct mtd_info *mymtd;
++#define WINDOW_ADDR1 CONFIG_MTD_PHYSMAP_START
++#define WINDOW_SIZE1 CONFIG_MTD_PHYSMAP_LEN
++#define BUSWIDTH1 CONFIG_MTD_PHYSMAP_BUSWIDTH
++#define TYPE1 CONFIG_MTD_PHYSMAP_TYPE
++#define WINDOW_ADDR2 CONFIG_MTD_PHYSMAP_START2
++#define WINDOW_SIZE2 CONFIG_MTD_PHYSMAP_LEN2
++#define BUSWIDTH2 CONFIG_MTD_PHYSMAP_BUSWIDTH2
++#define TYPE2 CONFIG_MTD_PHYSMAP_TYPE2
++
++static void __exit cleanup_physmap(void);
++
++
++static struct mtd_info *mymtd1 = 0;
++#ifdef CONFIG_MTD_PHYSMAP_2DEVICES
++static struct mtd_info *mymtd2 = 0;
++#endif
+ 
+ __u8 physmap_read8(struct map_info *map, unsigned long ofs)
+ {
+@@ -62,10 +73,26 @@
+ 	memcpy_toio(map->map_priv_1 + to, from, len);
+ }
+ 
+-struct map_info physmap_map = {
+-	name: "Physically mapped flash",
+-	size: WINDOW_SIZE,
+-	buswidth: BUSWIDTH,
++struct map_info physmap_map1 = {
++	name: "physically mapped mtd",
++	size: WINDOW_SIZE1,
++	buswidth: BUSWIDTH1,
++	read8: physmap_read8,
++	read16: physmap_read16,
++	read32: physmap_read32,
++	copy_from: physmap_copy_from,
++	write8: physmap_write8,
++	write16: physmap_write16,
++	write32: physmap_write32,
++	copy_to: physmap_copy_to,
++	map_priv_1: 0
++};
++
++#ifdef CONFIG_MTD_PHYSMAP_2DEVICES
++struct map_info physmap_map2 = {
++	name: "2nd physically mapped mtd",
++	size: WINDOW_SIZE2,
++	buswidth: BUSWIDTH2,
+ 	read8: physmap_read8,
+ 	read16: physmap_read16,
+ 	read32: physmap_read32,
+@@ -73,40 +100,68 @@
+ 	write8: physmap_write8,
+ 	write16: physmap_write16,
+ 	write32: physmap_write32,
+-	copy_to: physmap_copy_to
++	copy_to: physmap_copy_to,
++	map_priv_1: 0
+ };
++#endif
+ 
+ int __init init_physmap(void)
+ {
+-       	printk(KERN_NOTICE "physmap flash device: %x at %x\n", WINDOW_SIZE, WINDOW_ADDR);
+-	physmap_map.map_priv_1 = (unsigned long)ioremap(WINDOW_ADDR, WINDOW_SIZE);
+-
+-	if (!physmap_map.map_priv_1) {
++       	printk(KERN_NOTICE "physmap flash device: 0x%x at 0x%x\n", WINDOW_SIZE1, WINDOW_ADDR1);
++	physmap_map1.map_priv_1 = (unsigned long)ioremap(WINDOW_ADDR1, WINDOW_SIZE1);
++#ifdef CONFIG_MTD_PHYSMAP_2DEVICES
++       	printk(KERN_NOTICE "2nd physmap flash device: 0x%x at 0x%x\n", WINDOW_SIZE2, WINDOW_ADDR2);
++	physmap_map2.map_priv_1 = (unsigned long)ioremap(WINDOW_ADDR2, WINDOW_SIZE2);
++#endif
++
++	if (!physmap_map1.map_priv_1
++#ifdef CONFIG_MTD_PHYSMAP_2DEVICES
++	    || !physmap_map2.map_priv_1
++#endif
++		) {
+ 		printk("Failed to ioremap\n");
+-		return -EIO;
++		goto error;
+ 	}
+-	mymtd = do_map_probe("cfi_probe", &physmap_map);
+-	if (mymtd) {
+-		mymtd->module = THIS_MODULE;
++	mymtd1 = do_map_probe( TYPE1 , &physmap_map1);
++	if (!mymtd1) goto error;
++	mymtd1->module = THIS_MODULE;
++	add_mtd_device(mymtd1);
++#ifdef CONFIG_MTD_PHYSMAP_2DEVICES
++	mymtd2 = do_map_probe( TYPE2 , &physmap_map2);
++	if (!mymtd2) goto error;
++	mymtd2->module = THIS_MODULE;
++	add_mtd_device(mymtd2);
++#endif
+ 
+-		add_mtd_device(mymtd);
+-		return 0;
+-	}
++	return 0;
+ 
+-	iounmap((void *)physmap_map.map_priv_1);
++ error:
++	cleanup_physmap();
+ 	return -ENXIO;
+ }
+ 
+ static void __exit cleanup_physmap(void)
+ {
+-	if (mymtd) {
+-		del_mtd_device(mymtd);
+-		map_destroy(mymtd);
++	if (mymtd1) {
++		del_mtd_device(mymtd1);
++		map_destroy(mymtd1);
++		mymtd1 = 0;
++	}
++	if (physmap_map1.map_priv_1) {
++		iounmap((void *)physmap_map1.map_priv_1);
++		physmap_map1.map_priv_1 = 0;
++	}
++#ifdef CONFIG_MTD_PHYSMAP_2DEVICES
++	if (mymtd2) {
++		del_mtd_device(mymtd2);
++		map_destroy(mymtd2);
++		mymtd2 = 0;
+ 	}
+-	if (physmap_map.map_priv_1) {
+-		iounmap((void *)physmap_map.map_priv_1);
+-		physmap_map.map_priv_1 = 0;
++	if (physmap_map2.map_priv_1) {
++		iounmap((void *)physmap_map2.map_priv_1);
++		physmap_map2.map_priv_1 = 0;
+ 	}
++#endif
+ }
+ 
+ module_init(init_physmap);
+diff -urN linux.orig/drivers/mtd/mtdblock_ro.c linux/drivers/mtd/mtdblock_ro.c
+--- linux.orig/drivers/mtd/mtdblock_ro.c	Wed Nov  7 23:41:23 2001
++++ linux/drivers/mtd/mtdblock_ro.c	Thu Nov  8 14:06:03 2001
+@@ -153,7 +153,7 @@
+ 
+ 	 case READ:
+ 	 if (MTD_READ(mtd,current_request->sector<<9, 
+-		      current_request->nr_sectors << 9, 
++		      current_request->current_nr_sectors << 9, 
+ 		      &retlen, current_request->buffer) == 0)
+ 	    res = 1;
+ 	 else
+@@ -175,7 +175,7 @@
+ 
+ 	 // Do the write
+ 	 if (MTD_WRITE(mtd,current_request->sector<<9, 
+-		       current_request->nr_sectors << 9, 
++		       current_request->current_nr_sectors << 9, 
+ 		       &retlen, current_request->buffer) == 0)
+ 	    res = 1;
+ 	 else
+diff -urN linux.orig/drivers/net/ne.c linux/drivers/net/ne.c
+--- linux.orig/drivers/net/ne.c	Wed Nov  7 23:40:30 2001
++++ linux/drivers/net/ne.c	Thu Nov  8 14:06:03 2001
+@@ -71,7 +71,7 @@
+ /* A zero-terminated list of I/O addresses to be probed at boot. */
+ #ifndef MODULE
+ static unsigned int netcard_portlist[] __initdata = {
+-	0x300, 0x280, 0x320, 0x340, 0x360, 0x380, 0
++	0x200, 0x300, 0x280, 0x320, 0x340, 0x360, 0x380, 0
+ };
+ #endif
+ 
+diff -urN linux.orig/include/asm-i386/timex.h linux/include/asm-i386/timex.h
+--- linux.orig/include/asm-i386/timex.h	Wed Nov  7 23:40:16 2001
++++ linux/include/asm-i386/timex.h	Wed Jan 16 11:12:38 2002
+@@ -9,7 +9,16 @@
+ #include <linux/config.h>
+ #include <asm/msr.h>
+ 
+-#define CLOCK_TICK_RATE	1193180 /* Underlying HZ */
++#ifdef CONFIG_AMD_ELAN
++ #ifndef CONFIG_M586
++  #define CLOCK_TICK_RATE         1189200 /* Underlying HZ on AMD SC300/310/400/410 */
++ #else
++  #define CLOCK_TICK_RATE         1188200 /* Underlying HZ on AMD SC520 */
++ #endif
++#else
++ #define CLOCK_TICK_RATE         1193180 /* Underlying HZ */
++#endif
++
+ #define CLOCK_TICK_FACTOR	20	/* Factor of both 1000000 and CLOCK_TICK_RATE */
+ #define FINETUNE ((((((long)LATCH * HZ - CLOCK_TICK_RATE) << SHIFT_HZ) * \
+ 	(1000000/CLOCK_TICK_FACTOR) / (CLOCK_TICK_RATE/CLOCK_TICK_FACTOR)) \
+diff -urN linux.orig/include/asm-i386/wl11000.h linux/include/asm-i386/wl11000.h
+--- linux.orig/include/asm-i386/wl11000.h	Wed Dec 31 16:00:00 1969
++++ linux/include/asm-i386/wl11000.h	Mon Jan 14 13:31:23 2002
+@@ -0,0 +1,20 @@
++#ifndef _ASM_WL11000_H
++#define _ASM_WL11000_H
++
++#include <linux/init.h>
++
++extern spinlock_t wl11000_io_lock;
++
++void wl11000_config(void) __init;
++void wl11000_watchdog_ack(unsigned long reschedule);
++void wl11000_set_led(unsigned int state);
++
++enum {
++	WL11000_LED_RX_ON,    /* wireless activity on       */
++	WL11000_LED_RX_OFF,   /* wireless activity off      */
++	WL11000_LED_BR_ON,    /* wireless link on           */
++	WL11000_LED_BR_OFF,   /* wireless link off          */
++	WL11000_LED_BR_BLINK, /* wireless link initializing */
++};
++
++#endif /* _ASM_WL11000_H */
+diff -urN linux.orig/init/main.c linux/init/main.c
+--- linux.orig/init/main.c	Wed Jan  2 15:38:57 2002
++++ linux/init/main.c	Wed Jan  2 15:51:54 2002
+@@ -69,6 +69,10 @@
+ #include <asm/smp.h>
+ #endif
+ 
++#ifdef CONFIG_WL11000
++#include <asm/wl11000.h>
++#endif
++
+ /*
+  * Versions of gcc older than that listed below may actually compile
+  * and link okay, but the end product can have subtle run time bugs.
+@@ -724,7 +728,9 @@
+ #ifdef CONFIG_TC
+ 	tc_init();
+ #endif
+-
++#ifdef CONFIG_WL11000
++        wl11000_config();
++#endif
+ 	/* Networking initialization needs a process context */ 
+ 	sock_init();
+ 
+diff -urN linux.orig/kernel/timer.c linux/kernel/timer.c
+--- linux.orig/kernel/timer.c	Wed Nov  7 23:40:13 2001
++++ linux/kernel/timer.c	Mon Jan 14 14:05:35 2002
+@@ -24,6 +24,9 @@
+ #include <linux/kernel_stat.h>
+ 
+ #include <asm/uaccess.h>
++#ifdef CONFIG_WL11000
++#include <asm/wl11000.h>
++#endif
+ 
+ /*
+  * Timekeeping variables
+@@ -674,6 +677,14 @@
+ void do_timer(struct pt_regs *regs)
+ {
+ 	(*(unsigned long *)&jiffies)++;
++#ifdef CONFIG_WL11000
++	/* Under extreme load the prism driver appears to spend too long in
++	 * interrupts and timer bottom halfs don't get run soon enough to
++	 * prevent the hardware watchdog from rebooting us.  This is a hack to
++	 * ack the watchdog on every time tick.  Eventually we want to fix the
++	 * prism driver so this isn't necessary. */
++	wl11000_watchdog_ack(0);
++#endif
+ #ifndef CONFIG_SMP
+ 	/* SMP process accounting uses the local APIC timer */
+ 
+diff -urN linux.orig/net/Config.in linux/net/Config.in
+--- linux.orig/net/Config.in	Wed Jan  2 15:39:17 2002
++++ linux/net/Config.in	Wed Jan  2 15:51:54 2002
+@@ -59,7 +59,7 @@
+ if [ "$CONFIG_DECNET" != "n" ]; then
+    source net/decnet/Config.in
+ fi
+-tristate '802.1d Ethernet Bridging' CONFIG_BRIDGE
++dep_tristate '802.1d Ethernet Bridging' CONFIG_BRIDGE $CONFIG_INET
+ if [ "$CONFIG_EXPERIMENTAL" = "y" ]; then
+    tristate 'CCITT X.25 Packet Layer (EXPERIMENTAL)' CONFIG_X25
+    tristate 'LAPB Data Link Driver (EXPERIMENTAL)' CONFIG_LAPB
+diff -urN linux.orig/net/bridge/br.c linux/net/bridge/br.c
+--- linux.orig/net/bridge/br.c	Wed Nov  7 23:40:27 2001
++++ linux/net/bridge/br.c	Fri Dec 14 16:03:30 2001
+@@ -43,9 +43,7 @@
+ 	printk(KERN_INFO "NET4: Ethernet Bridge 008 for NET4.0\n");
+ 
+ 	br_handle_frame_hook = br_handle_frame;
+-#ifdef CONFIG_INET
+ 	br_ioctl_hook = br_ioctl_deviceless_stub;
+-#endif
+ #if defined(CONFIG_ATM_LANE) || defined(CONFIG_ATM_LANE_MODULE)
+ 	br_fdb_get_hook = br_fdb_get;
+ 	br_fdb_put_hook = br_fdb_put;
+@@ -62,9 +60,7 @@
+ 
+ static void __br_clear_ioctl_hook(void)
+ {
+-#ifdef CONFIG_INET
+ 	br_ioctl_hook = NULL;
+-#endif	
+ }
+ 
+ static void __exit br_deinit(void)
+diff -urN linux.orig/net/bridge/br_device.c linux/net/bridge/br_device.c
+--- linux.orig/net/bridge/br_device.c	Wed Nov  7 23:40:27 2001
++++ linux/net/bridge/br_device.c	Fri Dec 14 16:03:30 2001
+@@ -71,7 +71,7 @@
+ 	return 0;
+ }
+ 
+-static int br_dev_xmit(struct sk_buff *skb, struct net_device *dev)
++int br_dev_xmit(struct sk_buff *skb, struct net_device *dev)
+ {
+ 	struct net_bridge *br;
+ 	int ret;
+diff -urN linux.orig/net/bridge/br_if.c linux/net/bridge/br_if.c
+--- linux.orig/net/bridge/br_if.c	Wed Jan  2 15:39:21 2002
++++ linux/net/bridge/br_if.c	Wed Jan  2 15:51:54 2002
+@@ -226,6 +226,9 @@
+ 	if (dev->flags & IFF_LOOPBACK || dev->type != ARPHRD_ETHER)
+ 		return -EINVAL;
+ 
++	if (dev->hard_start_xmit == br_dev_xmit)
++		return -ELOOP;
++
+ 	dev_hold(dev);
+ 	write_lock_bh(&br->lock);
+ 	if ((p = new_nbp(br, dev)) == NULL) {
+diff -urN linux.orig/net/bridge/br_input.c linux/net/bridge/br_input.c
+--- linux.orig/net/bridge/br_input.c	Wed Nov  7 23:40:27 2001
++++ linux/net/bridge/br_input.c	Fri Dec 14 16:03:30 2001
+@@ -46,7 +46,7 @@
+ 			br_pass_frame_up_finish);
+ }
+ 
+-static void __br_handle_frame(struct sk_buff *skb)
++static int br_handle_frame_finish(struct sk_buff *skb)
+ {
+ 	struct net_bridge *br;
+ 	unsigned char *dest;
+@@ -57,103 +57,112 @@
+ 	dest = skb->mac.ethernet->h_dest;
+ 
+ 	p = skb->dev->br_port;
+-	br = p->br;
+-	passedup = 0;
++	if (p == NULL)
++		goto err_nolock;
+ 
+-	if (!(br->dev.flags & IFF_UP) ||
+-	    p->state == BR_STATE_DISABLED)
+-		goto freeandout;
++	br = p->br;
++	read_lock(&br->lock);
++	if (skb->dev->br_port == NULL)
++		goto err;
+ 
++	passedup = 0;
+ 	if (br->dev.flags & IFF_PROMISC) {
+ 		struct sk_buff *skb2;
+ 
+ 		skb2 = skb_clone(skb, GFP_ATOMIC);
+-		if (skb2) {
++		if (skb2 != NULL) {
+ 			passedup = 1;
+ 			br_pass_frame_up(br, skb2);
+ 		}
+ 	}
+ 
+-	if (skb->mac.ethernet->h_source[0] & 1)
+-		goto freeandout;
+-
+-	if (!passedup &&
+-	    (dest[0] & 1) &&
+-	    (br->dev.flags & IFF_ALLMULTI || br->dev.mc_list != NULL)) {
+-		struct sk_buff *skb2;
+-
+-		skb2 = skb_clone(skb, GFP_ATOMIC);
+-		if (skb2) {
+-			passedup = 1;
+-			br_pass_frame_up(br, skb2);
+-		}
+-	}
+-
+-	if (br->stp_enabled &&
+-	    !memcmp(dest, bridge_ula, 5) &&
+-	    !(dest[5] & 0xF0))
+-		goto handle_special_frame;
+-
+-	if (p->state == BR_STATE_LEARNING ||
+-	    p->state == BR_STATE_FORWARDING)
+-		br_fdb_insert(br, p, skb->mac.ethernet->h_source, 0);
+-
+-	if (p->state != BR_STATE_FORWARDING)
+-		goto freeandout;
+-
+ 	if (dest[0] & 1) {
+-		br_flood_forward(br, skb, 1);
++		br_flood_forward(br, skb, !passedup);
+ 		if (!passedup)
+ 			br_pass_frame_up(br, skb);
+-		else
+-			kfree_skb(skb);
+-		return;
++		goto out;
+ 	}
+ 
+ 	dst = br_fdb_get(br, dest);
+-
+ 	if (dst != NULL && dst->is_local) {
+ 		if (!passedup)
+ 			br_pass_frame_up(br, skb);
+ 		else
+ 			kfree_skb(skb);
+ 		br_fdb_put(dst);
+-		return;
++		goto out;
+ 	}
+ 
+ 	if (dst != NULL) {
+ 		br_forward(dst->dst, skb);
+ 		br_fdb_put(dst);
+-		return;
++		goto out;
+ 	}
+ 
+ 	br_flood_forward(br, skb, 0);
+-	return;
+ 
+- handle_special_frame:
+-	if (!dest[5]) {
+-		br_stp_handle_bpdu(skb);
+-		return;
+-	}
++out:
++	read_unlock(&br->lock);
++	return 0;
+ 
+- freeandout:
++err:
++	read_unlock(&br->lock);
++err_nolock:
+ 	kfree_skb(skb);
++	return 0;
+ }
+ 
+-static int br_handle_frame_finish(struct sk_buff *skb)
++void br_handle_frame(struct sk_buff *skb)
+ {
+ 	struct net_bridge *br;
++	unsigned char *dest;
++	struct net_bridge_port *p;
+ 
+-	br = skb->dev->br_port->br;
++	dest = skb->mac.ethernet->h_dest;
++
++	p = skb->dev->br_port;
++	if (p == NULL)
++		goto err_nolock;
++
++	br = p->br;
+ 	read_lock(&br->lock);
+-	__br_handle_frame(skb);
+-	read_unlock(&br->lock);
++	if (skb->dev->br_port == NULL)
++		goto err;
+ 
+-	return 0;
+-}
++	if (!(br->dev.flags & IFF_UP) ||
++	    p->state == BR_STATE_DISABLED)
++		goto err;
+ 
+-void br_handle_frame(struct sk_buff *skb)
+-{
+-	NF_HOOK(PF_BRIDGE, NF_BR_PRE_ROUTING, skb, skb->dev, NULL,
++	if (skb->mac.ethernet->h_source[0] & 1)
++		goto err;
++
++	if (p->state == BR_STATE_LEARNING ||
++	    p->state == BR_STATE_FORWARDING)
++		br_fdb_insert(br, p, skb->mac.ethernet->h_source, 0);
++
++	if (br->stp_enabled &&
++	    !memcmp(dest, bridge_ula, 5) &&
++	    !(dest[5] & 0xF0))
++		goto handle_special_frame;
++
++	if (p->state == BR_STATE_FORWARDING) {
++		NF_HOOK(PF_BRIDGE, NF_BR_PRE_ROUTING, skb, skb->dev, NULL,
+ 			br_handle_frame_finish);
++		read_unlock(&br->lock);
++		return;
++	}
++
++err:
++	read_unlock(&br->lock);
++err_nolock:
++	kfree_skb(skb);
++	return;
++
++handle_special_frame:
++	if (!dest[5]) {
++		br_stp_handle_bpdu(skb);
++		return;
++	}
++
++	kfree_skb(skb);
+ }
+diff -urN linux.orig/net/bridge/br_private.h linux/net/bridge/br_private.h
+--- linux.orig/net/bridge/br_private.h	Wed Nov  7 23:40:27 2001
++++ linux/net/bridge/br_private.h	Fri Dec 14 16:03:30 2001
+@@ -120,6 +120,7 @@
+ extern void br_inc_use_count(void);
+ 
+ /* br_device.c */
++extern int br_dev_xmit(struct sk_buff *skb, struct net_device *dev);
+ extern void br_dev_setup(struct net_device *dev);
+ 
+ /* br_fdb.c */
+diff -urN linux.orig/net/bridge/br_stp.c linux/net/bridge/br_stp.c
+--- linux.orig/net/bridge/br_stp.c	Wed Nov  7 23:40:27 2001
++++ linux/net/bridge/br_stp.c	Mon Dec 10 13:56:51 2001
+@@ -371,7 +371,7 @@
+ 	if (p->state == BR_STATE_BLOCKING) {
+ 		printk(KERN_INFO "%s: port %i(%s) entering %s state\n",
+ 		       p->br->dev.name, p->port_no, p->dev->name, "listening");
+-
++		
+ 		p->state = BR_STATE_LISTENING;
+ 		br_timer_set(&p->forward_delay_timer, jiffies);
+ 	}
+diff -urN linux.orig/net/bridge/br_stp_timer.c linux/net/bridge/br_stp_timer.c
+--- linux.orig/net/bridge/br_stp_timer.c	Wed Nov  7 23:40:27 2001
++++ linux/net/bridge/br_stp_timer.c	Mon Dec 10 13:56:51 2001
+@@ -17,6 +17,7 @@
+ #include <linux/if_bridge.h>
+ #include <linux/smp_lock.h>
+ #include <asm/uaccess.h>
++#include <asm/wl11000.h>
+ #include "br_private.h"
+ #include "br_private_stp.h"
+ 
+@@ -83,12 +84,16 @@
+ 	if (p->state == BR_STATE_LISTENING) {
+ 		printk(KERN_INFO "%s: port %i(%s) entering %s state\n",
+ 		       p->br->dev.name, p->port_no, p->dev->name, "learning");
++		
++		wl11000_set_led(WL11000_LED_BR_BLINK);
+ 
+ 		p->state = BR_STATE_LEARNING;
+ 		br_timer_set(&p->forward_delay_timer, jiffies);
+ 	} else if (p->state == BR_STATE_LEARNING) {
+ 		printk(KERN_INFO "%s: port %i(%s) entering %s state\n",
+ 		       p->br->dev.name, p->port_no, p->dev->name, "forwarding");
++
++		wl11000_set_led(WL11000_LED_BR_ON);
+ 
+ 		p->state = BR_STATE_FORWARDING;
+ 		if (br_is_designated_for_some_port(p->br))

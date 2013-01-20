@@ -1,0 +1,6 @@
+#!/bin/sh
+if [ -x /etc/rw/rc.tweak ]
+then
+    exec /etc/rw/rc.tweak $*
+fi
+exit 0

@@ -1,0 +1,34 @@
+#
+# netcfg
+#
+
+# Primary Interface (RL2/wlan0, RL3/br0, RL4/eth0)
+# Need first 3 if not dhcp
+# p_dhcp should be either enabled or disabled
+p_dhcp=enabled
+p_address=192.168.65.4
+p_netmask=255.255.255.0
+p_broadcast=192.168.65.255
+
+# Secondary Interface (RL2/eth0, RL4/wlan0)
+# Ignored at RL3
+s_dhcp=enabled
+s_address=10.0.1.1
+s_netmask=255.255.255.224
+s_broadcast=10.0.1.31
+
+# These should pull from dhcp ...
+router=192.168.65.1
+tftphost=192.168.65.1
+logaddr=192.168.65.1
+
+# Network Swapping
+swaphost=
+swapport=
+
+# Masqerading support ... Masquerade this network
+# ex: 10.1.0.0/27
+# Will Masquerade 10.1.0.0-10.1.0.31
+# This assumes you've set up eth0 appropriately
+# elsewhere
+masq_net=

@@ -1,0 +1,4 @@
+#!/bin/sh
+echo -e "\n\n\t\tlinuxAP-eh Access Point / Wireless Router"
+echo -e "\t\t`cat /etc/linuxAP-version`"
+echo -e "\n\n"

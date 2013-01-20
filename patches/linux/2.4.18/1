@@ -1,0 +1,31 @@
+--- linux/Makefile	Mon Jun 10 13:58:02 2002
++++ linux.new/Makefile	Sat Feb  8 21:56:28 2003
+@@ -17,7 +17,7 @@
+ FINDHPATH	= $(HPATH)/asm $(HPATH)/linux $(HPATH)/scsi $(HPATH)/net
+ 
+ HOSTCC  	= gcc
+-HOSTCFLAGS	= -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer
++HOSTCFLAGS	= -Wall -Wstrict-prototypes -Os -fomit-frame-pointer
+ 
+ CROSS_COMPILE 	=
+ 
+@@ -88,7 +88,7 @@
+ 
+ CPPFLAGS := -D__KERNEL__ -I$(HPATH)
+ 
+-CFLAGS := $(CPPFLAGS) -Wall -Wstrict-prototypes -Wno-trigraphs -O2 \
++CFLAGS := $(CPPFLAGS) -Wall -Wstrict-prototypes -Wno-trigraphs -Os \
+ 	  -fomit-frame-pointer -fno-strict-aliasing -fno-common
+ AFLAGS := -D__ASSEMBLY__ $(CPPFLAGS)
+ 
+--- linux/arch/i386/Makefile	Sat Feb  8 23:46:15 2003
++++ linux.new/arch/i386/Makefile	Sun Feb  9 10:16:37 2003
+@@ -16,7 +16,7 @@
+ #           Added '-march' and '-mpreferred-stack-boundary' support
+ #
+ 
+-LD=$(CROSS_COMPILE)ld -m elf_i386
++LD=$(CROSS_COMPILE)ld -m elf_i386 --noinhibit-exec
+ OBJCOPY=$(CROSS_COMPILE)objcopy -O binary -R .note -R .comment -S
+ LDFLAGS=-e stext
+ LINKFLAGS =-T $(TOPDIR)/arch/i386/vmlinux.lds $(LDFLAGS)

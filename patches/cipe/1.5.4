@@ -1,0 +1,2054 @@
+diff -urN cipe/Checksums cipe.new/Checksums
+--- cipe/Checksums	2002-06-28 16:40:39.000000000 -0700
++++ cipe.new/Checksums	1969-12-31 17:00:00.000000000 -0700
+@@ -1,102 +0,0 @@
+-# This file contains a list of the files in this package with checksums.
+-# If you run this as a /bin/sh script, it will verify the PGP signature on
+-# this file and verify the individual files' checksums.
+-#
+-# Packaged by olaf@bigred, Sat Jun 29 01:40:35 2002
+-:<<'_marker_'
+------BEGIN PGP SIGNED MESSAGE-----
+-Hash: SHA1
+-
+-___size ____date_time _____________________________md5  name___________________
+-    725 20010207-0000 b5ebc54b523b3ca2523e6f02c4b33927  README
+-   1170 20020629-0140 f4936080274795738bd1edf47e3602fd  README.key-bug
+-   2207 20010207-0000 7542c1b6df4188118077f3b0cb3c0cc2  CHANGES
+-  17982 19980922-2026 8ca43cbc842c2336e835926c2166c28b  COPYING
+-    445 20020629-0122 b38d42f1fe89d6dff9a13332606554b7  cipe.lsm
+-  60182 20020629-0139 80519233727770627ebc84f6c0e25bc7  configure
+-  10897 20020629-0138 9b29b4556abf377929511333fed25625  configure.in
+-  78244 20020629-0140 c3eae76d997e83c06e1808c20ecb8f8a  cipe.info
+-   1434 20000802-1633 90f5ddc57a4d353974b704cfe3b0e8a1  tcpdump.patch
+-   1615 20020629-0140 b9841a597184775e1ee9e9cfd3781c7c  cipe.spec
+-   3453 20020530-1349 f34789b4c2727495d32ab4bcf31625b5  conf/Makefile-top.in
+-   2673 20001216-1927 f58a5f43af2eb58c9b65f24ff9baa62a  conf/Makefile-obj.in
+-   2392 20020629-0123 6e1f4d14dc31c942a0b2aefd358c9b2b  conf/aclocal.m4
+-   1617 20001216-1849 97770057fe7a6b696a2bae7b8485ef8e  conf/config.h.in
+-   1436 20001231-0002 584cd4be77550875ae8fde4ebae3bfa1  lib/Makefile.in
+-    276 20001216-1849 a9a795f9caff723c50a812dbcd13f7f6  lib/README
+-   1724 20001213-0238 d892121d21d3577889b21385da574b85  lib/cipe_syslog.c
+-   4258 20001231-0002 2d598c2cb8dea918aea32769d95d4c5c  lib/cipelib.h
+-    709 20001122-2123 77babd74b9eed7c489efee7f0dda3d17  lib/debug.c
+-    843 20001130-2312 53fa3ceb8be593144ae2c67d000ee458  lib/dsprintf.c
+-   1604 20001122-2123 b54a63787f854c5b5dbbfe9e237f0aeb  lib/getaddr.c
+-    950 20001120-2323 02c9e3ee23150ea2127f91afbab96582  lib/gethex.c
+-    485 20001117-1459 f6d33e6638ab85ac62843e5ed22f8351  lib/hex.c
+-   1402 20010211-2242 6262aae065d5fe30b26a6c98caed04ae  lib/hexdump.c
+-   1288 20001213-0238 74252d04bea0ab24c7146fb7336cd30b  lib/hexstr.c
+-    838 20001120-2323 b46dd4583b6f83faa52a34f98f536b35  lib/parseopt.c
+-    884 20001117-1459 0403fb103dc1c1d7482bc3e7513a9ce2  lib/retstatus.c
+-   1487 20001231-0002 945027f15d8dd476b50f2bbe7ebc89a6  lib/secchk.c
+-    943 20001130-2312 f81276bbd1f409e11031ec1bd46c407b  lib/setsig.c
+-    527 20001117-1459 61bd67e5c874ea1760f7dd0db1894714  lib/sighand.c
+-   1363 20001122-2123 020d88bd9f581b207dc0037d595ef151  lib/socks5_cmd.c
+-   1072 20001205-2021 f117bc8b89ab980b0328109ebb5ba1c5  lib/socks5_internal.h
+-   2051 20001122-2123 a95d091121f4a5f25ce9a72b2e58d08b  lib/socks5_open.c
+-    739 20001120-2323 3e751ad7e915282f3f562727a57d70a5  lib/socks_errlist.c
+-    647 20001130-2312 b5a668cc115c6c49e2839d6973b00229  lib/xread.c
+-    655 20001130-2312 fce3f5a7a7cca9adea256ea97af20e93  lib/xwrite.c
+-    851 20001213-0238 a67e99e7e5b5102f6bf9ad01634568c8  lib/xwritev.c
+-  11573 20020629-0138 9b48f3be63d8f0fe0fc4e4fa2e577591  cipe/cipe.h
+-   2424 20010209-1513 eba6da5982cd7147016aad4ed5424d68  cipe/crypto.h
+-  26349 20010211-2242 cf7bcbb373ef004ddc4ec339f505c171  cipe/ciped.c
+-   1051 20001216-1849 593831fecd8fd884bcee9b446b00131b  cipe/ciped.h
+-   1707 20001215-1855 248f1d74ad01b06ab02d609dcafa8cd9  cipe/ioctl.c
+-    959 20000327-1938 d12328ccb688ec53bee8a04775cf53a7  cipe/ioctl.h
+-   3094 20001120-0008 cc42e7aaa1cb706bdc9e78f250e400fb  cipe/options.in
+-   1250 20001216-1927 354c724bf54d04f07be284470ce376fe  cipe/genoptions.pl
+-   1917 20020530-1349 c6ebf585a24a3b00d1e1c37aead9229c  cipe/module.c
+-  16941 20010209-1516 f32bbf0a6beb990ccf451965b1bafa1c  cipe/device.c
+-  19854 20020629-0138 e93e1801a2449e58b5bad9688aa829a0  cipe/sock.c
+-  18963 20020629-0138 5532f6d9bf7d569232f128e5146db462  cipe/output.c
+-   7559 20000913-2346 bba87243b4b28093086cc63071288832  cipe/encaps.c
+-   5034 19961013-1825 9af2477ad5d09f437e3f5d4ef504b1db  cipe/idea0.h
+-   8805 20010209-1515 67c0f5a66842100f62a47b3f2074494b  cipe/idea0.c
+-   2909 20001007-0115 0319ee9ac19df08ec950e5187b0eaeb6  cipe/bf.h
+-  21063 20001026-1211 6ef626865914c3977fb620426014f7b8  cipe/bf.c
+-   2968 19970401-0004 0c9ad0d1d34108a13be183abd0173ce6  cipe/crc.c
+-   7037 20001101-1631 36ab58993dcff439170dc1b066daa017  cipe/crc32.c
+-   1076 20000312-0110 0b76c953fcdd54a4e6150ae5d8af2565  cipe/crcgen.c
+-   2588 19970401-0007 7106989d997a72788054ed910db7815e  cipe/idea-i386.S
+-   5702 20001116-1745 2e9e7f5b0b49a2be65a8d34eb1ab0245  cipe/bf-i386.S
+-   2178 19961013-1819 607f582afdf7cb5f99d20b0b9137477f  cipe/thruput.c
+-   1992 20001216-1927 e97811d5c4a77ebdd8c47c17597e1003  pkcipe/Makefile.in
+-   8717 20001130-2312 989ea68b4591009822dc4f61d50e3b39  pkcipe/PKCIPE-Protocol
+-   5265 20001130-2312 7e70bf90be9eba9600e21721861a8c8a  pkcipe/README
+-   1024 20001216-1849 4694718e08c860721bb3abd87383a10c  pkcipe/config.h.in
+-   1533 20001109-0059 b4ba2cd9e127ba353d95d7d569384eda  pkcipe/dhkey.h
+-   4461 20001130-2312 865b270434656c088bf7c5e8c7069242  pkcipe/lock.c
+-   6348 20010105-0004 693b15ad1f65e2da130ef957a63cf228  pkcipe/main.c
+-   4604 20001205-2021 77fad2a24c18e405c349c376a71b412d  pkcipe/negotiate.c
+-   2510 20001205-2021 8d282c74c8a468374a2c66a289c1b52c  pkcipe/p_sha1.c
+-   5832 20001205-2021 6db69a3dde8b01d0771703b8957e6dcf  pkcipe/packet.c
+-   3607 20001205-2021 9a8d3b1aa5c04723caa23ae553017f83  pkcipe/pkcipe.h
+-  11297 20001231-0002 948c9c64f2029613947fcb6b48d31341  pkcipe/proto.c
+-   1142 20010120-1846 7db578ebfcd81c3a2e11f0d952b5fecf  pkcipe/rsa-keygen.in
+-     55 19961009-0116 3e202bcd35450045391894a1b85077a8  samples/README
+-    682 19990303-1253 5ce6004ee6a973b6d6c556fb08724dff  samples/options
+-   1753 20001216-1849 5886738651913ef06b1607c00e149382  samples/ip-up
+-    559 20001216-1849 f5fb30d2885c28137c58fb427f2c9896  samples/ip-down
+-___size ____date_time _____________________________md5  name___________________
+-
+-_marker_
+-echo "No output after the PGP signature check means everything is okay."
+-test `which gpg` && pgp="gpg" || pgp="pgp -tf"
+-$pgp <$0 | sed '/^_marker_/q;/^_/d' | tr -d "\r" | cut -b23- | md5sum -c
+-exit $?
+------BEGIN PGP SIGNATURE-----
+-Version: GnuPG v1.0.6 (GNU/Linux)
+-Comment: For info see http://www.gnupg.org
+-
+-iEYEARECAAYFAj0c8/cACgkQGPw4gdAdiZ15bACcDN9Hosb/RTbn8JkmnJh4ikpn
+-4S0An0hWvOfE7CMzsrKMI/VdFHeoilZ0
+-=PE1D
+------END PGP SIGNATURE-----
+diff -urN cipe/cipe.info cipe.new/cipe.info
+--- cipe/cipe.info	2002-06-28 16:40:34.000000000 -0700
++++ cipe.new/cipe.info	1969-12-31 17:00:00.000000000 -0700
+@@ -1,1819 +0,0 @@
+-This is cipe.info, produced by makeinfo version 4.0 from cipe.texinfo.
+-
+-
+-File: cipe.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
+-
+-CIPE
+-****
+-
+-CIPE (the name is shortened from _Crypto IP Encapsulation_) is a
+-package for an encrypting IP tunnel device. This can be used to build
+-encrypting routers for VPN (Virtual Private Networks) and similar
+-applications.
+-
+-    Copyright (C) 1996--2001 Olaf Titz. All rights reserved.
+-
+-    This program including its documentation is free software; you can
+-    redistribute it and/or modify it under the terms of the GNU General
+-    Public License as published by the Free Software Foundation; either
+-    version 2 of the License, or (at your option) any later version.
+-
+-    This program is distributed in the hope that it will be useful, but
+-    WITHOUT ANY WARRANTY; without even the implied warranty of
+-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+-    General Public License for more details.
+-
+-    You should have received a copy of the GNU General Public License
+-    along with this program; if not, write to the Free Software
+-    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+-
+-    The author can be contacted through the electronic mail address
+-    <Olaf.Titz@inka.de>.
+-
+-* Menu:
+-
+-* Introduction::        About routing, VPNs and encryption.
+-* Installation::        Installing the CIPE software package.
+-* Configuration::       Configuration.
+-* PKCIPE::              The PKCIPE public key tool.
+-* Examples::            Examples of CIPE configurations.
+-* Protocol descriptions::  How the protocols work internally.
+-* Misc::                Odds and ends.
+-* Concept Index::       Index.
+-
+- --- The Detailed Node Listing ---
+-
+-Introduction
+-
+-* Network layers::      Where encryption takes place.
+-* Routing::             About IP routing and VPNs.
+-* How CIPE works::      The encapsulation method employed here.
+-* Components::          Which pieces of software CIPE consists of.
+-* Internals::           A look under the hood of CIPE.
+-
+-Installing the CIPE software package
+-
+-* Prerequisites::       What you need before installing.
+-* Protocols and ciphers::  Important compile-time options to select.
+-* Advanced compiling::  Configuring the compile for different targets.
+-* Install::             Compiling and installing the software.
+-* Compilation errors::  If something goes wrong.
+-* Run::                 Running the software.
+-
+-Running CIPE
+-
+-* Program Names::       How the components of CIPE are named.
+-* insmod::              Loading the kernel module.
+-* ciped::               Running the daemon.
+-
+-Configuration of the CIPE software
+-
+-* Specifying options::  How CIPE gets its parameters.
+-* Parameter list::      All valid and needed parameters.
+-* Keys in older CIPE::  An incompatibility between Version 1.4 and earlier.
+-* SOCKS::               Routing with CIPE over a SOCKS5 relayer.
+-* Dynamic carrier::     How to deal with dynamic IP address assignment.
+-* Error handling::      How ciped deals with errors.
+-
+-The PKCIPE tool
+-
+-* How it works::        Short overview on PKCIPE.
+-* Public Keys::         What public keys are and how to use them.
+-* pkcipe invocation::   Running the pkcipe program.
+-
+-Usage examples
+-
+-* Tips::                General useful tips on CIPE configuration.
+-* Example 1::           The classic VPN setups.
+-* Example 2::           A PKCIPE setup.
+-* Connection modes::    Overview on different carrier network situations.
+-
+-Protocol descriptions
+-
+-* The CIPE Protocol::   Encrypted IP encapsulation used by CIPE.
+-* The PKCIPE Protocol::  Public-key based setup and key exchange.
+-
+-`$Id: 1.5.4,v 1.2 2003/09/29 21:52:20 xscript Exp $'
+-
+-
+-File: cipe.info,  Node: Introduction,  Next: Installation,  Prev: Top,  Up: Top
+-
+-Introduction
+-************
+-
+-* Menu:
+-
+-* Network layers::      Where encryption takes place.
+-* Routing::             About IP routing and VPNs.
+-* How CIPE works::      The encapsulation method employed here.
+-* Components::          Which pieces of software CIPE consists of.
+-* Internals::           A look under the hood of CIPE.
+-
+-
+-File: cipe.info,  Node: Network layers,  Next: Routing,  Prev: Introduction,  Up: Introduction
+-
+-Network layers and encryption
+-=============================
+-
+-There are several different places where encryption can be built into
+-an existing network infrastructure, corresponding to the different
+-protocol layers:
+-
+-  1. On the "network level": Packets travelling between hosts on the
+-     network are encrypted. The encryption engine is placed near the
+-     driver which sends and receives packets. An implementation is
+-     found in CIPE.
+-
+-  2. On the "socket level": A logical connection between programs
+-     running on different hosts (TCP connection; transport or session
+-     layer in OSI) is encrypted. The encryption engine intercepts or
+-     proxies connections. SSH and SSL work this way.
+-
+-  3. On the "application level": Applications contain their own
+-     encryption engine and encrypt data themselves. The best known
+-     example is PGP for encrypting mail.
+-
+-Low-level encryption as implemented with CIPE has the advantage that it
+-can be made to work transparently, without any change to application
+-software. In the case of encrypting IP packets, it can be built into IP
+-routers which usually act as "black boxes" that only route traffic
+-between hosts, the hosts themselves don't see at all how the routing
+-works. So an "encrypting router" looks exactly like a non-encrypting
+-one, without any difference seen by other hosts and applications. It
+-can thus be used in places where software changes at higher levels are
+-not feasible.
+-
+-Low-level encryption has the disadvantage that it does not guard against
+-intruders on a higher level, e.g. Trojaned applications, bug exploits
+-in system software or rogue administrators "sniffing" on terminal
+-devices.
+-
+-
+-File: cipe.info,  Node: Routing,  Next: How CIPE works,  Prev: Network layers,  Up: Introduction
+-
+-IP routing and Virtual Private Networks
+-=======================================
+-
+-A "virtual private network" (VPN for short) is a network (1) belonging
+-to one organization, using its own address range, but overlayed on
+-existing network infrastructure.  "IP-in-IP tunneling" makes it
+-possible to build IP-based VPNs on top of other IP-based "carrier
+-networks", such as the Internet.  "Encrypted tunneling" guards against
+-passive (sniffing) and active (faked message injection) attacks on the
+-carrier network. The carrier network sees only encrypted data.
+-
+-Depending on the choice of protocol, all information the original
+-packets carry can be encrypted. This includes not only the actual
+-(payload) data but also the TCP/IP headers, leaving no trace as to
+-which addresses and services are actually used. "Traffic analysis"
+-attacks, which attempt to gain useful information out of sniffing by
+-"who contacts whom", are thus made unfeasible. An even more
+-sophisticated technique to thwart traffic analysis employs the
+-injection of dummy packets into the network which carry no useful
+-information at all but are (at the carrier level) indistinguishable
+-from real data packets.
+-
+-IP routing in a VPN situation consists of the routing of the carrier
+-network, which in most situations is just a standard Internet setup,
+-and routing of the overlayed VPN. This is easiest when the address
+-ranges of carrier and VPN do not overlap in any way. It is common for
+-VPNs to use the 10.0.0.0/8 and 192.168.0.0/16 address ranges, which are
+-not part of the Internet and thus do never conflict with actual
+-Internet routing: any address in this range must be local to the
+-organization using it. *Note Example 1::, for a typical example.
+-
+-The IPSEC standards define a set of protocols which can be used (among
+-other things) to build encrypted VPNs. However, IPSEC is a rather
+-heavyweight and complicated protocol set with a lot of options,
+-implementations of the full protocol set are still rarely used and some
+-issues (such as key management) are still not fully resolved.  CIPE
+-uses a simpler approach, in which many things which can be
+-parameterized (such as the choice of the actual encryption algorithm
+-used) are an install-time fixed choice. This limits flexibility but
+-allows for a simple (and therefore efficient, easy to debug...)
+-implementation.
+-
+----------- Footnotes ----------
+-
+-(1) As CIPE is an IP routing application, this manual talks only about
+-IP-based networks.
+-
+-
+-File: cipe.info,  Node: How CIPE works,  Next: Components,  Prev: Routing,  Up: Introduction
+-
+-How CIPE works
+-==============
+-
+-CIPE encapsulates encrypted IP datagrams in UDP datagrams and sends
+-them via the normal UDP mechanism.  This is different from standard
+-IPIP encapsulation. UDP was chosen because this way many different
+-endpoints can easily be distinguished by port numbers; because an IP
+-protocol number would warrant a formal registration; and because
+-handling of UDP datagrams is easier than using a separate IP protocol
+-number, especially in firewalled setups.  Specifically, UDP can be
+-handled by user-level applications such as a SOCKS5 relayer. *Note
+-SOCKS::.
+-
+-A CIPE "link" always connects exactly two endpoints. In many ways, the
+-link works like a PPP dial-up link. At present, each link has its own
+-secret 128-bit key which has to be known by both ends (and nobody
+-else). This "link key" (called "static key" in the protocol
+-description) is used to negotiate a frequently changed "dynamic key",
+-which encrypts the actual data.
+-
+-Since CIPE 1.5 it is also possible to negotiate the keys via a "public
+-key" mechanism, similar to the SSH package. This removes the need for
+-shared secret keys. *Note PKCIPE::.
+-
+-
+-File: cipe.info,  Node: Components,  Next: Internals,  Prev: How CIPE works,  Up: Introduction
+-
+-CIPEs software components
+-=========================
+-
+-The CIPE package consists of a kernel module and a driver program.  The
+-kernel module does the IP packet handling: sending and receiving
+-packets, encapsulation including encryption. It implements a "network
+-device" which is mostly handled like any other network device.
+-Configuration and the whole key exchange process is done by the user
+-level program `ciped'. *Note Program Names::.
+-
+-`ciped' looks and behaves rather similar to `pppd'. In particular,
+-opening and closing a CIPE device is tied to starting and ending a
+-`ciped' process (one per device), the specification of options to the
+-daemon mimics `pppd''s setup and `ciped' invokes scripts on opening and
+-closing a device.
+-
+-The `pkcipe' program is a separate add-on to the `ciped' driver which
+-manages keys and other parameters.
+-
+-
+-File: cipe.info,  Node: Internals,  Prev: Components,  Up: Introduction
+-
+-Notes on internals
+-==================
+-
+-(This section is only relevant to readers who want to understand the
+-source, not to the regular user.)
+-
+-The module consists of an output driver, an input driver, the
+-encapsulation routines and some stuff to keep it all together. The
+-output driver is largely an adapted version of `new_tunnel' from the
+-Linux distribution. (1) In Linux 2.0 its actual packet sending is done
+-via the kernel IP forwarding engine. This implies that (a) forwarding
+-must be enabled in the kernel and (b) the encrypted packets, being UDP
+-packets with the source/dest addresses given as "me" and "peer", are
+-checked against the forwarding (as well as the output) firewall. (If it
+-doesn't work for you, first make sure that your firewall rules let the
+-packets pass!)
+-
+-The input driver is an adaptation from the kernel UDP receiver. To
+-activate it, ciped has to set a socket into a special mode with an
+-`ioctl' call. This has to be a connected UDP socket. The
+-`ioctl_attach(2cipe)' call replaces the socket's `sendto(2)' and
+-`recvfrom(2)' operations with special versions that do decryption of
+-traffic internally and only pass key exchange blocks to the user layer.
+-The whole work of decrypting and rerouting incoming traffic is done
+-inside a blocking `recvfrom(2)'. This means that unlike normal IP
+-forwarding, it is called from user mode and the needed CPU time is
+-charged to the ciped process, although the data never passes into user
+-mode. `sendto(2)' encodes the block as a key exchange block and sends
+-it to the peer. The socket should not use `read(2)', `write(2)',
+-`select(2)' or nonblocking mode (yet).
+-
+-Before attaching the socket, the operational parameters of the device
+-have to be set using a `ioctl_setpar(2cipe)' call. The key exchange
+-process supplies keys to the kernel via `ioctl_setkey(2cipe)'.
+-
+-The netdevice can only be opened (configured "UP") if it has a
+-controlling socket. When the controlling socket is closed, the netdevice
+-gets closed. Conversely, closing the netdevice (with `ifconfig(8)')
+-closes the socket too. Closing deletes all information that is set by
+-ciped on the device.
+-
+-Devices can be dynamically allocated and deallocated using a
+-`ioctl_alloc(2cipe)' call. The first device always remains allocated as
+-a hook for the `ioctl' calls.
+-
+----------- Footnotes ----------
+-
+-(1) For Linux 2.2, this has been merged into the `ipip' module, but the
+-functionality is the same.
+-
+-
+-File: cipe.info,  Node: Installation,  Next: Configuration,  Prev: Introduction,  Up: Top
+-
+-Installing the CIPE software package
+-************************************
+-
+-The CIPE software package is available via the WWW from
+-<http://sites.inka.de/~bigred/devel/cipe.html>. It is distributed in a
+-`tar.gz' file, currently about 138k in size. After unpacking the
+-distribution, run the `configure' script, possibly specifying options
+-there. Then run `make'.
+-
+-* Menu:
+-
+-* Prerequisites::       What you need before installing.
+-* Protocols and ciphers::  Important compile-time options to select.
+-* Advanced compiling::  Configuring the compile for different targets.
+-* Install::             Compiling and installing the software.
+-* Compilation errors::  If something goes wrong.
+-* Run::                 Running the software.
+-
+-
+-File: cipe.info,  Node: Prerequisites,  Next: Protocols and ciphers,  Prev: Installation,  Up: Installation
+-
+-Prerequisites
+-=============
+-
+-CIPE runs under Linux 2.0.* since 2.0.12, 2.1.* since about 2.1.103,
+-2.2.* and 2.3.*/2.4.* since 2.3.48.  It was developed for the i386
+-architecture; other architectures _should_ work.
+-
+-Make sure you have the source, or at least the complete include tree,
+-of the running kernel installed (usually in `/usr/src/linux'). The
+-version _and configuration_ of the kernel sources must match the kernel
+-on which it will run exactly, or else you risk building a module which
+-crashes.  You also have to use the same compiler version than the one
+-with which the kernel was compiled.  After reconfiguring and rebuilding
+-the kernel, don't forget to rebuild the CIPE module too. (This applies
+-to all externally compiled modules.) Enabling "versioned symbols" on
+-the kernel is strongly recommended, because it protects against version
+-skew between kernel and modules.
+-
+-The kernel needs "IP Forwarding/Gatewaying" enabled in the configuration
+-for 2.0 kernels. Make sure to enable IP forwarding with
+-     echo 1 > /proc/sys/net/ipv4/ip_forward
+-on system boot with 2.2 or later and recent 2.0 kernels. The `urandom'
+-device must be available.
+-
+-A suited version of the module utilities (`modprobe' and friends) needs
+-to be installed. When in doubt, consult the documentation in the kernel
+-source.
+-
+-The PKCIPE tool needs the OpenSSL package, version 0.9.6 or later. If
+-this is not available, the rest of the CIPE package can still be
+-compiled and installed as usual.
+-
+-As of version 1.3, CIPE uses an autoconf-generated configure script to
+-configure its Makefiles. This script takes the following parameters on
+-the command line. All of the parameters have defaults which should
+-suffice for a simple installation.
+-`--with-linux=dir'
+-     Path to the Linux source tree (e.g., `/usr/src/linux').
+-
+-`--with-linux-include=dir'
+-     Path to the Linux include tree, if you don't have the complete
+-     source.  This include tree must still contain all files generated
+-     by the kernel configuration process. Using a complete source tree
+-     is preferred (necessary on some architectures) because in that
+-     case the kernel `Makefile' parameters are also used.
+-
+-`--with-ssl-includes=dir'
+-     Path to the OpenSSL includes, if the script can not find it.
+-
+-`--with-ssl-libs=dir'
+-     Path to the OpenSSL libraries, if the script can not find it.
+-
+-`--enable-protocol=n'
+-     Use encapsulation protocol `n'. The supported values in CIPE 1.5
+-     are 3 and 4. *Note Protocols and ciphers::, for how to choose the
+-     right one.  The default is 3.
+-
+-`--enable-idea'
+-     Use the IDEA cipher (default is Blowfish).
+-
+-`--disable-debug'
+-     Disable debugging code in kernel module. Not really useful.
+-
+-`--disable-dyndev'
+-     Disable dynamic device allocation. Not really useful.
+-
+-`--enable-logfacility=x'
+-     Set syslog facility for `ciped' and `pkcipe' (default and usually
+-     right is LOG_DAEMON).
+-
+-`--disable-asm'
+-     Disable use of assembler code. Not really useful.
+-
+-`--enable-name=n'
+-     Set a name suffix for the compilation directory.
+-
+-`--enable-bug-compatible'
+-     Use old, broken interpretation of keys. *Note Keys in older CIPE::.
+-
+-`--disable-send-config'
+-     Do not send configuration information to the peer. This is normally
+-     sent on startup to help diagnose mismatches, but it is sent
+-     unencrypted, which may be unwanted.
+-
+-`--disable-pkcipe'
+-     Do not compile and install the PKCIPE tool.
+-
+-The script then looks for certain parameters (like whether compiling for
+-an SMP system) in the kernel headers, and it creates a new directory
+-named like `2.2.6-i386-cb' in which compilation of the module and
+-daemon will take place. (This would be for Linux 2.2.6 on i386, protocol
+-3 [the "c"], Blowfish [the "b"].)
+-
+-The PKCIPE tool and some library components are built in their source
+-directories, they do not depend on configuration (in theory;
+-unfortunately `pkcipe' is still tied to the particular `ciped' in use,
+-but this is going to be fixed).
+-
+-
+-File: cipe.info,  Node: Protocols and ciphers,  Next: Advanced compiling,  Prev: Prerequisites,  Up: Installation
+-
+-Protocols and ciphers
+-=====================
+-
+-CIPE supports different versions of the encryption protocol, which in
+-turn can be used with different ciphers (encryption algorithms). Which
+-one is used is chosen at compile time with arguments to the `configure'
+-script.
+-
+-As of CIPE 1.5, the following options are possible:
+-
+-Protocol version 3: This is the default protocol and recommended for
+-most use. It is described in detail in this document. *Note The CIPE
+-Protocol::. The device works as an IP-only point-to-point device much
+-like with SLIP or PPP.
+-
+-Protocol version 4: This protocol uses the same data format as protocol
+-version 3, except that the packets transmitted contain an
+-Ethernet-compatible link-level header. With this it is possible to run
+-payload protocols other than IP, and particularly it is possible to
+-make the CIPE device part of an Ethernet bridge.  The disadvantage is
+-that the packets get larger than with protocol 3. It may be necessary
+-to set the MAC address using the `hwaddr' option to make it unique
+-across the VPN. With this protocol, the device has a subnet mask and
+-broadcast address which can be set with appropriate options.
+-
+-Blowfish: This is the default encryption algorithm, used with a 128 bit
+-key.
+-
+-IDEA: An alternate encryption algorithm with a 128 bit key. This
+-algorithm is patented and may need a licence for commercial use.  It is
+-included mainly for compatibility with older installations which had
+-only this algorithm available.
+-
+-As of CIPE 1.4, both Blowfish and IDEA are available in generic C and
+-i386 assembler implementations. The assembler versions are used where
+-possible.
+-
+-
+-File: cipe.info,  Node: Advanced compiling,  Next: Install,  Prev: Protocols and ciphers,  Up: Installation
+-
+-Advanced compiling
+-==================
+-
+-The use of a separate object directory means it is possible to compile
+-CIPE for separate targets in the same directory. An example would be a
+-machine running different kernels for testing, etc. In that case you
+-would have kernel directories like `/usr/src/linux-2.0.36',
+-`/usr/src/linux-2.2.6', and so on. Running `configure
+---with-linux=/usr/src/linux-2.0.36' and after that `configure
+---with-linux=/usr/src/linux-2.2.6' leaves two directories
+-`2.0.36-i386-cb' and `2.2.6-i386-cb'. You can run `make' _in each of
+-the object directories_ separately.
+-
+-Another common case is a setup where one central box compiles kernels
+-for different machines. You can rename CIPE's compilation directories
+-with the -enable-name option, perhaps name them after the target
+-machine:
+-     ./configure --with-linux=/usr/src/linux-2.2.6-bigbox \
+-                 --enable-name=bigbox
+-     make -C 2.2.6-i386-cb-bigbox
+-     ./configure --with-linux=/usr/src/linux-2.2.6-satellite \
+-                 --enable-name=satellite
+-     make -C 2.2.6-i386-cb-satellite
+-     ./configure --with-linux=/mounts/srv1/linux-2.2.5-small \
+-                 --enable-name=laptop
+-     make -C 2.2.5-i386-cb-laptop
+-
+-In the same way distribution maintainers could prepare a set of
+-differently configured CIPE modules (IDEA vs. Blowfish) for one target.
+-The names of the module and driver are chosen so that different
+-configurations can coexist on one target. *Note Program Names::.
+-
+-Note that real cross-compilation is not possible for now, because the
+-configure script always assumes the CPU architecture of the system where
+-it runs.
+-
+-
+-File: cipe.info,  Node: Install,  Next: Compilation errors,  Prev: Advanced compiling,  Up: Installation
+-
+-Installation
+-============
+-
+-A simple `make' command compiles everything. Compiler warnings should
+-not occur. Do `make install' as _root_ to install the software
+-components in their final location.  These are a kernel module, named
+-according to the protocol version and encryption algorithm selected,
+-and the driver program, which is (as of CIPE 1.3) also named after the
+-protocol version and encryption algorithm. *Note Program Names::. The
+-Makefiles accept the semi-standard options `BINDIR, MODDIR, INFODIR' to
+-specify where the stuff gets installed.
+-
+-If PKCIPE was compiled, `make install' also installs the `pkcipe'
+-program and a helper `rsa-keygen', sets up the necessary directories
+-and generates a host key if none is already there.  *Note PKCIPE::.
+-
+-You need to create a directory `/etc/cipe' which contains at least two
+-files, `options' and `ip-up'. You can copy the files from the `samples'
+-directory in the distribution here, and edit them to suit your needs.
+-*Note Configuration::.
+-
+-
+-File: cipe.info,  Node: Compilation errors,  Next: Run,  Prev: Install,  Up: Installation
+-
+-Compilation errors
+-==================
+-
+-There is a known problem in that the various 2.0.30 and 2.0.31
+-pre-releases disagree on whether they have a certain feature
+-(`SO_BINDTODEVICE'), and detecting this version dependency via the
+-version number is not foolproof. Apparently, since 2.0.32, this problem
+-is resolved. If `output.c' doesn't compile under 2.0.*, change the line
+-     #ifdef SO_BINDTODEVICE
+-to `#if 1' or `#if 0' as needed.
+-
+-A similar problem exists in the 2.3.99 pre-releases, where the `name'
+-part of the `net_device' structure has changed. If an error occurs
+-during compilation of `device.c' under 2.3.99pre-n, change the
+-conditional definition of `HAVE_DEVNAME_ARRAY' in `cipe.h' to `#if 1'
+-or `#if 0' as needed.  Since the 2.4.0 test releases this problem is
+-resolved.
+-
+-
+-File: cipe.info,  Node: Run,  Prev: Compilation errors,  Up: Installation
+-
+-Running CIPE
+-============
+-
+-Once installed, the CIPE software is run by loading the module and
+-running the `ciped' daemon.
+-
+-* Menu:
+-
+-* Program Names::       How the components of CIPE are named.
+-* insmod::              Loading the kernel module.
+-* ciped::               Running the daemon.
+-
+-
+-File: cipe.info,  Node: Program Names,  Next: insmod,  Prev: Run,  Up: Run
+-
+-Program Names
+--------------
+-
+-The module name is `cip' followed by the protocol version as a letter
+-and the first letter of the encryption algorithm. E.g.  `cipcb' for
+-version 3 (i.e. "c"), Blowfish (the default). The device names which
+-this module manages are the module name followed by a number, e.g.
+-`cipcb0'.
+-
+-Since CIPE 1.3, the daemon program is named `ciped-' followed by the
+-protocol and encryption letters, likewise. E.g. `ciped-cb'.  Where this
+-manual refers to `ciped', assume the real name as given here.
+-
+-The configuration parameters of kernel module and daemon must match (the
+-module checks this), but the daemon does not depend (at least not in
+-theory) on the kernel version. The naming scheme is chosen so that all
+-possible modules and daemons on one machine can coexist.
+-
+-The `pkcipe' program is designed to be independent from the
+-configuration. However, currently it can only handle one version of
+-`ciped' (i.e. one protocol and cipher version). This will be fixed in
+-future versions.
+-
+-
+-File: cipe.info,  Node: insmod,  Next: ciped,  Prev: Program Names,  Up: Run
+-
+-Loading the module
+-------------------
+-
+-The kernel module is loaded into the kernel via the command
+-     modprobe modulename parameter=value...
+-
+-The CIPE module accepts the following additional parameters:
+-`cipe_debug=(number)'
+-     Set the debugging level. The file `cipe.h' defines different
+-     debugging levels which are ORed. Set this to 0 if you don't need
+-     debugging output. Debugging output is emitted via kernel messages,
+-     which means it usually winds up in the syslog somewhere.
+-
+-`cipe_maxdev=(number)'
+-     Set the number of channels this module manages. E.g. with
+-     `cipe_maxdev=4' the devices `cipcb0' through `cipcb3' are
+-     available. Maximum is 99. Since CIPE 1.2, there is no need to set
+-     this, since channels are allocated dynamically.
+-
+-The module can be autoloaded via `kerneld'/`kmod'. Advanced users will
+-recognize the following options in `/etc/conf.modules' necessary to
+-make it work correctly:
+-     alias cipcb0 cipcb
+-     options cipcb cipe_debug=0
+-Note: with dynamic device allocation, aliasing any device other than
+-`cipcb0' is pointless and autoloading only works when the requesting
+-application is `ciped' (not `ifconfig' etc.)  This is a limitation
+-inherent in dynamic device allocation.
+-
+-
+-File: cipe.info,  Node: ciped,  Prev: insmod,  Up: Run
+-
+-Running the `ciped' daemon
+---------------------------
+-
+-The `ciped' daemon must be run as _root_. (*Do not* make it setuid.) It
+-takes as command line arguments an optional `-o file' parameter
+-specifying an options file followed by any number of individual option
+-arguments. *Note Specifying options::.
+-
+-Except in debugging mode, the daemon puts itself in the background and
+-uses `syslog(3)' for logging messages. Normal operation causes no log
+-messages except for errors and a notice when the daemon terminates.
+-
+-Shutting down (with `ifconfig(8)') a CIPE device terminates its `ciped'
+-process, and vice-versa terminating a `ciped' closes the device. When a
+-device is closed, its configuration parameters including all keys and
+-statistics are erased. (This is different from earlier CIPE versions!)
+-`ciped' does not keep any keys in memory.
+-
+-When the device comes up, `ciped' spawns `/etc/cipe/ip-up' with the
+-parameters described in the sample version. It waits for completion of
+-this script before data can be sent over the device and before it goes
+-into the background. The script is called with standard input, output
+-and error to `/dev/null'. It typically sets routes and does some
+-logging. Since CIPE 1.4, the script is called with all options (except
+-key) in environment variables named after the option.
+-
+-Likewise, when a CIPE device goes down, `/etc/cipe/ip-down' is invoked.
+-`ciped' itself logs the interface statistics when closing.
+-
+-`ciped' will terminate when an error occurs. This includes a
+-"connection refused" message from the peer, to be able to detect
+-non-working peers. This default error handling implies that no data may
+-be sent over a link unless _both_ ends are up and running, or the first
+-one to come up will go down again immediately. In particular, the
+-"ping" command in the sample `ip-up' should not be activated on both
+-ends of a link. This behaviour can be customized. *Note Error
+-handling::, for more details.
+-
+-
+-File: cipe.info,  Node: Configuration,  Next: PKCIPE,  Prev: Installation,  Up: Top
+-
+-Configuration of the CIPE software
+-**********************************
+-
+-* Menu:
+-
+-* Specifying options::  How CIPE gets its parameters.
+-* Parameter list::      All valid and needed parameters.
+-* Keys in older CIPE::  An incompatibility between Version 1.4 and earlier.
+-* SOCKS::               Routing with CIPE over a SOCKS5 relayer.
+-* Dynamic carrier::     How to deal with dynamic IP address assignment.
+-* Error handling::      How ciped deals with errors.
+-
+-
+-File: cipe.info,  Node: Specifying options,  Next: Parameter list,  Prev: Configuration,  Up: Configuration
+-
+-Specifying options
+-==================
+-
+-All configuration parameters are processed by the `ciped' daemon.  It
+-takes parameters from
+-  1. the default options file (`/etc/cipe/options'),
+-
+-  2. an options file specified as `-o file' on the command line,
+-
+-  3. single options given on the command line,
+-
+-in that order. Which means, parameters on the command line override
+-those from files, and parameters from an explicit options file override
+-those from the default options file.
+-
+-Options are one of the types: boolean, integer, string, IP address, IP
+-address with port number. Booleans are default false and specifying them
+-as option makes them true. IP addresses are given as dot-quad notation
+-or domain names which can be resolved using `gethostbyname(3)'. UDP or
+-TCP addresses are given as `ip:port', where the port is a number or a
+-name resolvable by `getservbyname(3)'.
+-
+-The syntax for specifying options is `name=value' on the command line,
+-and `name value' (one option per line, no continuations, escapes,
+-quoting etc.) in the options file.
+-
+-For security reasons, options files must be given as absolute paths,
+-and they and all their parent directories must be owned by root and not
+-writable by group or other, and the options file itself must be even not
+-readable by group or other (because it may contain secret keys).
+-
+-
+-File: cipe.info,  Node: Parameter list,  Next: Keys in older CIPE,  Prev: Specifying options,  Up: Configuration
+-
+-List of all parameters
+-======================
+-
+-(Req=Required parameter)
+-
+-Name       Type      Req     
+-`device'   String    no      Name of the CIPE device. If not given, the
+-                             system picks a free one.
+-`debug'    Bool              Don't go background, use stderr instead of
+-                             syslog.   (Independent of the kernel driver
+-                             debug option.)
+-`ipaddr'   IP        yes     IP address of the CIPE device.
+-`ptpaddr'  IP        (yes)   IP address of the peer device (i.e. the CIPE
+-                             device on the other  end). For protocol 3.
+-`mask'     IP        no      Netmask of the CIPE device. For protocol 4.
+-`bcast'    IP        no      Broadcast address of the CIPE device. For
+-                             protocol 4.
+-`mtu'      Int       no      Device MTU (default: ethernet standard MTU
+-                             minus all necessary headers)
+-`metric'   Int       no      Device metric (not sure if this is used
+-                             anywhere...)
+-`cttl'     Int       no      Carrier TTL value. If not specified or 0, use
+-                             the payload packet's  TTL. Default
+-                             recommendation is 64.
+-`me'       UDP       no      Our carrier UDP address. If either IP or port
+-                             are not given, the  system picks one and
+-                             reports it via `ip-up'.
+-`peer'     UDP       yes     The other end's carrier UDP address.
+-`key'      String    (yes)   The link key. For security reasons, the key
+-                             has to be set via an  options file, subject
+-                             to the restrictions described above. The key
+-                             should be 128 bits in hexadecimal encoding.
+-                             (To generate such a beast  from random, try
+-                             `ps -auxw | md5sum'.)
+-`nokey'    Bool              Don't encrypt at all, just encapsulate in
+-                             UDP. Only with this option,  `key' is not
+-                             needed.
+-`socks'    TCP       no      Address (port required!) of the SOCKS5
+-                             server. *Note SOCKS::.
+-`tokxc'    Int       no      Timeout (seconds) for key exchange. Default:
+-                             10.
+-`tokey'    Int       no      Dynamic key lifetime. Default: 600 (10
+-                             minutes).
+-`ipup'     String    no      Script to run instead of `/etc/cipe/ip-up'.
+-`ipdown'   String    no      Script to run instead of `/etc/cipe/ip-down'.
+-`arg'      String    no      Argument to supply to `ip-up', `ip-down'.
+-`maxerr'   Int       no      Maximum number of errors before ciped exits.
+-                             *Note Error handling::.
+-`tokxts'   Int       no      Key exchange timestamp timeout. Default: 0
+-                             (no timestamps).   Set this to 30 to prevent
+-                             key exchange replay attacks, but only if the
+-                             peer runs CIPE 1.2 or later and both system
+-                             clocks are reasonably  synchronized.
+-`ping'     Int       no      Frequency (in seconds) for keep-alive pings.
+-                             Default is don't send any pings.   The "ping"
+-                             used here is internal to CIPE, not ICMP ping.
+-`toping'   Int       no      Timeout for pings. If no answer is received
+-                             on a keep-alive ping in  this time, it counts
+-                             as an error, *Note Error handling::.
+-                             Default is no check for answers.
+-`dynip'    Bool              Assume the carrier is on a dynamic IP
+-                             address. *Note Dynamic carrier::.
+-`hwaddr'   String    no      Set the dummy MAC address used in Ethernet
+-                             mode (protocol 4).
+-`ifconfig' Bool              Require an external `ifconfig' call to
+-                             configure the interface.
+-`checksum' Bool              Use checksummed UDP carrier packets. Only
+-                             necessary if the network  does not like
+-                             unchecksummed packets.
+-
+-
+-File: cipe.info,  Node: Keys in older CIPE,  Next: SOCKS,  Prev: Parameter list,  Up: Configuration
+-
+-Incompatibility of keys to older CIPE versions
+-==============================================
+-
+-Versions of CIPE before 1.4.0 have a bug in the way the `key' option is
+-interpreted. It is supposed to be a 128-bit hexadecimal number.
+-However, earlier versions interpret the digits `a' through `f' as equal
+-to `1' through `6'. This reduces the effective key space from 16^32 (32
+-hex digits) to 10^32 (32 decimal digits), or 109 bits. Worse, it
+-introduces bias in the distribution of bit patterns in the effective
+-key.
+-
+-This bug needed to be fixed as soon as it was found. Unfortunately the
+-fix means that old and new versions of `ciped' will read the same key
+-parameter differently, in other words: keys are not compatible between
+-1.4.0 and older when they contain any non-decimal digits.
+-
+-The solution to make them work again is either to upgrade both ends at
+-once (recommended), or generate new keys which consist only of decimal
+-digits. A possible method to generate such a key is
+-     (ps aux|md5sum; ps alx|md5sum) | tr -cd 0-9
+-
+-Alternatively, the 1.4 or newer package can be given the option
+-`--enable-bug-compatible' to `configure' to use the old broken key
+-parser.
+-
+-
+-File: cipe.info,  Node: SOCKS,  Next: Dynamic carrier,  Prev: Keys in older CIPE,  Up: Configuration
+-
+-Working with SOCKS
+-==================
+-
+-With the `socks' option, CIPE uses a SOCKS5 server for sending and
+-receiving the encrypted data. Since this is UDP, SOCKS4 (which doesn't
+-support UDP) can not be used. SOCKS5 has a number of authentication
+-methods. CIPE can use either no authentication or Username/Password.
+-(1) Username and password are taken from the environment variables
+-`SOCKS5_USER' and `SOCKS5_PASSWD'.
+-
+-The SOCKS server is free to pick any IP address, or at least any port
+-number, as it sees fit. Thus using SOCKS implies a dynamic carrier
+-address. *Note Dynamic carrier::.
+-
+-The implementation is not based on a SOCKS library, don't attempt to
+-link `ciped' with it.
+-
+-`ciped' periodically checks whether the SOCKS server has closed the
+-control connection. If the SOCKS server goes down, there is no way to
+-recover without restarting the client (in this case, `ciped'). This is
+-a limitation in the SOCKS5 protocol. *Note Error handling::.
+-
+----------- Footnotes ----------
+-
+-(1) GSSAPI/Kerberos authentication is not supported because (a) I don't
+-have the environment to test it, and (b) it can specify that UDP
+-packets be encrypted with its own method, which is unnecessary and
+-causes only additional load here, and (c) it makes the implementation
+-much more complicated.
+-
+-
+-File: cipe.info,  Node: Dynamic carrier,  Next: Error handling,  Prev: SOCKS,  Up: Configuration
+-
+-Dynamic carrier addresses
+-=========================
+-
+-CIPE can handle dynamically changing carrier addresses. This is subject
+-to certain restrictions, however.
+-
+-When a link is already established, one end must notice when the other
+-end's carrier address changes. CIPE versions since 0.5.1 do this
+-automatically.
+-
+-When one end of the link is on a real dynamic IP address (dial-up
+-device), it must notice when its own carrier address changes. This
+-requires Linux 2.2 or higher, CIPE version 1.4.0 or higher and the
+-`dynip' option set.
+-
+-The trickiest part with using dynamic carrier addresses is finding out
+-the peer address before the link is established. Each CIPE needs to know
+-the IP address and UDP port number to send packets to. Normally this is
+-set with the `peer' option. As soon as a valid packet is received the
+-driver recognizes the peer address automatically.
+-
+-With one static and one dynamic (or SOCKS) end, this is fairly easy.
+-Just make sure the dynamic end has the right `peer' option, and (only!)
+-the dynamic end has the `ping' in the example `ip-up' activated. The
+-`ping' will ensure that the dynamic end tells the static end its
+-carrier address as soon as possible. The static end should use a dummy
+-`peer' which does not respond to packets normally(1) and the option
+-`maxerr=-1'. The link is initiated by the dynamic end.
+-
+-Whether a link between two dynamic carriers is possible depends on the
+-situation. It must be possible for one end to tell the other end its
+-current address in _some_ way outside of CIPE, and it should be
+-possible to initiate an immediate restart of `ciped' this way.  As of
+-CIPE 1.5, the recommended way to do this is the PKCIPE program.  *Note
+-PKCIPE::.
+-
+-The `ip-up' script is always given the correct address in the `me'
+-environment variable. For dynamic addresses this is the current address
+-and for SOCKS this is the address of the SOCKS relayer.
+-
+-In such a configuration, both ends should use `maxerr=-1' and the
+-initiating end should use the `ping'.
+-
+-*Note Connection modes::, for an overview on the different sorts of
+-dynamic addresses and how they can be handled.
+-
+----------- Footnotes ----------
+-
+-(1) Use `127.0.0.1:9', the discard UDP port on the local host
+-
+-
+-File: cipe.info,  Node: Error handling,  Prev: Dynamic carrier,  Up: Configuration
+-
+-Error handling in `ciped'
+-=========================
+-
+-When the remote `ciped' is down or not available, the local `ciped'
+-will get a "connection refused" error. Older versions always exited on
+-this error. This has proven impractical in some situations, so an extra
+-option has been added: `maxerr' determines how many network errors
+-`ciped' will tolerate before exiting. This counter is reset when the
+-connection proves OK (more precisely: when a key exchange packet is
+-received). The default for `maxerr' is 8, like the non-changeable
+-default in version 0.5.1. A value of -1 will cause `ciped' to ignore
+-any network errors. In this case, it can only be brought down manually.
+-
+-If keep-alive pings are enabled, a failure to respond to a ping counts
+-as one error in this picture. This means that for maxerr=5 and ping=60,
+-a dead link will take ciped down after five minutes.
+-
+-Error handling for SOCKS is independent of this option, however. When an
+-error occurs on the SOCKS control connection (e.g., the SOCKS server
+-goes down), `ciped' will exit. This behaviour is mandated by the SOCKS5
+-protocol.
+-
+-
+-File: cipe.info,  Node: PKCIPE,  Next: Examples,  Prev: Configuration,  Up: Top
+-
+-The PKCIPE tool
+-***************
+-
+-The `pkcipe' program, included in the CIPE package since version 1.5,
+-eases configuration and running of CIPE links. With `pkcipe' it is not
+-necessary to use long lived static keys. A public key based scheme
+-(using Diffie-Hellman key exchange and RSA signatures) is used instead.
+-`pkcipe' also automatically handles dynamic carrier addresses.
+-
+-* Menu:
+-
+-* How it works::        Short overview on PKCIPE.
+-* Public Keys::         What public keys are and how to use them.
+-* pkcipe invocation::   Running the pkcipe program.
+-
+-
+-File: cipe.info,  Node: How it works,  Next: Public Keys,  Prev: PKCIPE,  Up: PKCIPE
+-
+-How it works
+-============
+-
+-To start a CIPE link, two instances of the `pkcipe' program, one on
+-each side of the link, are connected via TCP. They do a key exchange,
+-yielding a new random key which is used as the `key' parameter for
+-CIPE. They tell each other their _identity_ and send a _signature_
+-built with their private key.
+-
+-Each side verifies the signature using the other side's public key.
+-Additional parameters are exchanged as necessary. Currently these
+-additional parameters are only the carrier IP addresses, which the
+-`pkcipe' program obtains from the system at run time.
+-
+-After all parameters are set up, `pkcipe' writes an options file
+-containing the new key and other parameters and starts `ciped' with
+-this options file. Then `pkcipe' exits and the TCP connection is closed.
+-
+-
+-File: cipe.info,  Node: Public Keys,  Next: pkcipe invocation,  Prev: How it works,  Up: PKCIPE
+-
+-Public Keys
+-===========
+-
+-With PKCIPE, each host has a public/private key pair. The private
+-(secret) key is kept in the file `/etc/cipe/identity.priv' and never
+-copied anywhere else. The `/etc/cipe/pk' directory contains the public
+-keys of all peers. For all key files, the same restrictions on file and
+-directory permissions apply as for options files.  *Note Specifying
+-options::.
+-
+-Each host has an "identity" (may be its host name) by which it is known
+-to its peers. The public key files are named according to these
+-identities. Each public key files also contains options (as in a CIPE
+-options file) for this peer. The peer which has the right private key is
+-allowed to connect.(1)
+-
+-A public key pair may be generated with the `rsa-keygen' script.  This
+-generates two files, one with the public and one with the private key,
+-the latter having the file name ending `.priv'. The Makefile
+-automatically does this on installation time if necessary.
+-
+-The secret key may be encrypted with a passphrase. In this case
+-`pkcipe' asks for the passphrase every time it starts. This may be
+-useful e.g. for mobile systems which connect manually to a central host.
+-The `-p' argument to `rsa-keygen' allows to set a passphrase on the
+-newly generated secret key. For existing secret keys, the passphrase
+-can be changed with the command
+-     openssl rsa -des3 -out newfile -in oldfile
+-and deleted with the command
+-     openssl rsa -out newfile -in oldfile
+-where `oldfile' is the existing secret key file; the result will be
+-stored in `newfile'.
+-
+----------- Footnotes ----------
+-
+-(1) Note the similarity to the `ssh' program.
+-
+-
+-File: cipe.info,  Node: pkcipe invocation,  Prev: Public Keys,  Up: PKCIPE
+-
+-Running the `pkcipe' program
+-============================
+-
+-The `pkcipe' program must be run as _root_. (*Do not* make it setuid.)
+-`pkcipe' takes the following command line parameters:
+-
+-`-c HOST:PORT'
+-     Run in client mode, connect to the given address.
+-
+-`-t TIMEOUT'
+-     Set the timeout for each network read (default is 60 seconds).
+-
+-`-r HOST'
+-     Give the host where the actual CIPE UDP packets are routed to. This
+-     option is necessary when the TCP connection is done via a SOCKS or
+-     other proxy (e.g. SSH redirection).
+-
+-`-k KEYFILE'
+-     Specify the private key file. Default is `/etc/cipe/identity.priv'.
+-
+-`-p PROTO'
+-     Set the PKCIPE protocol level to use. Currently there exists only
+-     the protocol level 2.
+-
+-`-D DEBUG'
+-     Debug logging flags.
+-
+-`-E'
+-     Log to standard error instead of syslog. For debugging purposes.
+-
+-`IDENTITY'
+-     (non-option parameter) Specify the identity to use. Default is the
+-     host name.
+-
+-The location of the `ciped' command to be run by PKCIPE, as well as the
+-auxiliary files read from and written to, is currently hardcoded at
+-compile time.
+-
+-
+-File: cipe.info,  Node: Examples,  Next: Protocol descriptions,  Prev: PKCIPE,  Up: Top
+-
+-Usage examples
+-**************
+-
+-Here are some tips, examples and additional information on how to design
+-a network structure with CIPE and configure the devices accordingly.
+-
+-* Menu:
+-
+-* Tips::                General useful tips on CIPE configuration.
+-* Example 1::           The classic VPN setups.
+-* Example 2::           A PKCIPE setup.
+-* Connection modes::    Overview on different carrier network situations.
+-
+-
+-File: cipe.info,  Node: Tips,  Next: Example 1,  Prev: Examples,  Up: Examples
+-
+-General tips
+-============
+-
+-   * The IP address of a CIPE device and it's UDP carrier _must_ be
+-     different. Chose a "transit network" (e.g. 192.168 address) for
+-     the CIPE devices if these don't fit into existing structures.
+-
+-   * The route to the UDP carrier ("peer" address) _can not_ go through
+-     the CIPE device. If both are on the same route (e.g. both are on
+-     the same network, IP-address-wise), add a host route to the "peer"
+-     address through the right device or gateway.
+-
+-   * In Linux 2.0, the `route add -host $5 dev $1' in `ip-up' is
+-     required.  Without it the link won't work. This also means the
+-     `ip-up' script itself is mandatory.
+-
+-   * Routes through a CIPE device should be set only in the `ip-up'
+-     script. Use case selections on `$1' or `$5' if you have several
+-     CIPE links. Use `route add ... gw $5', not `route add ... dev $1'.
+-     Remember that Linux deletes any routes through a device when this
+-     device goes down.
+-
+-   * If you have a default route, the addresses reachable via the CIPE
+-     link are routed via the default when the link is down. This can
+-     defeat the purpose of an encrypted link. To guard against this,
+-     set a reject route to the affected addresses with higher metric in
+-     the system startup script.
+-
+-   * On a system running `gated', gated is the only thing responsible
+-     for setting any routes and the routes through the CIPE device
+-     routes belong in `gated.conf' as static routes, or are to be set
+-     via a routing protocol. To gated, a CIPE link looks and behaves
+-     exactly like a dial-up link. It is strongly recommended to put
+-     `gdc interface' in `ip-up' as well as `ip-down' to tell gated
+-     about status changes.
+-
+-   * The configuration of both ends of a link is symmetric. One side's
+-     `ipaddr' is the other's `ptpaddr', and one side's `me' is the
+-     other's `peer'. Since CIPE 0.5, `peer' is picked up dynamically
+-     and the real peer may be different from that set in the config
+-     file (but this config item must still be present, it should
+-     specify the other end's reverse as a reasonable default).
+-
+-   * When designing a network structure, draw the CIPE links as if they
+-     were SLIP/PPP links. Build the routing with these links enabled.
+-     Then look at the picture as if the CIPE links weren't there, so
+-     you can see the routing needed for the UDP adresses.
+-
+-   * Firewall rules which contain a device are independent of the
+-     device's existence. This means that they can be established before
+-     the module is loaded and `ciped' run, and that an explicit
+-     `device' option should be used if the device name is used in
+-     firewall rules.
+-
+-   * With PKCIPE, the location and content of the PID files from the
+-     `ip-up' sample scripts is mandatory as they are used as lock files.
+-     Omitting these can cause confusion when several instances of
+-     `pkcipe' run at the same time.
+-
+-
+-File: cipe.info,  Node: Example 1,  Next: Example 2,  Prev: Tips,  Up: Examples
+-
+-Example 1
+-=========
+-
+-This basic example shows how to connect hosts and networks with
+-unofficial network numbers through the Internet. Uses for this are
+-classic VPN setups:
+-
+-  1. Connecting two unofficial subnets through an Internet link
+-
+-  2. Connecting a branch office to the head office through a
+-     one-address dialup
+-
+-  3. Connecting a mobile host with varying access points
+-
+-
+-               Internet               Internet
+-                  ^                      ^
+-                  |                      |                           hostz
+-                  |ppp0                  |eth1                  200.0.24.3
+-                  |200.0.24.65           |200.0.24.1                     |
+-     +---------routera                routerb         eth0 200.0.24.1    |
+-     |    eth0        \_ _ _ _ _ _ _ _/      \---------------+-------+---+
+-     |  10.0.1.1   cipcb0         cipcb0      eth0           |       |
+-   hosta           10.0.1.1      10.0.2.1     10.0.2.1       |       |
+- 10.0.1.88                                                hostx   hosty
+-                                                       10.0.2.5  10.0.2.6
+-
+-As can be seen from the picture, a CIPE device and another network
+-device can have the same IP address if there are no overlapping routes
+-between them.
+-
+-The CIPE devices are configured like this:
+-
+-                   routera                   routerb
+-                   cipcb0                    cipcb0
+-ipaddr             10.0.1.1                  10.0.2.1
+-ptpaddr            10.0.2.1                  10.0.1.1
+-me                 200.0.24.65:9999          200.0.24.1:9999
+-peer               200.0.24.1:9999           200.0.24.65:9999
+-static routes      10.0.1.0/24 dev eth0      10.0.2.0/24 dev eth0
+-                   default dev ppp0          200.0.24.0/26 dev eth0
+-                                             default dev eth1
+-routes in ip-up    10.0.2.0/24 gw 10.0.2.1   10.0.1.0/24 gw 10.0.1.1
+-
+-For case 3, assume `routera' to be the mobile host, think of `eth0'
+-missing and `ppp0' having a dynamic address. The `routerb' config
+-remains unchanged. For `routera' simply omit the `eth0' stuff, add the
+-`dynip' flag for ciped. `routerb' picks up its peer dynamically. This
+-even works when `routerb' is plugged behind a firewall and has to rely
+-on a SOCKS5 server for outside access. (Yes, this can be used to punch
+-holes into firewalls. No, it's not my intention to do anything about
+-it. Local policy issues have to be dealt with locally.)
+-
+-
+-File: cipe.info,  Node: Example 2,  Next: Connection modes,  Prev: Example 1,  Up: Examples
+-
+-Example 2
+-=========
+-
+-This example shows how to set up PKCIPE. The overall setup is symmetric,
+-there are no designated servers and clients. However, one end has to
+-accept incoming TCP connections on a chosen port ("server mode") and
+-the other one has to connect to it ("client mode").
+-
+-The basic configuration of a link is like this: assuming `routera' has
+-the address (of the CIPE device) `10.0.1.1' and `routerb' has the
+-address `10.0.2.1' like in Example 1. Each `/etc/cipe/pk/HOST' file
+-contains the public key of that host together with options applying to
+-that host:
+-
+-On `routera', `/etc/cipe/pk/routerb' looks like this:
+-
+-     -----BEGIN PUBLIC KEY-----
+-     (here is the public key of routerb)
+-     -----END PUBLIC KEY-----
+-     ipaddr  10.0.1.1
+-     ptpaddr 10.0.2.1
+-
+-and on `routerb', `/etc/cipe/pk/routera' looks like this:
+-
+-     -----BEGIN PUBLIC KEY-----
+-     (here is the public key of routera)
+-     -----END PUBLIC KEY-----
+-     ipaddr  10.0.2.1
+-     ptpaddr 10.0.1.1
+-
+-This is all of the minimum configuration. Note that no `me' and `peer'
+-options are necessary. These are determined by `pkcipe'. It does not
+-matter which side runs `pkcipe' in server and which one in client mode.
+-
+-In server mode, `pkcipe' has to be started via `inetd'. This requires
+-the following steps:
+-  1. Choose a port. (This is arbitrary, here I use 963.) Enter this
+-     port into `/etc/services' on _both_ machines, giving it a name:
+-          pkcipe       963/tcp
+-
+-  2. Enter the parameters into `/etc/inetd.conf':
+-          pkcipe stream tcp nowait root /usr/local/sbin/pkcipe pkcipe
+-     or if using TCP Wrapper for access control:
+-          pkcipe stream tcp nowait root /usr/sbin/tcpd /usr/local/sbin/pkcipe
+-     Restart `inetd' after any change.
+-
+-The other end then initiates the connection simply via
+-     pkcipe -c SERVER.MACHINE:pkcipe
+-It is possible to run this connection through NAT (masquerading) or via
+-SOCKS using a dynamic SOCKS library (`socksify'/`runsocks' script). In
+-the latter case it may be necessary to repeat the peer address in a `-r
+-SERVER.MACHINE' argument.
+-
+-
+-File: cipe.info,  Node: Connection modes,  Prev: Example 2,  Up: Examples
+-
+-Connection modes
+-================
+-
+-Here is in detail how it is possible to build CIPE links between
+-different classes of carriers. Those classes are, based on how they are
+-able to reach the Internet:
+-
+-  1. Direct connection on a static IP address.
+-
+-  2. Direct connection on a dynamic IP address.
+-
+-  3. Indirect connection through a SOCKS server.
+-
+-  4. Indirect connection through a NAT (masquerading) router.
+-
+-This produces ten different combinations:
+-
+-`1-1'
+-     Can be configured statically like in the simple example. Or any
+-     end may run a PKCIPE server and let the other end connect.
+-
+-`1-2'
+-     The `1' end can run a PKCIPE server and let the `2' end connect.
+-     `pkcipe' gets the right IP addresses at both ends, later changes
+-     are handled automatically. (1)
+-
+-`1-3'
+-     Like `1-2', with a `ping' in `ip-up' at the `3' end.  The `3' end
+-     does not know its effective (as seen by the other end) carrier
+-     address, so the PKCIPE exchange produces a wrong `peer' parameter
+-     at the `1' end. The `ping' corrects that by sending packets with
+-     the right address. (2)
+-
+-`1-4'
+-     Like `1-3'.
+-
+-`2-2'
+-     One end runs a PKCIPE server and publishes its current IP address
+-     using some external service (like a web server or dynamic DNS
+-     (3)). The other end fetches this address to connect to and proceeds
+-     like in `1-2'.
+-
+-`2-3'
+-     Like `1-3', except that the `2' end uses an external service to
+-     publish its current address.
+-
+-`2-4'
+-     Like `1-4', except that the `2' end uses an external service to
+-     publish its current address.
+-
+-`3-3'
+-     This is not easily possible with the current code because neither
+-     end knows its effective carrier address (i.e. the SOCKS UDP
+-     relayer address) before the link is set up, and so neither side
+-     can send packets to the other. This information is available in
+-     the `ip-up' script, but transmitting it to the other end would
+-     need some means outside of CIPE.  It is planned that future
+-     versions will be able to handle this via extended capabilities of
+-     PKCIPE; this will also require an external service like dynamic
+-     DNS with a special setup.
+-
+-`3-4'
+-     Like `3-3'.
+-
+-`4-4'
+-     Not possible. Neither side gets to know its effective carrier
+-     address at all.
+-
+-*Note Dynamic carrier::, for a more detailed explanation of some of
+-these configurations.
+-
+----------- Footnotes ----------
+-
+-(1) It is also possible, but less convenient, to configure this
+-statically: The carrier address of the `2' end should be the special
+-dummy `127.0.0.1:9', and the `ip-up' script in `2' should have the
+-`ping' statement as in the sample. See also `1-3'.
+-
+-(2) Static configuration like `1-2' is also possible.
+-
+-(3) Dynamic DNS is easiest to handle because it does not need any
+-external scripts or special software for CIPE, only the dynamic DNS
+-client. There are some services which provide dynamic DNS free of
+-charge.
+-
+-
+-File: cipe.info,  Node: Protocol descriptions,  Next: Misc,  Prev: Examples,  Up: Top
+-
+-Protocol descriptions
+-*********************
+-
+-* Menu:
+-
+-* The CIPE Protocol::   Encrypted IP encapsulation used by CIPE.
+-* The PKCIPE Protocol::  Public-key based setup and key exchange.
+-
+-
+-File: cipe.info,  Node: The CIPE Protocol,  Next: The PKCIPE Protocol,  Prev: Protocol descriptions,  Up: Protocol descriptions
+-
+-The CIPE protocol
+-=================
+-
+-     This chapter is copied verbatim from the earlier documentation texts.
+-
+-The primary goal of this software is to provide a facility for secure
+-(against eavesdropping, including traffic analsyis, and faked message
+-injection) subnetwork interconnection across an insecure packet network
+-such as the Internet.
+-
+-1. Overview
+-
+-This protocol was designed to be simple and efficient, and to work over
+-existing communication facilities, especially by encapsulation in UDP
+-packets. Compatibility with existing protocols such as the IPSEC RFCs
+-were not a concern. The first test implementation was done entirely on
+-the user level, while the now published one consists of a kernel module
+-and a user level program.
+-
+-The CIPE model assumes a fixed link between two peers which exchange
+-datagrams (packetwise, not necessarily reliable). The most common way
+-of implementing such a thing is sending UDP messages between them.
+-(Another would be encapsulation in PPP, etc.)
+-
+-Nothing that can be parameterized is inside the scope of this protocol
+-and implementation. This is delegated to either prior arrangement or a
+-yet-to-be-defined application level protocol. Most notably, this
+-involves exchanging a shared secret key by now, and it involves choice
+-of encryption algorithm.
+-
+-The CIPE protocol consists of two parts: Encryption and checksumming of
+-the data packets and dynamic key exchange.
+-
+-2. Packet encryption
+-
+-Each IP datagram is taken as a whole, including headers. It is padded
+-at the end with zero to seven random octets so that the total length in
+-octets is congruent three modulo eight. The padded packet is appended
+-with one octet of the value P described below and the CRC-32 over the
+-packet built up so far, up to and including P. (This makes the complete
+-packet length a multiple of eight octets.)
+-
+-This packet is then encrypted through a 64-bit block cipher in CBC mode
+-with an IV as described below using either the static or the sending
+-dynamic key of the outbound interface (for definition of keys see
+-below). The default cipher algorithm is IDEA. The current
+-implementation also supports Blowfish with 128 bit key.
+-
+-The encrypted packet is prepended with the IV block. The highest order
+-bit of the first octet of the IV is zero if the static key is used, one
+-if the dynamic key is used. The remaining 63 bits are random, but the
+-first 31 of them should not be all zeros (i.e. an IV/packet that starts
+-with hex 0000 0000 or 8000 0000 is not allowed). Such packets are
+-reserved for later protocol extensions.
+-
+-The CRC is over the polynomial
+-
+-     X^32+X^26+X^23+X^22+X^16+X^12+X^11+X^10+X^8+X^7+X^5+X^4+X^2+X^1+X^0
+-and represented in network byte order.
+-
+-The value P is given as follows: bits 6,5,4 indicate the length of the
+-padding between the original packet end and P. Bits 2,1 are a type
+-code, indicating which kind of packet this is. The remaining bits 7,3,0
+-are reserved and must be zero.
+-
+-The type codes are: 00 - data 01 - key exchange 10 - reserved 11 -
+-reserved
+-
+-For decryption, first check the highest bit of the first octet and use
+-it to select the key. Decrypt the packet, calculate the CRC over the
+-packet minus the last four octets, compare that with the last four
+-octets. If valid, strip off the last octet as value P, strip off the
+-padding as given by bits 6,5,4 of P and process the packet as indicated
+-by bits 2,1 of P.
+-
+-3. Key exchange
+-
+-Every interface is associated with a static key, a sending dynamic key
+-and a receiving dynamic key. (An interface is an endpoint of a
+-connection, which may use protocols like UDP for transport but for the
+-purpose of CIPE are always point-to-point links.) On startup, only the
+-static key is valid. Encryption uses the static key if and only if the
+-sending dynamic key is invalid. The value 0 (all bits zero) for the
+-static key is reserved for future extensions and should not be used.
+-
+-The dynamic key is set by a dialogue procedure involving messages with
+-type code bits 01. These are encrypted just like above. The packets
+-consist of a type octet followed by protocol data followed by a random
+-amount of padding random data, so that the packet is at least 64 octets
+-long. A key consists of 16 octets, a key CRC is the CRC-32 over the
+-key, transferred in network order.
+-
+-The following messages exist:
+-
+-NK_REQ: Type code 1, no data: Requests the peer to immediately start a
+-key negotiation (send NK_IND). This should be sent when a packet is
+-received encrypted with a dynamic key but no dynamic receive key is
+-valid. (Which can happen when the receiving side of a connection is
+-rebooted while the sending side remains running.)
+-
+-NK_IND: Type code 2, data is new key followed by key CRC. Specifies a
+-new sending dynamic key for this sender. Requests the peer to
+-immediately answer with NK_ACK.
+-
+-NK_ACK: Type code 3, data is CRC of the previously accepted key.
+-Confirms receipt of NK_IND.
+-
+-The key negotiation procedure normally runs as follows: The sender
+-sends a NK_IND with the new key, then invalidates its own sending key.
+-Upon receipt of NK_IND, the receiver starts using this key as its
+-receiving key and sends a NK_ACK. When the sender receives NK_ACK, it
+-starts using the new key as its sending key. If either of NK_IND or
+-NK_ACK is lost in transmission, no new key will be used. The sender
+-should send a new NK_IND (with new key) if no matching NK_ACK is
+-received within a reasonable amount of time (current specification: 10
+-seconds).
+-
+-If any of the checksums contained in the key negotiation data
+-mismatches the contained or stored key, this packet is ignored and no
+-further action taken.
+-
+-A sending dynamic key should be invalidated after being used for a
+-certain period of time or amount of data and a new NK_IND sent. The
+-process is symmetric and both sides act independently for their own
+-sending key. The dynamic key lifetime should not exceed 15 minutes and
+-the amount of data sent using one dynamic key should not exceed 2^32
+-packets.
+-
+-Optionally, the key exchange packets can be timestamped. The timestamp
+-is a 32bit unsigned integer in network order representing the UNIX time
+-of the sending host, placed in octets 56-59 (starting at zero) of the
+-key exchange packets. The receiver may be configured to ignore the
+-timestamp, or it may be configured to reject all key exchange packets
+-whose timestamp differs from the current UNIX time of the receiving host
+-by more than a defined amount. It is recommended that this timeout not
+-exceeds 30 seconds.
+-
+-4. Security considerations
+-
+-The packets that actually get transmitted don't carry any usable
+-information related to the original IP datagram other than its length,
+-padded to a multiple of 8. This should effectively guard against most
+-aspects of traffic analysis. The only information visible prior
+-(attempt) to decrypting the packet is the bit that tells whether the
+-static or dynamic key was used. Because the static key has a
+-potentially long lifetime it is expected to be used as rarely as
+-possible. It is normally used only in the short period of time during a
+-key exchange. The dynamic key is changed often. These precautions are
+-there because the application is prone to known and chosen plaintext
+-attacks and the intention is to inhibit feeding of large amounts of
+-data through one key.
+-
+-Because the type code and padding length are encrypted with the packet,
+-they can not be deduced from the ciphertext. Especially, it is not
+-possible to determine whether the packet is a data or key exchange
+-packet. (Usually, the last packet of a sequence of dynamic key packets
+-followed by a sequence of static key packets is a NK_IND, but the
+-NK_ACK and a possible second NK_IND can't be guessed this way, so there
+-is no provision to tell whether the key exchange succeeded.  However,
+-this is a small but real weakness.)
+-
+-The CRC serves as a check whether the encryption key was valid - i.e.
+-some sort of signature for authenticity of the packet. Additionally,
+-data packets should still have to form valid IP headers (with their own
+-16-bit checksum) and key exchange packets carry their own checksum as
+-defined above.
+-
+-IP packets carry some known or easily guessable plaintext in certain
+-positions of their header. Potential exploitation of this fact should
+-be mitigated by the limited key usage described above. The use of a
+-random IV for each packet means at least that identical (retransmitted)
+-packets encrypt to different ciphertexts.
+-
+-The protocol gives only limited protection against replay attacks. A
+-packet remains valid as long as the key it is encrypted with remains
+-valid. However, active exploitation is unlikely as the packet carries
+-no indication of its meaning. (Except for the note about sequences and
+-NK_IND above. Replay of NK_IND could be dangerous. Possible remedy:
+-store the last N accepted key CRCs [for large-ish N] and refuse to
+-accept NK_INDs with the same CRC as an already stored one.)
+-
+-If the timestamp of key exchange packets is used, it should guard
+-against replay of key exchange packets. However, this requires that the
+-clocks of both machines are in sync.
+-
+-Denial of service attacks are possible e.g. by sending large amounts of
+-bogus packets, which should affect performance only. A vulnerability
+-against disruption of the key generation process exists if the sender
+-is overrun with bogus packets so that it fails to process the NK_ACK,
+-effectively being forced to use its static sending key for a prolonged
+-period of time. A possible way out of this problem is to stop sending
+-data completely after a long burst of static key sends, sending only
+-NK_INDs and resuming only after a valid NK_ACK has been processed.
+-Then this attack would become a simple denial-of-service.
+-
+-5. Practical test, Conclusion
+-
+-The mentioned prototype implementations, one on the user level and one
+-as a kernel module, have been in use for several months now on a live
+-network, where they provide a transparent connection between
+-subnetworks through an insecure transit network based on UDP
+-encapsulation. This does work flawlessly. However, it is too early to
+-draw final conclusions about the feasibility of this approach.
+-
+-It is planned to replace the simple secret key based key exchange
+-process described above by a signed Diffie-Hellman scheme, which would
+-eliminate the need for secret keys.
+-
+-6. Appendix: New protocol for control messages in CIPE 1.3
+-
+-CIPE 1.3 has added control messages. These are transmitted as key
+-exchange messages with a type code of 0x70 or higher. They may, but
+-don't need to carry a timestamp.
+-
+-CT_DUMMY: Type code 0x70. Dummy/keepalive message, should be ignored by
+-the receiver.
+-
+-CT_DEBUG: Type code 0x71. Debug message. The data is a string which the
+-receiver should log.
+-
+-CT_PING: Type code 0x72. Echo request. Receiver should immediately
+-answer with a CT_PONG.
+-
+-CT_PONG: Type code 0x73. Echo reply. Data should be copied from the
+-CT_PING message.
+-
+-CT_KILL: Type code 0x74. Requests the peer to exit. Data is a string
+-which should be logged, indicating the reason.
+-
+-Strings sent in control packets should not exceed 254 octets in length.
+-They should be terminated with a zero octet, after which random padding
+-may follow. If the messages are timestamped, the string must not exceed
+-a length of 54 octets, so a timestamp can be placed at octet 56.
+-
+-CIPE 1.5 has added the following control messages. Because they are
+-expected to be evaluated without even knowing if a matching key exists,
+-they are sent as unencrypted control messages (see next section).
+-
+-CT_CONFREQ: Type code 0x75. Tells the peer the fixed (compile-time)
+-configuration parameters. The receiver should compare this to its own
+-parameters, warn the user on any mismatch, and in any case immediately
+-reply with a CT_CONF message.
+-
+-The data in this packet is the following structure (shown here including
+-the type code:)
+-
+-(Octet 0    the type code)
+-1-3         filler, ignored
+-4-8         the ASCII letters "CIPE"
+-9           the protocol version, here 3 or 4
+-10          letter indicating the encryption algorithm ("b" or "i")
+-11-12       Major/minor number of the software release
+-13          1 if the implementation uses a correct key parser,
+-            0 for the broken key interpretation of CIPE <1.4
+-This structure may be extended in the future.
+-
+-CT_CONF: Type code 0x76. Identical to CT_CONFREQ except that it does not
+-solicit a response.
+-
+-7. Appendix: New protocol for unencrypted control messages in CIPE 1.5
+-
+-Starting with CIPE 1.5, control messages of certain kinds may be sent in
+-the clear without any encryption at all. These are sent as a packet
+-starting with an all-zeros IV (i.e. 8 zero bytes for IDEA and Blowfish),
+-after which the actual message follows. The packet may carry a
+-timestamp; the position of the timestamp is calculated starting with
+-(i.e. including) the all-zeros IV.
+-
+-Receivers must treat a packet starting with an IV with its first 32
+-bits zero as unencrypted control message. They should discard with a
+-warning any unencrypted control message which would affect the proper
+-operation of the daemon or the keying, especially CT_KILL and all KX_
+-messages.
+-
+-A. Appendix: Errata
+-
+-The IV specification originally said: "The remaining 63 bits are random,
+-but the first 15 of them should not be all zeros (i.e. an IV/packet that
+-starts with hex 0000 0000 or 8000 0000 is not allowed)." This is
+-inconsistent. The hex numbers are correct and the right number of bits
+-is 31. This has been corrected in the text above.
+-
+-
+-File: cipe.info,  Node: The PKCIPE Protocol,  Prev: The CIPE Protocol,  Up: Protocol descriptions
+-
+-The PKCIPE Protocol
+-===================
+-
+-To be written.
+-
+-
+-File: cipe.info,  Node: Misc,  Next: Concept Index,  Prev: Protocol descriptions,  Up: Top
+-
+-Odds and ends
+-*************
+-
+-   * Ideas and code for this project came from various parts of the
+-     Linux 2.0.12 kernel, most notably the `ipip' protocol, the
+-     `new_tunnel' driver, and the `udp' protocol.
+-
+-   * NOTE: This software contains a data encryption facility. Use of it
+-     is restricted by law in some countries including France and
+-     Russia. In the United States of America it is not allowed to
+-     export such systems without special permission. The IDEA algorithm
+-     included herein is patented and subject to licensing conditions at
+-     least in parts of Europe and America (see
+-     <http://www.ascom.ch/systec>).
+-
+-   * A note on the Blowfish algorithm: For historical reasons (a bug in
+-     the original i386 assembler implementation), CIPE uses a variant
+-     of the Blowfish algorithm where the plaintext and ciphertext data
+-     words are interpreted as little-endian. This means it is Blowfish
+-     with an added initial and final permutation. This does not affect
+-     the cryptographic properties of the algorithm.
+-
+-   * A Windows port of the CIPE protocol is being developed. It is
+-     found at <http://cipe-win32.sourceforge.net>.
+-
+-   * To Do list for future development:
+-        - Profiling and optimization for speed. Check C implementation
+-          of IDEA for possible optimization.
+-
+-        - Make IDEA run in constant time to harden against timing
+-          attack? This would impose a serious performance penalty. It
+-          is at least possible in C and i486 and higher; probably not
+-          for the i386. The Blowfish algorithm always runs in constant
+-          time (at least the assembler implementation).
+-
+-        - Test various combinations of crypto algorithm and
+-          implementation selected.
+-
+-        - Implement all of the attack protections outlined in the
+-          protocol chapter. (Keeping log of recent keys and
+-          timestamping is implemented.)
+-
+-        - Implement dummy packet generation.
+-
+-   * There is a mailing list for CIPE users and development.  To
+-     subscribe, send mail to <majordomo@inka.de> containing the line
+-          subscribe cipe-l
+-     in the message body. Please subscribe before posting to the list.
+-
+-   * The Encryption HOWTO covers various methods on disk and network
+-     encryption. See <http://EncryptionHOWTO.sourceforge.net/>.
+-
+-
+-
+-File: cipe.info,  Node: Concept Index,  Prev: Misc,  Up: Top
+-
+-Concept Index
+-*************
+-
+-* Menu:
+-
+-* /etc/cipe directory:                   Install.
+-* autoloading of modules:                insmod.
+-* Blowfish <1>:                          Misc.
+-* Blowfish:                              The CIPE Protocol.
+-* Branch office -- head office:          Example 1.
+-* Bridging:                              Protocols and ciphers.
+-* carrier network:                       Routing.
+-* CIPE link:                             How CIPE works.
+-* ciped:                                 Components.
+-* Classic VPN setup:                     Example 1.
+-* command line options:                  Specifying options.
+-* Compiling modules:                     Prerequisites.
+-* CRC:                                   The CIPE Protocol.
+-* daemon name:                           Program Names.
+-* debugging level:                       insmod.
+-* Denial of service attack:              The CIPE Protocol.
+-* Designing network structure:           Tips.
+-* device names:                          Program Names.
+-* devices, number of:                    insmod.
+-* dynamic addresses <1>:                 Connection modes.
+-* dynamic addresses:                     Dynamic carrier.
+-* Dynamic DNS:                           Connection modes.
+-* Encrypted tunneling:                   Routing.
+-* Encryption HOWTO:                      Misc.
+-* Ethernet:                              Protocols and ciphers.
+-* firewall rules <1>:                    Tips.
+-* firewall rules:                        Internals.
+-* gated:                                 Tips.
+-* Hole in firewall:                      Example 1.
+-* IDEA:                                  The CIPE Protocol.
+-* identity:                              Public Keys.
+-* inetd:                                 Example 2.
+-* IP address syntax:                     Specifying options.
+-* IP-in-IP tunneling:                    Routing.
+-* IPIP:                                  How CIPE works.
+-* IPSEC <1>:                             The CIPE Protocol.
+-* IPSEC:                                 Routing.
+-* Kernel IP forwarding option <1>:       Prerequisites.
+-* Kernel IP forwarding option:           Internals.
+-* Kernel versions:                       Prerequisites.
+-* Key exchange:                          The CIPE Protocol.
+-* Legal issues:                          Misc.
+-* link key:                              How CIPE works.
+-* Mailing list:                          Misc.
+-* masquerading:                          Connection modes.
+-* Mobile host:                           Example 1.
+-* modprobe command:                      insmod.
+-* module name:                           Program Names.
+-* module parameters:                     insmod.
+-* NAT:                                   Connection modes.
+-* net_device structure:                  Compilation errors.
+-* network device:                        Components.
+-* Network layers:                        Network layers.
+-* Obtaining the CIPE package:            Installation.
+-* OpenSSL:                               Prerequisites.
+-* options file:                          Specifying options.
+-* Packet encryption:                     The CIPE Protocol.
+-* PGP:                                   Network layers.
+-* PKCIPE, modes:                         Example 2.
+-* PKCIPE, over SOCKS:                    Example 2.
+-* pkcipe, program <1>:                   Example 2.
+-* pkcipe, program:                       Components.
+-* pppd:                                  Components.
+-* reject route:                          Tips.
+-* Setting routes:                        Tips.
+-* SO_BINDTODEVICE:                       Compilation errors.
+-* SOCKS <1>:                             Connection modes.
+-* SOCKS:                                 SOCKS.
+-* SSH:                                   Network layers.
+-* SSL:                                   Network layers.
+-* To Do list:                            Misc.
+-* traffic analysis:                      Routing.
+-* transit network:                       Tips.
+-* tunnel driver:                         Internals.
+-* UDP:                                   How CIPE works.
+-* Unofficial subnets:                    Example 1.
+-* VPN:                                   Routing.
+-* Windows:                               Misc.
+-
+-
+-
+-Tag Table:
+-Node: Top72
+-Node: Introduction3645
+-Node: Network layers4056
+-Node: Routing5820
+-Ref: Routing-Footnote-18285
+-Node: How CIPE works8376
+-Node: Components9602
+-Node: Internals10540
+-Ref: Internals-Footnote-112935
+-Node: Installation13035
+-Node: Prerequisites13855
+-Node: Protocols and ciphers17934
+-Node: Advanced compiling19677
+-Node: Install21420
+-Node: Compilation errors22522
+-Node: Run23401
+-Node: Program Names23768
+-Node: insmod24851
+-Node: ciped26167
+-Node: Configuration28166
+-Node: Specifying options28711
+-Node: Parameter list30148
+-Node: Keys in older CIPE34468
+-Node: SOCKS35741
+-Ref: SOCKS-Footnote-136830
+-Node: Dynamic carrier37128
+-Ref: Dynamic carrier-Footnote-139374
+-Node: Error handling39437
+-Node: PKCIPE40621
+-Node: How it works41259
+-Node: Public Keys42140
+-Ref: Public Keys-Footnote-143803
+-Node: pkcipe invocation43850
+-Node: Examples45029
+-Node: Tips45533
+-Node: Example 148553
+-Node: Example 251115
+-Node: Connection modes53287
+-Ref: Connection modes-Footnote-155766
+-Ref: Connection modes-Footnote-256018
+-Ref: Connection modes-Footnote-356073
+-Node: Protocol descriptions56282
+-Node: The CIPE Protocol56557
+-Node: The PKCIPE Protocol70103
+-Node: Misc70261
+-Node: Concept Index72693
+-
+-End Tag Table
+diff -urN cipe/cipe.spec cipe.new/cipe.spec
+--- cipe/cipe.spec	2002-06-28 16:40:34.000000000 -0700
++++ cipe.new/cipe.spec	1969-12-31 17:00:00.000000000 -0700
+@@ -1,65 +0,0 @@
+-Summary: CIPE - encrypted IP over UDP tunneling
+-Name: cipe
+-Version: 1.5.4
+-Release: 1
+-Copyright: GPL
+-Group: System Environment/Daemons
+-Source: http://sites.inka.de/bigred/sw/%{name}-%{version}.tar.gz
+-BuildRoot: /var/tmp/%{name}-root
+-
+-%description
+-CIPE (the name is shortened from *Crypto IP Encapsulation*) is a
+-package for an encrypting IP tunnel device. This can be used to build
+-encrypting routers for VPN (Virtual Private Networks) and similar
+-applications.
+-
+-%prep
+-%setup -q
+-./configure --prefix=/usr
+-
+-%build
+-make
+-
+-%install
+-rm -rf $RPM_BUILD_ROOT
+-%define kversion `uname -r`
+-
+-make install BINDIR=$RPM_BUILD_ROOT/usr/sbin INFODIR=$RPM_BUILD_ROOT/usr/info \
+-     MODDIR=$RPM_BUILD_ROOT/lib/modules/%{kversion}/misc \
+-     sbindir=$RPM_BUILD_ROOT/usr/sbin bindir=$RPM_BUILD_ROOT/usr/bin
+-gzip $RPM_BUILD_ROOT/usr/info/cipe.info
+-
+-%post
+-depmod -a
+-install-info --info-file=/usr/info/cipe.info.gz \
+-	     --dir-file=/usr/info/dir \
+-             --item="* cipe: (cipe)cipe.        CIPE - encrypted IP over UDP tunneling"
+-
+-
+-%preun
+-install-info --delete \
+-	     --info-file=/usr/info/cipe.info.gz \
+-	     --dir-file=/usr/info/dir \
+-             --item="* cipe: (cipe)cipe.        CIPE - encrypted IP over UDP tunneling"
+-
+-%postun
+-depmod -a
+-
+-%clean
+-rm -rf $RPM_BUILD_ROOT
+-
+-%files
+-%defattr(-,root,root)
+-%doc COPYING CHANGES README README.key-bug tcpdump.patch samples
+-/usr/info/cipe.info.gz
+-/usr/sbin/ciped-cb
+-/usr/sbin/pkcipe
+-/usr/bin/rsa-keygen
+-/lib/modules/*/misc/cipcb.o
+-
+-%changelog
+-* Sat Dec 16 2000 Olaf Titz <olaf@bigred.inka.de>
+-- integrated pkcipe
+-
+-* Fri Jul 21 2000 Mirko Zeibig <mz@webideal.de>
+-- created spec-file
+diff -urN cipe/conf/Makefile-obj.in cipe.new/conf/Makefile-obj.in
+--- cipe/conf/Makefile-obj.in	2000-12-16 11:27:35.000000000 -0700
++++ cipe.new/conf/Makefile-obj.in	2003-01-08 12:52:44.000000000 -0700
+@@ -9,8 +9,10 @@
+ 
+ # $Id: 1.5.4,v 1.2 2003/09/29 21:52:20 xscript Exp $
+ 
+-BINDIR:=/usr/local/sbin
+-MODDIR:=/lib/modules/@KVERS@/misc
++include ../../Makefile.defs
++
++BINDIR:=$(IMAGE_DIR)/usr/local/sbin
++MODDIR:=$(IMAGE_DIR)/lib/modules/@KVERS@/misc
+ 
+ MAKE=	   @MAKE@
+ CC=	   @CC@
+diff -urN cipe/conf/Makefile-top.in cipe.new/conf/Makefile-top.in
+--- cipe/conf/Makefile-top.in	2002-05-30 04:49:18.000000000 -0700
++++ cipe.new/conf/Makefile-top.in	2003-01-08 12:51:16.000000000 -0700
+@@ -96,9 +96,9 @@
+ bf.tgz: $(SRC)/bf.checksums
+ 	(cd $(SRC); tar czf ../bf.tgz $(BF) bf.checksums)
+ 
+-install:: cipe.info
+-	-mkdir -p $(INFODIR)
+-	install -m 644 cipe.info $(INFODIR)
++#install:: cipe.info
++#	-mkdir -p $(INFODIR)
++#	install -m 644 cipe.info $(INFODIR)
+ 
+ TAGS:
+ 	etags *.[hc] */*.[hc]
+diff -urN cipe/local_config cipe.new/local_config
+--- cipe/local_config	1969-12-31 17:00:00.000000000 -0700
++++ cipe.new/local_config	2003-01-08 12:51:16.000000000 -0700
+@@ -0,0 +1,20 @@
++#!/bin/sh
++CC=/usr/i386-linux-uclibc/usr/bin/gcc
++export CC
++
++unset LD
++unset AR
++unset CFLAGS
++unset MAKEFLAGS
++unset MAKELEVEL
++unset MFLAGS
++
++cfg="./configure"
++# cfg="$cfg --prefix=/usr/i386-linux-uclibc"
++# cfg="$cfg --includedir=/usr/i386-linux-uclibc/include"
++cfg="$cfg --disable-debug"
++cfg="$cfg --with-linux=../linux"
++cfg="$cfg --disable-pkcipe"
++
++/bin/echo $cfg
++$cfg

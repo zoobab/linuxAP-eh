@@ -1,0 +1,14 @@
+#
+# protocols
+#
+ip	0	IP
+icmp	1	ICMP
+igmp	2	IGMP
+ggp	3	GGP
+st	5	ST
+tcp	6	TCP
+egp	8	EGP
+udp	17	UDP
+hmp	20	HMP
+rdp	27	RDP
+ddp	37	DDP

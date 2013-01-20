@@ -1,0 +1,51 @@
+--- hostap-2002-10-12/Makefile	2002-09-12 01:11:00.000000000 -0700
++++ hostap.old/Makefile	2003-09-01 00:20:46.000000000 -0700
+@@ -1,6 +1,6 @@
+ # Edit this path to match with your system (it should point to the root
+ # directory of the Linux kernel source)
+-KERNEL_PATH=/usr/src/linux
++KERNEL_PATH=/usr/src/linuxAP/linux
+ 
+ # Systems using external pcmcia-cs package (instead of kernel-tree pcmcia
+ # modules):
+@@ -9,9 +9,9 @@
+ # directory and compiling pcmcia-cs package or by configuring PCMCIA_PATH
+ # and using this Makefile with 'make pccard; make install_pccard'.
+ # Leave this blank for kernel-tree PCMCIA compilations (CONFIG_PCMCIA):
+-PCMCIA_PATH=
++PCMCIA_PATH=../pcmcia-cs
+ 
+-CC=gcc
++CC=$(CROSS_COMPILE)gcc
+ CFLAGS=-O2 -D__KERNEL__ -DMODULE -Wall -c $(EXTRA_CFLAGS)
+ 
+ VERFILE := $(KERNEL_PATH)/include/linux/version.h
+@@ -20,7 +20,7 @@
+ 	else uname -r; fi)
+ KERNELVER := $(shell echo "$(KERNELRELEASE)" | \
+ 	sed "s/\([0-9]*\.[0-9]*\.[0-9]*\).*/\1/")
+-MODPATH := /lib/modules/$(KERNELRELEASE)
++MODPATH := $(IMAGE_DIR)/lib/modules/$(KERNELRELEASE)
+ MODULE_CS := hostap_cs.o
+ MODULE_PLX := hostap_plx.o
+ MODULE_PCI := hostap_pci.o
+@@ -156,13 +156,13 @@
+ 	@echo "Installing $(MODULE_CS) to $(MODPATH_CS)"
+ 	mkdir -p $(MODPATH_CS)
+ 	cp $(MSRC)/$(MODULE_CS) $(MODPATH_CS)
+-	/sbin/depmod -a
+-	@if [ ! -r /etc/pcmcia/hostap_cs.conf ]; then \
+-		echo "Installing /etc/pcmcia/hostap_cs.conf"; \
+-		cp driver/etc/hostap_cs.conf /etc/pcmcia/hostap_cs.conf; \
++#	/sbin/depmod -a
++	@if [ ! -r $(IMAGE_DIR)/etc/pcmcia/hostap_cs.conf ]; then \
++		echo "Installing $(IMAGE_DIR)/etc/pcmcia/hostap_cs.conf"; \
++		cp driver/etc/hostap_cs.conf $(IMAGE_DIR)/etc/pcmcia/hostap_cs.conf; \
+ 	fi
+-	@if [ -r /etc/pcmcia/prism2.conf ]; then \
+-		echo "You may need to remove old /etc/pcmcia/prism2.conf"; \
++	@if [ -r $(IMAGE_DIR)/etc/pcmcia/prism2.conf ]; then \
++		echo "You may need to remove old $(IMAGE_DIR)/etc/pcmcia/prism2.conf"; \
+ 	fi
+ 
+ install_plx: install_check install_crypt install_hostap

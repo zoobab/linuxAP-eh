@@ -1,0 +1,83 @@
+#!/bin/sh
+#
+# primary
+#
+# Bring up the primary interface (RL2/RL3/RL4 wlan0/br0/eth0)
+
+# Default
+p_dhcp=enabled
+[ -f $CFGD/netcfg ] && . $CFGD/netcfg
+
+#----------------------------------------------------------------------
+# CONFIG_PRIMARY
+# Configure $iface with fallback if dhcp
+#----------------------------------------------------------------------
+config_primary()
+{
+    status=1
+    if [ "$p_dhcp" = "enabled" ]
+    then
+        udhcpc -n -i $iface
+        status=$?
+    fi
+    if [ $status -eq 1 -o "$p_dhcp" != "enabled" ]
+    then
+        if [ "$p_address" != "" ]
+        then
+            ifconfig $iface $p_address \
+                netmask $p_netmask broadcast $p_broadcast
+        fi
+    fi
+    sleep 2
+}
+
+
+case "$1" in
+# Router Mode
+    4)
+        echo "Starting eth0 interface."
+        if ifconfig eth0 > /dev/null 2>&1
+        then
+            :
+        else
+            echo "eth0 does not exist"
+            exit 0
+        fi
+        iface=eth0
+        config_primary
+        ;;
+# Host Mode
+    3)
+        echo "Starting bridge interface."
+        if ifconfig wlan0 > /dev/null 2>&1
+        then
+            :
+        else
+            echo "wlan0 does not exist to bridge with"
+            exit 0
+        fi
+        iface=br0
+        config_primary
+        ;;
+# Station Mode
+    2)
+        echo "Starting wlan0 interface."
+        if ifconfig wlan0 > /dev/null 2>&1
+        then
+            :
+        else
+            echo "wlan0 does not exist"
+            exit 0
+        fi
+        iface=wlan0
+        config_primary
+        ;;
+    stop|0|1|6)
+        echo "Stopping wlan0/bridge interface."
+        killall udhcpc > /dev/null 2>&1
+        ifconfig br0 down > /dev/null 2>&1
+        ifconfig wlan0 down
+        ;;
+    *) : ;;
+esac
+exit 0

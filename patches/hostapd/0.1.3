@@ -1,0 +1,22 @@
+diff -Nur hostapd/Makefile hostapd.new/Makefile
+--- hostapd/Makefile	2003-08-03 21:52:10.000000000 +0200
++++ hostapd.new/Makefile	2004-02-18 03:17:06.000000000 +0100
+@@ -1,15 +1,15 @@
+ CC=gcc
+ 
+ ifndef CFLAGS
+-CFLAGS = -MMD -O2 -Wall -g
++CFLAGS = -MMD -Os -Wall -g
+ endif
+ 
+ # define HOSTAPD_DUMP_STATE to include SIGUSR1 handler for dumping state to
+ # a file (undefine it, if you want to save in binary size)
+-CFLAGS += -DHOSTAPD_DUMP_STATE
++#CFLAGS += -DHOSTAPD_DUMP_STATE
+ 
+ # Include directories for CVS version
+-CFLAGS += -I../driver/modules -I../utils
++#CFLAGS += -I../driver/modules -I../utils
+ 
+ # Uncomment following line and set the path to your kernel tree include
+ # directory if your C library does not include all header files.

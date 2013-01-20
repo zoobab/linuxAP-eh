@@ -1,0 +1,28 @@
+#!/bin/sh
+#
+# swap
+#
+
+[ -f $CFGD/netcfg ] && . $CFGD/netcfg
+[ -f /var/udhcpc.lease ] && . /var/udhcpc.lease
+
+if [ -z "$swapsvr" ]
+then
+    exit 0
+fi
+
+case "$1" in
+    start|2|3|4)
+        nbd-client $swapsvr $swapport /dev/nd0 -swap
+        mkswap /dev/nd0
+        swapon /dev/nd0
+        ;;
+    stop|0)
+        swapoff /dev/nd0
+        nbd-client -d /dev/nd0
+        ;;
+    restart)
+        $0 start
+        $0 stop
+         ;;
+esac

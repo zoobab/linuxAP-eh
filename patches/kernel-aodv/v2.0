@@ -1,0 +1,36 @@
+diff -Nur kernel-aodv_v2.0/Makefile kernel-aodv_v2.0.new/Makefile
+--- kernel-aodv_v2.0/Makefile	2002-08-15 15:30:32.000000000 +0200
++++ kernel-aodv_v2.0.new/Makefile	2003-09-07 18:07:45.000000000 +0200
+@@ -1,4 +1,4 @@
+-CCx86=gcc
++CCx86=$(CROSS_COMPILE)/gcc
+ 
+ #Change this Line to reflect where ARM-gcc is on your machine
+ CCarm=/opt/Embedix/tools/bin/arm-linux-gcc
+@@ -6,7 +6,7 @@
+ 
+ 
+ 
+-KVERSION=`uname -r`
++KVERSION=$(KERNEL_VERSION)
+ CURRENTDIR=`pwd`
+ LOCATE=locate
+ # if you don't have locate uncomment the line below...it should work.
+@@ -18,7 +18,7 @@
+ 
+ MODCFLAGS :=  -O3 -DMODULE -D__KERNEL__ -DLINUX -DMESSAGES
+ 
+-PATHx86 := /lib/modules/$(KVERSION)/build/include/ 
++PATHx86 := $(DESTDIR)/lib/modules/$(KVERSION)/build/include/ 
+ 
+ #Change this Line to reflect where the src for ARM Linux is on your machine
+ PATHarm := /home/adhoc/sl_5000/linux/include/
+@@ -28,7 +28,7 @@
+ 
+ OBJ=
+ 
+-LINKx86 := ld -m elf_i386 -r   
++LINKx86 := $(CROSS_COMPILE)/ld -m elf_i386 -r   
+ #Change this Line to reflect where the ARM linker is on your machine
+ LINKarm := /opt/Embedix/tools/bin/arm-linux-ld -m armelf -r
+ 

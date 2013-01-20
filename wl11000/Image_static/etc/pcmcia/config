@@ -1,0 +1,5 @@
+# PCMCIA Card Configuration Database
+source ./*.conf
+
+# Include local configuration settings
+source ./config.opts

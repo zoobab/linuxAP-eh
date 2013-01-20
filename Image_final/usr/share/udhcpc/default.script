@@ -1,0 +1,88 @@
+#!/bin/sh
+#
+# udhcpc script
+#
+[ -z "$1" ] && echo "Error: should be called from udhcpc" && exit 1
+
+RESOLV_CONF="/etc/resolv.conf"
+
+#----------------------------------------------------------------------
+# UPDATE_HOSTS
+#----------------------------------------------------------------------
+update_hosts()
+{
+    if [ -n "$xmanager" ]
+    then
+        if [ $fontsrv = "" ]
+        then
+            fontsrv=$xmanager
+        fi
+        echo "\
+#
+# hosts
+#
+# loopback
+127.0.0.1 localhost
+$xmanager thost
+# X-Window Manger Host
+$xmanager Xhost
+# X-Window Font Server Host
+$fontsrv fonthost
+# Syslog Host
+$logsvr loghost
+" > /etc/hosts
+    fi
+
+}
+#----------------------------------------------------------------------
+# SAVE_CONFIG
+#----------------------------------------------------------------------
+save_config()
+{
+    leasefile=/var/udhcpc.lease
+    echo "leased_at=\"`date`\"" > $leasefile
+    for var in boot_file bootfile bootsize cookiesvr \
+        dhcptype domain dns fontsrv hostname interface \
+        ip ipttl lease logsvr lprsvr message mtu namesvr \
+        router serverid siaddr sname subnet swapsvr \
+        rootpath timesvr timezone tftp xmanager
+    do
+        eval "value=\$$var"
+        [ "$value" ] && eval "echo $var=\\\"\$$var\\\"" >> $leasefile
+    done
+}
+
+[ -n "$broadcast" ] && BROADCAST="broadcast $broadcast"
+[ -n "$subnet" ] && NETMASK="netmask $subnet"
+
+case "$1" in
+  deconfig)
+    /sbin/ifconfig $interface 0.0.0.0
+    ;;
+
+  renew|bound)
+    /sbin/ifconfig $interface $ip $BROADCAST $NETMASK
+
+    if [ -n "$router" ] ; then
+        echo "deleting routers"
+        while route del default gw 0.0.0.0 dev $interface ; do
+            :
+        done
+     for i in $router ; do
+            route add default gw $i dev $interface
+        done
+    fi
+    echo -n > $RESOLV_CONF
+
+    [ -n "$domain" ] && echo search $domain >> $RESOLV_CONF
+    for i in $dns ; do
+        echo adding dns $i
+        echo nameserver $i >> $RESOLV_CONF
+    done
+    update_hosts
+    save_config
+    ;;
+esac
+
+exit 0
+

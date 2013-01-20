@@ -1,0 +1,9 @@
+#
+# services
+#
+daytime		13/tcp
+daytime		13/udp
+telnet		23/tcp
+telnet		23/udp
+time		37/tcp
+time		37/udp

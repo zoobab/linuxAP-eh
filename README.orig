@@ -1,0 +1,88 @@
+Once again, this is the latest linuxAP (formerly openSTA) software.  You
+can always download the latest from:
+
+http://linuxAP.ksmith.com
+
+It's still probably a good idea to put this in /usr/src/linuxAP.  I've
+made a great deal of effort to keep things non-specific but some of this
+stuff is really onrey.
+
+QuickStart
+
+Extract the bundle (you've already done this probably)
+
+cd linuxAP
+mkdir tarfiles
+cd tarfiles
+--> Place the following files in here
+    bridge-utils-0.9.6.tar.gz
+    busybox-0.60.5.tar.bz2
+ *  cipe-1.5.4.tar.gz 
+ *  cku206.tar.gz
+    cramfs-1.1.tar.gz
+    hostap-2002-10-12.tar.bz2
+ *  iptables-1.2.7a.tar.bz2
+    linux-2.4.20.tar.bz2
+    pcmcia-cs-3.2.3.tar.bz2
+ *  syslinux-2.00.tar.bz2
+    uClibc-0.9.12.tar.bz2
+    udhcp-0.9.8.tar.gz
+    wireless_tools.25.tar.gz
+
+--> Files with a * are optional
+cd ..
+make
+<configure what you want>
+make
+
+WL11000-SAN
+-----------
+
+WL11000 uses 4800/8/N/1 on the serial port, hook it up with a null modem
+to minicom or the like.  Crazy busybox/uClibc plays hell with the modem
+control lines, use no flow control
+
+
+To install fresh to a new AP
+----------------------------
+Copy the sram file to a linear pcmcia RAM card.
+
+Boot the sram card by shorting JP2
+
+Watch the boot on the serial port, watch the eeprom update.  The machine
+will reboot, then fail for lack of the radio card. 
+
+
+To update a flashed AP
+----------------------
+Copy 'flash' && 'flash.md5' to your tftp directory
+
+reflash -s flash {your tftp host IP}
+
+
+Soekris
+-------
+
+Serial console is set to 19200/N/8/1.  Use minicom uClibc/busybox play
+hell with the modem control lines.
+
+Create a dos partition (~8MB) on an ATA/CF card
+Put syslinux on it, mount it on /cf
+
+copy kernel->/cf/linux
+copy ramdisk->/cf/ramdisk
+copy syslinux.cfg -> /cf/syslinux.cfg
+
+Slide it in the soekris.
+
+
+----
+2003-01-10
+
+I changed the build dramatically.  I now use the kernel config parser
+and a config.in file to configure what we are going to build
+
+****IMPORTANT****
+
+If you are changing from one build target to another you MUST run make
+distclean and start fresh first.  I'll work on that.

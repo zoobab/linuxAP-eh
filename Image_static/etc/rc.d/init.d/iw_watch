@@ -1,0 +1,40 @@
+#! /bin/sh
+
+INTERVAL="30"
+IFACES="wlan0"
+
+[ -f $CFGD/netcfg ] && . $CFGD/netcfg
+[ ! "$iw_watch_if" = "" ] && IFACES=$iw_watch_if
+[ ! "$iw_watch_time" = "" ] && INTERVAL=$iw_watch_time
+
+case "$1" in
+  start|2|3|4)
+       echo "Starting iw_watch: "
+       for i in $IFACES
+       do
+	   echo -n " $i "
+	   if [ ! -f $CFGD/wlan/$i ]; then echo "(no conf)"
+	   else
+	       . $CFGD/wlan/$i
+	       iw_watchdog $i $channel $INTERVAL &
+	       # Wait iw_watchdog to come up
+	       sleep 2
+	   fi
+       done
+
+       echo " Done."
+       ;;
+  stop)
+       echo -n "Stopping iw_watch: "
+       # Get the PID for iw_watchdog and kill it
+       IWWDPID=`ps | grep iw_watchdog | grep -v grep | cut -f 1 -d "r"`
+       for i in $IWPID; do
+	   kill -9 $i
+       done
+
+       echo " Done."
+       ;;
+  restart)
+       $0 stop
+       $0 start
+esac

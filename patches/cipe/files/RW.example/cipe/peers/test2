@@ -1,0 +1,12 @@
+#
+# test2
+#
+ipaddr  another
+ptpaddr host
+peer    192.168.1.1:1234
+cttl    64
+dynip   1
+ping    60
+maxerr  2
+mtu     1500
+key     kool

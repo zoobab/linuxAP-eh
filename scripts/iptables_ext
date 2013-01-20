@@ -1,0 +1,7 @@
+#!/bin/sh
+#This script cp the iptables extensions selected on menuconfig to the
+#Image_final directory.
+for i in $(cat .config |grep -e "ipt.*=y"|sed -e s/=y/.so/)
+do 
+    cp iptables/extensions/$i  $1/usr/lib/iptables
+done

@@ -1,0 +1,8 @@
+#
+# wlan0
+#
+SSID=default
+# S/B one of 1,6,11
+CHANNEL=6
+wep=
+

@@ -1,0 +1,101 @@
+--- pcmcia-cs-3.2.3/Configure	2002-11-05 04:51:26.000000000 +0100
++++ pcmcia-cs/Configure	2003-10-10 12:14:17.000000000 +0200
+@@ -27,7 +27,6 @@
+ # may use your version of this file under either the MPL or the GPL.
+ #
+ #=======================================================================
+-
+ fail ()
+ {
+     echo ""
+@@ -872,31 +871,31 @@
+ 
+ # Check out the module stuff
+ 
+-if [ ! -x /sbin/insmod -o ! -x /sbin/rmmod -o ! -x /sbin/lsmod ] ; then
+-    echo "Your module utilities (insmod, rmmod) are missing from /sbin!"
+-    echo "    To fix, you should build and install the latest set" \
+-         "of module tools,"
+-    echo "    available from FTP sites listed in the HOWTO."
+-    fail
+-fi
+-
+-MOD_RELEASE=`/sbin/insmod -V 2>&1 | \
+-    sed -n -e 's/.*[Vv]ersion \([0-9][0-9.]*[0-9]\).*/\1/p'`
+-X=`echo $MOD_RELEASE | sed -e 's/\./ /g'`
+-MOD_CODE=`version $X`
+-if [ $VERSION_CODE -ge `version 2 1 85` ] ; then
+-    NEED=`version 2 1 85` ; T=2.1.85
+-elif [ $VERSION_CODE -ge `version 2 1 18` ] ; then
+-    NEED=`version 2 1 23` ; T=2.1.23
+-else
+-    NEED=`version 2 0 0` ; T=2.0.0
+-fi
+-
+-if [ $NEED -gt $MOD_CODE ] ; then
+-    echo "Your module utilities are version $MOD_RELEASE.  That is too old"
+-    echo "    for this kernel!  To fix, upgrade to at least version $T."
+-    fail
+-fi
++#if [ ! -x $MODUTILS/insmod -o ! -x $MODUTILS/rmmod -o ! -x $MODUTILS/lsmod ] ; then
++#    echo "Your module utilities (insmod, rmmod) are missing from /sbin!"
++#    echo "    To fix, you should build and install the latest set" \
++#         "of module tools,"
++#    echo "    available from FTP sites listed in the HOWTO."
++#    fail
++#fi
++
++#MOD_RELEASE=`/sbin/insmod -V 2>&1 | \
++#    sed -n -e 's/.*[Vv]ersion \([0-9][0-9.]*[0-9]\).*/\1/p'`
++#X=`echo $MOD_RELEASE | sed -e 's/\./ /g'`
++#MOD_CODE=`version $X`
++#if [ $VERSION_CODE -ge `version 2 1 85` ] ; then
++#    NEED=`version 2 1 85` ; T=2.1.85
++#elif [ $VERSION_CODE -ge `version 2 1 18` ] ; then
++#    NEED=`version 2 1 23` ; T=2.1.23
++#else
++#    NEED=`version 2 0 0` ; T=2.0.0
++#fi
++
++#if [ $NEED -gt $MOD_CODE ] ; then
++#    echo "Your module utilities are version $MOD_RELEASE.  That is too old"
++#    echo "    for this kernel!  To fix, upgrade to at least version $T."
++#    fail
++#fi
+ 
+ #=======================================================================
+ 
+@@ -972,14 +971,14 @@
+ fi
+ 
+ HAS_XAW=n
+-echo "#include <X11/Xaw/XawInit.h>" > tmp.c
+-echo "int main() { void *x = &XawInitializeWidgetSet; return 0; }" >> tmp.c
+-if $UCC $UFLAGS $XINCS tmp.c -L/usr/X11R6/lib -L/usr/X11/lib \
+-    -lX11 -lXaw 2>/dev/null ; then
+-    HAS_XAW=y
+-else
+-    echo "The X11/Xaw libraries are not available."
+-fi
++#echo "#include <X11/Xaw/XawInit.h>" > tmp.c
++#echo "int main() { void *x = &XawInitializeWidgetSet; return 0; }" >> tmp.c
++#if $UCC $UFLAGS $XINCS tmp.c -L/usr/X11R6/lib -L/usr/X11/lib \
++#    -lX11 -lXaw 2>/dev/null ; then
++#    HAS_XAW=y
++#else
++#    echo "The X11/Xaw libraries are not available."
++#fi
+ write_bool HAS_XAW
+ 
+ HAS_GTK=n
+--- pcmcia-cs/cardmgr/cardmgr.c	2002-10-16 08:17:10.000000000 +0200
++++ pcmcia-cs/cardmgr/cardmgr.c.new	2003-10-29 11:34:11.000000000 +0100
+@@ -712,7 +712,7 @@
+ 		unsetenv("MAJOR");
+ 		unsetenv("MINOR");
+ 	    }
+-	    ret |= execute_on_dev(cmd, class, bind->name);
++/*	    ret |= execute_on_dev(cmd, class, bind->name); */
+ 	}
+     return ret;
+ }

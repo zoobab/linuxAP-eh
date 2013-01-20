@@ -1,0 +1,43 @@
+#TOPDIR      := $(shell pwd)
+TOPDIR      := /usr/src/linuxAP-eh
+KERNEL_DIR  := $(TOPDIR)/linux
+IMAGE_DIR   := $(TOPDIR)/Image_final
+
+ifeq ($(CONFIG_UCLIBC),y)
+
+ifeq ($(UCLIBC_VERSION),0.9.12)
+CROSS_COMPILE:= /usr/i386-linux-uclibc/bin/
+UCLIBC_PREFIX=/usr/i386-linux-uclibc/bin
+else
+CROSS_COMPILE:= /usr/i386-linux-uclibc/usr/bin/
+UCLIBC_PREFIX=/usr/i386-linux-uclibc/usr/bin
+endif
+
+LIBDIR=/usr/i386-linux-uclibc/lib
+else
+LIBDIR=/lib
+endif
+
+CC=$(CROSS_COMPILE)gcc
+AR=$(CROSS_COMPILE)ar
+LD=$(CROSS_COMPILE)ld
+STRIP=$(CROSS_COMPILE)strip
+
+MKNOD=/bin/mknod
+INSTALL=/usr/bin/install
+# STRIPFLAGS="--remove-section=.comment --remove-section=.note"
+STRIPFLAGS="--remove-section=.comment --strip-debug"
+CFLAGS       =-Wall -Wstrict-prototypes
+
+#
+# When creating an sram image you must specify the size of the card
+# (in megabytes).
+#
+SRAM_SIZE=2
+
+# date/time global format
+DATE=`date "+%Y-%m-%d"`
+DATE_TIME=`date "+%Y-%m-%d.%T"`
+
+#----------------------------------------------------------------------
+

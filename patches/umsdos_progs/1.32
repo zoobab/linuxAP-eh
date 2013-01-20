@@ -1,0 +1,20 @@
+--- umsdos_progs/include/ums_config.h	Sun Aug 11 02:53:20 2002
++++ umsdos_progs.new/include/ums_config.h	Tue Mar 11 09:56:48 2003
+@@ -18,7 +18,7 @@
+  * this to valid value. Read the toplevel README carefully.
+  */
+  
+-#define BE_UVFAT -1
++#define BE_UVFAT 0
+ 
+ /* 
+  * define GNU_HACK to: 
+@@ -41,7 +41,7 @@
+  * (e.g. you can do 'rmdir .' etc)
+  *
+  */
+-#define KERN_22X
++// #define KERN_22X
+ 
+ /*
+  * define UID/GID for gen/sticky.C tests

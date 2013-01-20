@@ -1,0 +1,33 @@
+diff -Naur linux.orig/fs/cramfs/inode.c linux/fs/cramfs/inode.c
+--- linux.orig/fs/cramfs/inode.c	Fri Dec 21 10:41:55 2001
++++ linux/fs/cramfs/inode.c	Mon Jun 10 14:13:47 2002
+@@ -209,9 +209,15 @@
+ 	up(&read_mutex);
+ 
+ 	/* Do sanity checks on the superblock */
++	if (super.magic == CRAMFS_MAGIC_AP) {
++		super.magic = CRAMFS_MAGIC;
++	}
+ 	if (super.magic != CRAMFS_MAGIC) {
+ 		/* check at 512 byte offset */
+ 		memcpy(&super, cramfs_read(sb, 512, sizeof(super)), sizeof(super));
++		if (super.magic == CRAMFS_MAGIC_AP) {
++			super.magic = CRAMFS_MAGIC;
++		}
+ 		if (super.magic != CRAMFS_MAGIC) {
+ 			printk(KERN_ERR "cramfs: wrong magic\n");
+ 			goto out;
+diff -Naur linux.orig/include/linux/cramfs_fs.h linux/include/linux/cramfs_fs.h
+--- linux.orig/include/linux/cramfs_fs.h	Thu Jul 19 16:14:53 2001
++++ linux/include/linux/cramfs_fs.h	Mon Jun 10 14:17:09 2002
+@@ -9,7 +9,9 @@
+ 
+ #endif
+ 
+-#define CRAMFS_MAGIC		0x28cd3d45	/* some random number */
++#define CRAMFS_MAGIC            0x28cd3d45      /* some random number */
++/* Bogosity for openAP, problem with SRAM card's 1st two bytes */
++#define CRAMFS_MAGIC_AP		0x28cd0000
+ #define CRAMFS_SIGNATURE	"Compressed ROMFS"
+ 
+ /*

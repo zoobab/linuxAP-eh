@@ -1,0 +1,18 @@
+#!/bin/ash
+
+if [ ! -f $CFGD/hostapd.conf ]
+then
+    echo "Did Not start hostapd"
+    exit 0
+fi
+case "$1" in
+    start|2|3|4)
+        echo "Starting hostapd daemon."
+        hostapd /etc/hostapd.conf ;;
+    stop|0|1|6)
+        echo "Stopping hostapd daemon."
+        killall hostapd
+        sleep 2 ;;
+    restart) killall hostapd
+        hostapd /etc/hostapd.conf ;;
+esac

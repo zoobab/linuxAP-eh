@@ -1,0 +1,3 @@
+console::wait:/etc/rc S
+console::wait:/etc/rc
+console::askfirst:/bin/ash -s

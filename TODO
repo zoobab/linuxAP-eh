@@ -1,0 +1,9 @@
+Things to do 2002/06/11
+o Kernel Tree could probably tune down dramatically
+    if one knew what they were doing.
+o Explore tmpfs vs ramfs.
+o Improve tftp configuration download reliability
+    for station mode
+o RH Lamp on if STA mode working properly
+o Mesh scripts to handle prism2 AP mesh notification
+    events && add new wds to bridge.

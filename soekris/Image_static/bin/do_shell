@@ -1,0 +1,6 @@
+#!/bin/ash
+PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin
+export PATH
+stty sane
+stty 19200
+exec /bin/ash

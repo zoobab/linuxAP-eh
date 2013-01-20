@@ -1,0 +1,3 @@
+ttyS0::sysinit:/etc/rc S
+ttyS0::wait:/etc/rc
+ttyS0::askfirst:/bin/ash -s

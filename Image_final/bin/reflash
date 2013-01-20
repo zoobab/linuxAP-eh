@@ -1,0 +1,125 @@
+#!/bin/sh
+#
+# reflash
+#
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+export PATH
+MTD=/dev/mtd/0
+
+#----------------------------------------------------------------------
+# TFTP_PREP
+# Prepare system for reflash
+#----------------------------------------------------------------------
+tftp_prep()
+{
+    rval=0
+    rm -f /tmp/*
+    sleep 1
+# Move to "RunLevel" 1
+    swap=`cat /proc/meminfo | sed -n 's/^SwapTotal: *\([^ ].*\) kB/\1/p'`
+    if [ $swap -eq 0 ]
+    then
+        /etc/rc 1
+        rval=1
+    fi
+    return $rval
+}
+
+
+#----------------------------------------------------------------------
+# MAIN
+#----------------------------------------------------------------------
+[ -f /etc/rw/netcfg ] && . /etc/rw/netcfg
+[ -f /var/udhcpc.lease ] && . /var/udhcpc.lease
+[ "$tftp" ] && tftphost=$tftp
+[ ! "$tftphost" -a "$serverid" ] && tftphost=$tftp
+
+cd /tmp
+tftp=TRUE
+flashfile=
+save_config="-s"
+
+while [ ! -z "$1" ]
+do
+    case "$1" in
+        -s) save_config="-s"
+            ;;
+        -o) save_config=
+            ;;
+        -f)
+            tftp=FALSE
+            ;;
+        *)
+            if [ -z "$flashfile" ]
+            then
+                flashfile=$1
+            elif [ -z "$tftphost" ]
+            then
+                tftphost=$1
+            fi
+            ;;
+    esac
+    shift
+done
+
+if [ -z "$flashfile" -o \( "$tftp" = "FALSE" -a ! -f "$flashfile" \) -o \
+    -z "$tftphost" ]
+then
+	echo "Usage: $0 [-o] [-s] [-f] flashfile [tftphost]
+    -o      Overwrite configuration data
+    -s      Save (do not overwrite) config data
+    -f      do not use tftp"
+	exit 1
+fi
+
+if [ "$tftp" = "TRUE" ]
+then
+    tftp_prep
+    if [ $? -eq 1 ]
+    then
+        exec < /dev/console > /dev/console 2>&1
+    fi
+fi
+
+retries=1
+while [ $retries -lt 4 ]
+do
+    if [ "$tftp" = "TRUE" ]
+    then
+        echo -e "Downloading $flashfile from $tftphost Please Wait ...\c"
+        tftp -g -l flash -r $flashfile $tftphost
+        echo -e "\nDownloading $flashfile.md5 from $tftphost"
+        tftp -g -l flash.md5 -r $flashfile.md5 $tftphost
+    else
+        cd /tmp
+        ln -sf $flashfile ./flash
+        ln -sf $flashfile.md5 ./flash.md5
+    fi
+    echo -e "md5 image verification, Please Wait ...\c"
+    if md5sum -c flash.md5
+    then
+# update will reboot
+        echo -e "\nUpdating Flash Please Wait ..."
+        echo "exec update $save_config $MTD 0x0 0x100000 /tmp/flash"
+        exec update $save_config $MTD 0x0 0x100000 /tmp/flash
+    else
+        if [ "$ftfp" != "TRUE"]
+        then
+            echo -e "\n Bad Verify on Image $flashfile, aborting\n"
+            retries=4
+            continue
+        fi
+        echo -e "\nVerification Failed, attempt = $retries"
+    fi
+    retries=`expr $retries - 1`
+done
+
+if [ $swap -eq 0 ]
+then
+    echo -e "\nVerification Failed, rebooting in 5 seconds!"
+# Some time to abort if we are manual . . .
+    sleep 5
+    exec reboot
+else
+    echo -e "\nVerification Failed, update aborted!"
+fi

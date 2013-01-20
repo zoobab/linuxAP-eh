@@ -1,0 +1,2 @@
+/dev/mtdblock/0 / squashfs defaults 1 1
+none /proc proc defaults,noauto,ro 0 0

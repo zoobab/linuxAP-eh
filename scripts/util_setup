@@ -1,0 +1,102 @@
+#!/bin/sh
+#
+# Install or remove files of a package
+#
+# Having 'pack' as the package going to be installed, files will be searched
+# on all of the following directories (in order) and their contents will be
+# copied to the directory containing linuxAP sources (./):
+#   o patches/pack/files
+#   o patches/pack/$(PACK_VERSION)/files
+#   o $(AP_BUILD)/patches/pack/files
+#   o $(AP_BUILD)/patches/pack/$(PACK_VERSION)/files
+#
+# When cleaning the package, all files on directories not being Image_final
+# (that is, RW.something) will be removed (as Image_final is regenerated every
+# time)
+#---------------------------------------------------------------------------
+install () {
+    actual=`pwd`
+    for dir in $pre/patches/$utility/files \
+	       $pre/patches/$utility/$version/files
+    do
+	if [ -d $dir ]
+	then
+	    cd $dir
+	    echo "Installing files from $dir"
+	    for i in `find . |grep -v "CVS$" | grep -v "/CVS/"`
+	    do
+		if [ -f $i ]
+		then
+		    if [ ! -d $actual/`dirname $i` ]
+		    then
+			mkdir $actual/`dirname $i`
+		    fi
+		    cp -v $i $actual/$i
+		fi
+	    done
+	    cd $actual
+	fi
+    done
+}
+
+clean() {
+    actual=`pwd`
+    for dir in $pre/patches/$utility/files \
+	$pre/patches/$utility/$version/files
+    do
+	if [ -d $dir ]
+	then
+	    cd $dir
+	    files=`find . -type f | grep -v "^./Image_final" | grep -v "CVS/*"`
+	    cd $actual
+	    if [ "$files" != "" ]
+	    then
+		echo "Removing files:"
+		echo "$files"
+		rm -Rf $files
+	    fi
+	    cd $dir
+	    dirs=`find . -type d | grep -v "^./Image_final" | grep -v "CVS/*" | grep -v ^.$`
+	    cd $actual
+	    if [ "$dirs" != "" ]
+	    then
+		echo "Removing (if empty) directories:"
+		for d in $dirs
+		do
+		    rdirs="$d $rdirs"
+		done
+		echo "$rdirs"
+		rmdir --ignore-fail-on-non-empty $rdirs
+	    fi
+	fi
+    done
+}
+
+utility=$2
+version=$3
+
+case "$1" in
+    install)
+    pre=.
+    install
+    if [ ! "$AP_BUILD" = "$pre" ]
+    then
+	pre=$AP_BUILD
+	install
+    fi
+    ;;
+    clean)
+    pre=.
+    clean
+    if [ ! "$AP_BUILD" = "$pre" ]
+    then
+	pre=$AP_BUILD
+	clean
+    fi
+    ;;
+    *)
+    echo "Operational mode \"$1\" unknown"
+    exit 1
+    ;;
+esac
+

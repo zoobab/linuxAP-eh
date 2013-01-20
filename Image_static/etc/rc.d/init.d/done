@@ -1,0 +1,5 @@
+#!/bin/sh
+# I don't think this does shit -- KS
+# all done - turn on the light!
+# cat /proc/net/prism2/wlan0/rids > /dev/null
+echo -e "\nStartup Complete!\n"

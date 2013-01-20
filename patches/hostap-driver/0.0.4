@@ -1,0 +1,79 @@
+diff -Nur hostap-0.0.4/Makefile hostap-0.0.4.new/Makefile
+--- hostap-0.0.4/Makefile	2003-07-26 04:39:33.000000000 +0200
++++ hostap-0.0.4.new/Makefile	2003-08-21 15:14:21.000000000 +0200
+@@ -1,6 +1,6 @@
+ # Edit this path to match with your system (it should point to the root
+ # directory of the Linux kernel source)
+-KERNEL_PATH=/usr/src/linux
++KERNEL_PATH=$(KERNEL_DIR)
+ 
+ # Systems using external pcmcia-cs package (instead of kernel-tree pcmcia
+ # modules):
+@@ -12,9 +12,9 @@
+ PCMCIA_PATH=
+ 
+ # This path will be prepended to every installed file
+-DESTDIR=
++DESTDIR=$(IMAGE_DIR)
+ 
+-CC=gcc
++CC=$(CROSS_COMPILE)gcc
+ CFLAGS=-O2 -D__KERNEL__ -DMODULE -Wall -g -c $(EXTRA_CFLAGS)
+ 
+ include $(KERNEL_PATH)/.config
+@@ -236,15 +236,15 @@
+ 	mkdir -p $(MODPATH_CS)
+ 	cp -f $(MSRC)/$(MODULE_CS) $(MODPATH_CS)
+ ifndef DESTDIR
+-	/sbin/depmod -ae
++	#/sbin/depmod -ae
+ endif
+ 
+ install_conf:
+-	@if [ ! -r $(DESTDIR)/etc/pcmcia/hostap_cs.conf ]; then \
++	#@if [ ! -r $(DESTDIR)/etc/pcmcia/hostap_cs.conf ]; then \
+ 		echo "Installing $(DESTDIR)/etc/pcmcia/hostap_cs.conf"; \
+ 		cp -f driver/etc/hostap_cs.conf $(DESTDIR)/etc/pcmcia/hostap_cs.conf; \
+ 	fi
+-	@if [ -r $(DESTDIR)/etc/pcmcia/prism2.conf ]; then \
++	#@if [ -r $(DESTDIR)/etc/pcmcia/prism2.conf ]; then \
+ 		echo "You may need to remove old $(DESTDIR)/etc/pcmcia/prism2.conf"; \
+ 	fi
+
+diff -urN hostap/driver/modules/hostap_config.h hostap.new/driver/modules/hostap_config.h
+--- hostap/driver/modules/hostap_config.h       2003-07-27 20:38:31.000000000 -0700
++++ hostap.new/driver/modules/hostap_config.h   2003-09-09 00:37:19.000000000 -0700
+@@ -40,7 +40,7 @@
+ #endif /* PRISM2_BUS_MASTER */
+
+ /* Include code for downloading firmware images. */
+-/* #define PRISM2_DOWNLOAD_SUPPORT */
++#define PRISM2_DOWNLOAD_SUPPORT
+
+ /* Allow kernel configuration to enable download support. */
+ #if !defined(PRISM2_DOWNLOAD_SUPPORT) && defined(CONFIG_HOSTAP_FIRMWARE)
+@@ -54,19 +54,19 @@
+  * In addition, please note that it is possible to kill your card with
+  * non-volatile download if you are using incorrect image. This feature has
+  * not
+  * been fully tested, so please be careful with it. */
+-/* #define PRISM2_NON_VOLATILE_DOWNLOAD */
++#define PRISM2_NON_VOLATILE_DOWNLOAD
+ #endif /* PRISM2_DOWNLOAD_SUPPORT */
+
+ /* Include wireless extensions sub-ioctl support even if wireless extensions
+  * version is less than 15 (actually, only if it is 12 .. 14). If ver >= 15,
+  * these will be included. Please note, that this requires iwpriv version 25
+  * or higher (older versions will segfault due to long ioctl list). */
+-/* #define PRISM2_USE_WE_SUB_IOCTLS */
++#define PRISM2_USE_WE_SUB_IOCTLS
+
+ /* Use IW_PRIV_TYPE_ADDR with private WE ioctls taking MAC address argument
+  * (instead of old 18*char). This requires iwpriv ver >= 25. This will be
+  * automatically included for WIRELESS_EXT >= 15. */
+-/* #define PRISM2_USE_WE_TYPE_ADDR */
++#define PRISM2_USE_WE_TYPE_ADDR
+
+ /* Save low-level I/O for debugging. This should not be enabled in normal
+ * use.
+  */

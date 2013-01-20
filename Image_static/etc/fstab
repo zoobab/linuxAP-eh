@@ -1,0 +1,4 @@
+/dev/ram0 / ext2 defaults 1 1
+none /proc proc defaults,noauto,ro 0 0
+none /dev/pts devpts mode=0622,gid=5 0 0
+/dev/hda1 /cf umsdos noauto,rw 0 0

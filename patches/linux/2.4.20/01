@@ -1,0 +1,12 @@
+diff -urN linux/Makefile linux.new/Makefile
+--- linux/Makefile	Thu Nov 28 16:53:16 2002
++++ linux.new/Makefile	Sat Feb  1 22:02:05 2003
+@@ -88,7 +88,7 @@
+ 
+ CPPFLAGS := -D__KERNEL__ -I$(HPATH)
+ 
+-CFLAGS := $(CPPFLAGS) -Wall -Wstrict-prototypes -Wno-trigraphs -O2 \
++CFLAGS := $(CPPFLAGS) -Wall -Wstrict-prototypes -Wno-trigraphs -Os \
+ 	  -fno-strict-aliasing -fno-common
+ ifndef CONFIG_FRAME_POINTER
+ CFLAGS += -fomit-frame-pointer

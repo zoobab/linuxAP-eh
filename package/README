@@ -1,0 +1,71 @@
+linuxAP-eh bundle package's README
+==================================
+
+WARNING: 66Mhz images may NOT work !!
+
+NOTE: if you are upgrading an old version of linuxAP-eh, follow the next
+      instructions to automatically upgrade your config files (if you don't
+      want to reflash with '-o' option)
+      Server:
+      	copy updateconfigs.sh on your tftp server directory
+      linuxAP-eh box (literally tiped):
+        cd /etc/rw/
+	tftp -g -l updateconfigs.sh -r updateconfigs.sh IP_tftp_server
+	chmod 0777 updateconfigs.sh
+	./updateconfigs.sh
+	rm updateconfigs.sh
+	save_config
+	reboot
+	
+
+
+Flash Images
+------------
+
+Start up the box, copy extracted files 'flash' and 'flash.md5' on your tftp
+server directory, and execute this command:
+	reflash flash IP_tftp_server
+
+if you want also to overwrite the config files with the ones provided on the
+new version, execute:
+	reflash -o flash IP_tftp_server
+
+
+
+Sram Images
+-----------
+
+Extracted from OpenAP's README:
+
+--------------8<--------------
+Since the default AP software (that which comes with the AP fresh from the
+factory) won't upgrade itself automatically to the linux system you need to
+boot off a PCMCIA flash card the first time you move from the old software to
+Linux.  The mechanics of openning the case, replacing the card and shorting the
+jumper is described elsewhere.  The SRAM image creation is described here. 
+
+It is probably easiest if you just use the sram image found on
+opensource.instant802.com rather than build your own.  Once you have a default
+image into the AP you can upgrade it with the 'reflash' command.
+
+There is a target in the Makefile 'sram'.  It should do everything you need
+provided you have already build an appropriate flash image (maybe you created
+it with 'make bootstrap').
+
+Once you have the image 'sram' you need to write it to your sram card.  The
+Linux pcmcia drivers should detect your sram card when you insert it and create
+some new device node that look something like this:
+
+crw-r--r--    1 root     root     253,   0 Jan 17 16:11 /dev/mem0c0c
+
+See man memory_cs(4) for more info.  Don't write to the /dev/mem*a* devices
+since that is the attribute memory for the card.  You risk messing the
+attributes up so PCMCIA can't identify your card.  You want to copy the 2 MB
+sram image to the flash card enough times to fill it up [1].  If you have a 4MB
+sram card you can do something like:
+
+# cat sram sram >  /dev/mem0c0c
+
+Voila.  The card is ready.
+-------------->8--------------
+

@@ -1,0 +1,68 @@
+OpenAP
+
+This source distribution comes with exerything you need except the kernel
+source.  You need to get the kernel source at your nearest kernel mirror
+untar it inside the openap source directory and then apply the patch in the
+misc subdir.  Example commands follow:
+
+# tar -xzf openap-0.1.0.tar.gz
+# cd openap-0.1.0/
+# wget http://ftp.kernel.org/pub/linux/kernel/v2.4/linux-2.4.17.tar.gz
+# tar -xzf linux-2.4.17.tar.gz
+# patch -p0 < ./misc/openap-linux-2.4.17.patch
+
+Now that your sources are ready, see the toplevel Makefile for more info.
+
+
+** Card Boot
+
+Since the default AP software (that which comes with the AP fresh from the
+factory) won't upgrade itself automatically to the linux system you need to
+boot off a PCMCIA flash card the first time you move from the old software to
+Linux.  The mechanics of openning the case, replacing the card and shorting the
+jumper is described elsewhere.  The SRAM image creation is described here. 
+
+It is probably easiest if you just use the sram image found on
+opensource.instant802.com rather than build your own.  Once you have a default
+image into the AP you can upgrade it with the 'reflash' command.
+
+There is a target in the Makefile 'sram'.  It should do everything you need
+provided you have already build an appropriate flash image (maybe you created
+it with 'make bootstrap').
+
+Once you have the image 'sram' you need to write it to your sram card.  The
+Linux pcmcia drivers should detect your sram card when you insert it and create
+some new device node that look something like this:
+
+crw-r--r--    1 root     root     253,   0 Jan 17 16:11 /dev/mem0c0c
+
+See man memory_cs(4) for more info.  Don't write to the /dev/mem*a* devices
+since that is the attribute memory for the card.  You risk messing the
+attributes up so PCMCIA can't identify your card.  You want to copy the 2 MB
+sram image to the flash card enough times to fill it up [1].  If you have a 4MB
+sram card you can do something like:
+
+# cat sram sram >  /dev/mem0c0c
+
+Voila.  The card is ready.
+
+
+
+** Reflashing
+
+Once you have reprogrammed the flash once on your AP it is easy to update the
+software.  You can use the 'reflash' command.  Just pass it a URL for a flash
+image (make sure flash.md5 is there as well). It will download flash and
+flash.md5, check the md5sum and then reprogram the unit.
+
+
+1 - The reality is that the way we have the bootloader set up we need it at the
+top of the card because that is where the CPU looks for instructions when you
+short the jumper.  After the boot loader has copied itself into RAM it can only
+access low memory, so we need a kernel and filesystem image at the bottom of
+the card where it can reach it.  It would be more elegant to rewrite it so we
+create one variable-size flash image with the bootloader at the top and kernel
+and filesystem at the bottom with padding in between, I'll leave that as an
+exercise for the reader.
+
+

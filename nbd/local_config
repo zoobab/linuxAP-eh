@@ -1,0 +1,14 @@
+#!/bin/sh
+
+unset LD
+unset AR
+unset CFLAGS
+unset MAKEFLAGS
+unset MAKELEVEL
+unset MFLAGS
+
+cfg="./configure"
+cfg="$cfg --prefix=\$(IMAGE_DIR)/usr"
+
+/bin/echo $cfg
+$cfg

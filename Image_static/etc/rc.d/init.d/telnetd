@@ -1,0 +1,17 @@
+#!/bin/ash
+if [ ! -f $CFGD/telnetd.hosts ]
+then
+    echo "Did Not start telnetd"
+    exit 0
+fi
+case "$1" in
+    start|2|3|4)
+        echo "Starting telnetd daemon."
+        telnetd ;;
+    stop|0|1|6)
+        echo "Stopping telnetd daemon."
+        killall telnetd
+        sleep 2 ;;
+    restart) killall telnetd
+        telnetd ;;
+esac

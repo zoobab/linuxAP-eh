@@ -1,0 +1,3 @@
+#!/bin/sh
+echo "   IP           MAC"
+grep wlan0 /proc/net/arp | tr -s " " | cut -d" " -f1,4

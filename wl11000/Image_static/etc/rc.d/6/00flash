@@ -1,0 +1,26 @@
+#!/bin/sh
+#
+# flash
+#
+MTD=/dev/mtd/0
+cd /
+
+if [ ! -f flash ]
+then
+    echo "No flash image found."
+    exit 0
+fi
+
+echo -e "Flash Image found, checking . . . \c"
+if md5sum -c flash.md5
+then
+    echo -e "\nReflashing AP in 5 seconds . . . \c"
+    sleep 5
+    echo ""
+    exec /sbin/update $MTD 0x0 0x100000 /flash
+    reboot
+fi
+
+echo -e "\nFlash image sum failure."
+
+exit 0

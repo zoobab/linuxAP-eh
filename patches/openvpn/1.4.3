@@ -1,0 +1,11 @@
+--- openvpn/configure.orig	2003-10-31 09:49:23.000000000 +0100
++++ openvpn/configure	2003-10-31 09:49:58.000000000 +0100
+@@ -2598,7 +2598,7 @@
+   CFLAGS=$ac_save_CFLAGS
+ elif test $ac_cv_prog_cc_g = yes; then
+   if test "$GCC" = yes; then
+-    CFLAGS="-g -O2"
++    CFLAGS="-g -Os"
+   else
+     CFLAGS="-g"
+   fi

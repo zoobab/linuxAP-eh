@@ -1,0 +1,241 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.5.2	//
+BIGBUF_SIZE	setup.h	19;"	d
+CC	Makefile	/^CC= $(CROSS_COMPILE)gcc -Os$/;"	m
+CFG_keyword	setup.h	73;"	d
+CGI_keyword	setup.h	68;"	d
+CIPE_MENU	cipe.c	/^enum { CIPE_OPTION, CIPE_MENU, CIPE_WRITE, CIPE_REFRESH, CIPE_NULL };$/;"	e	file:
+CIPE_NULL	cipe.c	/^enum { CIPE_OPTION, CIPE_MENU, CIPE_WRITE, CIPE_REFRESH, CIPE_NULL };$/;"	e	file:
+CIPE_OPTION	cipe.c	/^enum { CIPE_OPTION, CIPE_MENU, CIPE_WRITE, CIPE_REFRESH, CIPE_NULL };$/;"	e	file:
+CIPE_REFRESH	cipe.c	/^enum { CIPE_OPTION, CIPE_MENU, CIPE_WRITE, CIPE_REFRESH, CIPE_NULL };$/;"	e	file:
+CIPE_WRITE	cipe.c	/^enum { CIPE_OPTION, CIPE_MENU, CIPE_WRITE, CIPE_REFRESH, CIPE_NULL };$/;"	e	file:
+CKW_CTTL	cipe.c	45;"	d	file:
+CKW_HOST	cipe.c	40;"	d	file:
+CKW_IPADDR	cipe.c	41;"	d	file:
+CKW_KEY	cipe.c	46;"	d	file:
+CKW_PEER	cipe.c	43;"	d	file:
+CKW_PING	cipe.c	44;"	d	file:
+CKW_PTPADDR	cipe.c	42;"	d	file:
+FC_CANCEL	setup.c	26;"	d	file:
+FC_GO	setup.c	29;"	d	file:
+FC_NULL	setup.c	30;"	d	file:
+FC_OK	setup.c	24;"	d	file:
+FC_REFRESH	setup.c	25;"	d	file:
+FC_RETURN	setup.c	27;"	d	file:
+FC_SAVE	setup.c	28;"	d	file:
+HEADER_NULL	setup.c	39;"	d	file:
+HEADER_SAVE	setup.c	37;"	d	file:
+HEADER_STATUS	setup.c	38;"	d	file:
+HFILES	Makefile	/^HFILES=	setup.h linked_functions.h$/;"	m
+HTTPD_MENU	httpd.c	15;"	d	file:
+HTTPD_NULL	httpd.c	17;"	d	file:
+HTTPD_OPTION	httpd.c	14;"	d	file:
+HTTPD_WRITE	httpd.c	16;"	d	file:
+KAODV_MENU	kaodv.c	/^enum { KAODV_OPTION, KAODV_MENU, KAODV_WRITE, KAODV_REFRESH, KAODV_NULL };$/;"	e	file:
+KAODV_NULL	kaodv.c	/^enum { KAODV_OPTION, KAODV_MENU, KAODV_WRITE, KAODV_REFRESH, KAODV_NULL };$/;"	e	file:
+KAODV_OPTION	kaodv.c	/^enum { KAODV_OPTION, KAODV_MENU, KAODV_WRITE, KAODV_REFRESH, KAODV_NULL };$/;"	e	file:
+KAODV_REFRESH	kaodv.c	/^enum { KAODV_OPTION, KAODV_MENU, KAODV_WRITE, KAODV_REFRESH, KAODV_NULL };$/;"	e	file:
+KAODV_WRITE	kaodv.c	/^enum { KAODV_OPTION, KAODV_MENU, KAODV_WRITE, KAODV_REFRESH, KAODV_NULL };$/;"	e	file:
+KV_KAODV	kaodv.c	/^enum { KV_KAODV, KV_KAODV_GW, KV_KAODV_LO, KV_KAODV_IF, KV_KAODV_BL,$/;"	e	file:
+KV_KAODV_BL	kaodv.c	/^enum { KV_KAODV, KV_KAODV_GW, KV_KAODV_LO, KV_KAODV_IF, KV_KAODV_BL,$/;"	e	file:
+KV_KAODV_GW	kaodv.c	/^enum { KV_KAODV, KV_KAODV_GW, KV_KAODV_LO, KV_KAODV_IF, KV_KAODV_BL,$/;"	e	file:
+KV_KAODV_GW_AIF	kaodv.c	/^       KV_KAODV_GW_GIF, KV_KAODV_GW_AIF, KV_KAODV_GW_SUBNET, KV_NULL };$/;"	e	file:
+KV_KAODV_GW_GIF	kaodv.c	/^       KV_KAODV_GW_GIF, KV_KAODV_GW_AIF, KV_KAODV_GW_SUBNET, KV_NULL };$/;"	e	file:
+KV_KAODV_GW_SUBNET	kaodv.c	/^       KV_KAODV_GW_GIF, KV_KAODV_GW_AIF, KV_KAODV_GW_SUBNET, KV_NULL };$/;"	e	file:
+KV_KAODV_IF	kaodv.c	/^enum { KV_KAODV, KV_KAODV_GW, KV_KAODV_LO, KV_KAODV_IF, KV_KAODV_BL,$/;"	e	file:
+KV_KAODV_LO	kaodv.c	/^enum { KV_KAODV, KV_KAODV_GW, KV_KAODV_LO, KV_KAODV_IF, KV_KAODV_BL,$/;"	e	file:
+KV_NULL	kaodv.c	/^       KV_KAODV_GW_GIF, KV_KAODV_GW_AIF, KV_KAODV_GW_SUBNET, KV_NULL };$/;"	e	file:
+MAIN	setup.c	1;"	d	file:
+NETWORK_MENU	network.c	/^enum { NETWORK_OPTION, NETWORK_MENU, NETWORK_WRITE, NETWORK_NULL };$/;"	e	file:
+NETWORK_NULL	network.c	/^enum { NETWORK_OPTION, NETWORK_MENU, NETWORK_WRITE, NETWORK_NULL };$/;"	e	file:
+NETWORK_OPTION	network.c	/^enum { NETWORK_OPTION, NETWORK_MENU, NETWORK_WRITE, NETWORK_NULL };$/;"	e	file:
+NETWORK_WRITE	network.c	/^enum { NETWORK_OPTION, NETWORK_MENU, NETWORK_WRITE, NETWORK_NULL };$/;"	e	file:
+NUM_CFGS	setup.c	6;"	d	file:
+NV_IW_WATCHDOG_IF	network.c	/^       NV_IW_WATCHDOG_IF, NV_IW_WATCHDOG_TIME, NV_NULL };$/;"	e	file:
+NV_IW_WATCHDOG_TIME	network.c	/^       NV_IW_WATCHDOG_IF, NV_IW_WATCHDOG_TIME, NV_NULL };$/;"	e	file:
+NV_LOGSVR	network.c	/^       NV_S_ADDRESS, NV_S_NETMASK, NV_S_BROADCAST, NV_TFTPHOST, NV_LOGSVR,$/;"	e	file:
+NV_MASQ_NET	network.c	/^       NV_TIMESVR, NV_ROUTER, NV_SWAPSVR, NV_SWAPPORT, NV_MASQ_NET,$/;"	e	file:
+NV_NULL	network.c	/^       NV_IW_WATCHDOG_IF, NV_IW_WATCHDOG_TIME, NV_NULL };$/;"	e	file:
+NV_P_ADDRESS	network.c	/^enum { NV_P_DHCP, NV_P_ADDRESS, NV_P_NETMASK, NV_P_BROADCAST, NV_S_DHCP,$/;"	e	file:
+NV_P_BROADCAST	network.c	/^enum { NV_P_DHCP, NV_P_ADDRESS, NV_P_NETMASK, NV_P_BROADCAST, NV_S_DHCP,$/;"	e	file:
+NV_P_DHCP	network.c	/^enum { NV_P_DHCP, NV_P_ADDRESS, NV_P_NETMASK, NV_P_BROADCAST, NV_S_DHCP,$/;"	e	file:
+NV_P_NETMASK	network.c	/^enum { NV_P_DHCP, NV_P_ADDRESS, NV_P_NETMASK, NV_P_BROADCAST, NV_S_DHCP,$/;"	e	file:
+NV_ROUTER	network.c	/^       NV_TIMESVR, NV_ROUTER, NV_SWAPSVR, NV_SWAPPORT, NV_MASQ_NET,$/;"	e	file:
+NV_SWAPPORT	network.c	/^       NV_TIMESVR, NV_ROUTER, NV_SWAPSVR, NV_SWAPPORT, NV_MASQ_NET,$/;"	e	file:
+NV_SWAPSVR	network.c	/^       NV_TIMESVR, NV_ROUTER, NV_SWAPSVR, NV_SWAPPORT, NV_MASQ_NET,$/;"	e	file:
+NV_S_ADDRESS	network.c	/^       NV_S_ADDRESS, NV_S_NETMASK, NV_S_BROADCAST, NV_TFTPHOST, NV_LOGSVR,$/;"	e	file:
+NV_S_BROADCAST	network.c	/^       NV_S_ADDRESS, NV_S_NETMASK, NV_S_BROADCAST, NV_TFTPHOST, NV_LOGSVR,$/;"	e	file:
+NV_S_DHCP	network.c	/^enum { NV_P_DHCP, NV_P_ADDRESS, NV_P_NETMASK, NV_P_BROADCAST, NV_S_DHCP,$/;"	e	file:
+NV_S_NETMASK	network.c	/^       NV_S_ADDRESS, NV_S_NETMASK, NV_S_BROADCAST, NV_TFTPHOST, NV_LOGSVR,$/;"	e	file:
+NV_TFTPHOST	network.c	/^       NV_S_ADDRESS, NV_S_NETMASK, NV_S_BROADCAST, NV_TFTPHOST, NV_LOGSVR,$/;"	e	file:
+NV_TIMESVR	network.c	/^       NV_TIMESVR, NV_ROUTER, NV_SWAPSVR, NV_SWAPPORT, NV_MASQ_NET,$/;"	e	file:
+OFILES	Makefile	/^OFILES= setup.o utils.o network.o status.o udhcpd.o wlan.o telnetd.o httpd.o$/;"	m
+OPENVPN_MENU	openvpn.c	/^enum { OPENVPN_OPTION, OPENVPN_MENU, OPENVPN_WRITE, OPENVPN_REFRESH, OPENVPN_NULL };$/;"	e	file:
+OPENVPN_NULL	openvpn.c	/^enum { OPENVPN_OPTION, OPENVPN_MENU, OPENVPN_WRITE, OPENVPN_REFRESH, OPENVPN_NULL };$/;"	e	file:
+OPENVPN_OPTION	openvpn.c	/^enum { OPENVPN_OPTION, OPENVPN_MENU, OPENVPN_WRITE, OPENVPN_REFRESH, OPENVPN_NULL };$/;"	e	file:
+OPENVPN_REFRESH	openvpn.c	/^enum { OPENVPN_OPTION, OPENVPN_MENU, OPENVPN_WRITE, OPENVPN_REFRESH, OPENVPN_NULL };$/;"	e	file:
+OPENVPN_WRITE	openvpn.c	/^enum { OPENVPN_OPTION, OPENVPN_MENU, OPENVPN_WRITE, OPENVPN_REFRESH, OPENVPN_NULL };$/;"	e	file:
+SEP	setup.h	31;"	d
+SEP	udhcpd.c	18;"	d	file:
+STATUS_MENU	status.c	13;"	d	file:
+STATUS_NULL	status.c	15;"	d	file:
+STATUS_OPTION	status.c	12;"	d	file:
+STATUS_WRITE	status.c	14;"	d	file:
+TELNETD_MENU	telnetd.c	13;"	d	file:
+TELNETD_NULL	telnetd.c	15;"	d	file:
+TELNETD_OPTION	telnetd.c	12;"	d	file:
+TELNETD_WRITE	telnetd.c	14;"	d	file:
+UDHCPD_MENU	udhcpd.c	/^enum { UDHCPD_OPTION, UDHCPD_MENU, UDHCPD_WRITE, UDHCPD_NULL };$/;"	e	file:
+UDHCPD_NULL	udhcpd.c	/^enum { UDHCPD_OPTION, UDHCPD_MENU, UDHCPD_WRITE, UDHCPD_NULL };$/;"	e	file:
+UDHCPD_OPTION	udhcpd.c	/^enum { UDHCPD_OPTION, UDHCPD_MENU, UDHCPD_WRITE, UDHCPD_NULL };$/;"	e	file:
+UDHCPD_WRITE	udhcpd.c	/^enum { UDHCPD_OPTION, UDHCPD_MENU, UDHCPD_WRITE, UDHCPD_NULL };$/;"	e	file:
+UVK_DNS	udhcpd.c	/^enum { UVK_ENABLE, UVK_INTERFACE, UVK_START, UVK_END, UVK_LEASE_FILE, UVK_DNS,$/;"	e	file:
+UVK_DOMAIN	udhcpd.c	/^       UVK_SUBNET, UVK_ROUTER, UVK_DOMAIN, UVK_LEASE, UVK_NULL };$/;"	e	file:
+UVK_ENABLE	udhcpd.c	/^enum { UVK_ENABLE, UVK_INTERFACE, UVK_START, UVK_END, UVK_LEASE_FILE, UVK_DNS,$/;"	e	file:
+UVK_END	udhcpd.c	/^enum { UVK_ENABLE, UVK_INTERFACE, UVK_START, UVK_END, UVK_LEASE_FILE, UVK_DNS,$/;"	e	file:
+UVK_INTERFACE	udhcpd.c	/^enum { UVK_ENABLE, UVK_INTERFACE, UVK_START, UVK_END, UVK_LEASE_FILE, UVK_DNS,$/;"	e	file:
+UVK_LEASE	udhcpd.c	/^       UVK_SUBNET, UVK_ROUTER, UVK_DOMAIN, UVK_LEASE, UVK_NULL };$/;"	e	file:
+UVK_LEASE_FILE	udhcpd.c	/^enum { UVK_ENABLE, UVK_INTERFACE, UVK_START, UVK_END, UVK_LEASE_FILE, UVK_DNS,$/;"	e	file:
+UVK_NULL	udhcpd.c	/^       UVK_SUBNET, UVK_ROUTER, UVK_DOMAIN, UVK_LEASE, UVK_NULL };$/;"	e	file:
+UVK_ROUTER	udhcpd.c	/^       UVK_SUBNET, UVK_ROUTER, UVK_DOMAIN, UVK_LEASE, UVK_NULL };$/;"	e	file:
+UVK_START	udhcpd.c	/^enum { UVK_ENABLE, UVK_INTERFACE, UVK_START, UVK_END, UVK_LEASE_FILE, UVK_DNS,$/;"	e	file:
+UVK_SUBNET	udhcpd.c	/^       UVK_SUBNET, UVK_ROUTER, UVK_DOMAIN, UVK_LEASE, UVK_NULL };$/;"	e	file:
+WLAN_MENU	wlan.c	/^enum { WLAN_OPTION, WLAN_MENU, WLAN_WRITE, WLAN_NULL };$/;"	e	file:
+WLAN_NULL	wlan.c	/^enum { WLAN_OPTION, WLAN_MENU, WLAN_WRITE, WLAN_NULL };$/;"	e	file:
+WLAN_OPTION	wlan.c	/^enum { WLAN_OPTION, WLAN_MENU, WLAN_WRITE, WLAN_NULL };$/;"	e	file:
+WLAN_WRITE	wlan.c	/^enum { WLAN_OPTION, WLAN_MENU, WLAN_WRITE, WLAN_NULL };$/;"	e	file:
+WLK_ANTSEL_RX	wlan.c	/^enum { WLK_ESSID, WLK_SECURITY, WLK_CHANNEL, WLK_ANTSEL_RX, WLK_ANTSEL_TX,$/;"	e	file:
+WLK_ANTSEL_TX	wlan.c	/^enum { WLK_ESSID, WLK_SECURITY, WLK_CHANNEL, WLK_ANTSEL_RX, WLK_ANTSEL_TX,$/;"	e	file:
+WLK_CHANNEL	wlan.c	/^enum { WLK_ESSID, WLK_SECURITY, WLK_CHANNEL, WLK_ANTSEL_RX, WLK_ANTSEL_TX,$/;"	e	file:
+WLK_ESSID	wlan.c	/^enum { WLK_ESSID, WLK_SECURITY, WLK_CHANNEL, WLK_ANTSEL_RX, WLK_ANTSEL_TX,$/;"	e	file:
+WLK_NULL	wlan.c	/^       WLK_RATE, WLK_TXPOWER, WLK_WEP, WLK_NWDS, WLK_NULL };$/;"	e	file:
+WLK_NWDS	wlan.c	/^       WLK_RATE, WLK_TXPOWER, WLK_WEP, WLK_NWDS, WLK_NULL };$/;"	e	file:
+WLK_RATE	wlan.c	/^       WLK_RATE, WLK_TXPOWER, WLK_WEP, WLK_NWDS, WLK_NULL };$/;"	e	file:
+WLK_SECURITY	wlan.c	/^enum { WLK_ESSID, WLK_SECURITY, WLK_CHANNEL, WLK_ANTSEL_RX, WLK_ANTSEL_TX,$/;"	e	file:
+WLK_TXPOWER	wlan.c	/^       WLK_RATE, WLK_TXPOWER, WLK_WEP, WLK_NWDS, WLK_NULL };$/;"	e	file:
+WLK_WEP	wlan.c	/^       WLK_RATE, WLK_TXPOWER, WLK_WEP, WLK_NWDS, WLK_NULL };$/;"	e	file:
+argvindex	utils.c	/^int argvindex(argvlist, s, strfunc)$/;"	f
+argvindex_sep	utils.c	/^int argvindex_sep(argvlist, sep, s, strfunc)$/;"	f
+bigbuf	setup.h	/^char bigbuf[BIGBUF_SIZE];$/;"	v
+cfg	setup.h	/^    char *cfg;$/;"	m	struct:globals
+cfgdir	setup.h	/^    char *cfgdir;$/;"	m	struct:globals
+cfgdirs	setup.c	/^char *cfgdirs[] = {$/;"	v
+cipe	cipe.c	/^int cipe(char *what) {$/;"	f
+cipe_funcs	cipe.c	/^char *cipe_funcs[] = {$/;"	v
+cipe_keywords	cipe.c	/^static char *cipe_keywords[] = {$/;"	v	file:
+cipe_menu	cipe.c	/^static int cipe_menu()$/;"	f	file:
+cipe_option	cipe.c	/^static int cipe_option()$/;"	f	file:
+cipe_refresh	cipe.c	/^static int cipe_refresh() {$/;"	f	file:
+cipe_vars	cipe.c	/^static struct cipe_vars {$/;"	s	file:
+cipe_write	cipe.c	/^cipe_write()$/;"	f
+cttl	cipe.c	/^    char *cttl;$/;"	m	struct:cipe_vars	file:
+cv	cipe.c	/^} cv;$/;"	v	file:
+debug	setup.h	107;"	d
+debug	setup.h	110;"	d
+dispatch	setup.c	/^dispatch(char *what) {$/;"	f
+f_click_values	setup.c	/^char *f_click_values[] = {$/;"	v
+fetch_runlevel	setup.c	/^char *fetch_runlevel() {$/;"	f
+form	utils.c	/^char *form(char *method, ...)$/;"	f
+get_file_chooser	utils.c	/^char **get_file_chooser (char *dirname, char *value, char *keyword, char *newmsg) {$/;"	f
+get_peers	cipe.c	/^static char **get_peers() {$/;"	f	file:
+globals	setup.h	/^struct globals {$/;"	s
+globs	setup.h	/^struct globals globs;$/;"	v
+header	setup.c	/^header(char *which) {$/;"	f
+header_values	setup.c	/^char *header_values[] = {$/;"	v
+host	cipe.c	/^    char *host;$/;"	m	struct:cipe_vars	file:
+host	setup.h	/^    char *host;$/;"	m	struct:globals
+httpd	httpd.c	/^int httpd (char *what)$/;"	f
+httpd_funcs	httpd.c	/^char *httpd_funcs[] = {$/;"	v
+httpd_menu	httpd.c	/^static int httpd_menu()$/;"	f	file:
+httpd_option	httpd.c	/^static int httpd_option()$/;"	f	file:
+httpd_write	httpd.c	/^static int httpd_write()$/;"	f	file:
+ihid	utils.c	/^char *ihid(char *name, char *value)$/;"	f
+interface_sel	wlan.c	/^static char *interface_sel;$/;"	v	file:
+ipaddr	cipe.c	/^    char *ipaddr;$/;"	m	struct:cipe_vars	file:
+isub	utils.c	/^char *isub(char *name, char *value)$/;"	f
+itext	utils.c	/^char *itext(char *name, char *value, int size, int maxlength)$/;"	f
+kaodv	kaodv.c	/^int kaodv (char *arg)$/;"	f
+kaodv_funcs	kaodv.c	/^char *kaodv_funcs[] = {$/;"	v
+kaodv_gw_sel	kaodv.c	/^char *kaodv_gw_sel=NULL;$/;"	v
+kaodv_menu	kaodv.c	/^static int kaodv_menu()$/;"	f	file:
+kaodv_option	kaodv.c	/^static int kaodv_option()$/;"	f	file:
+kaodv_refresh	kaodv.c	/^static void kaodv_refresh()$/;"	f	file:
+kaodv_write	kaodv.c	/^static void kaodv_write()$/;"	f	file:
+key	cipe.c	/^    char *key;$/;"	m	struct:cipe_vars	file:
+kkw	kaodv.c	/^char *kkw[KV_NULL+1] = {$/;"	v
+kv	kaodv.c	/^char *kv[KV_NULL+1] = {$/;"	v
+linked_functions	linked_functions.h	/^void *linked_functions[] = {$/;"	v
+linked_names	linked_functions.h	/^char *linked_names[] = {$/;"	v
+main	setup.c	/^main()$/;"	f
+menu	setup.c	/^menu() {$/;"	f
+network	network.c	/^int network(char *arg)$/;"	f
+network_funcs	network.c	/^char *network_funcs[] = {$/;"	v
+network_menu	network.c	/^static int network_menu()$/;"	f	file:
+network_option	network.c	/^static int network_option()$/;"	f	file:
+network_write	network.c	/^network_write()$/;"	f
+nkw	network.c	/^char *nkw[] = {$/;"	v
+nv	network.c	/^char *nv[] = {$/;"	v
+oform	setup.h	39;"	d
+ohid	setup.h	41;"	d
+openvpn	openvpn.c	/^int openvpn (char *arg)$/;"	f
+openvpn_funcs	openvpn.c	/^char *openvpn_funcs[] = {$/;"	v
+openvpn_menu	openvpn.c	/^static int openvpn_menu()$/;"	f	file:
+openvpn_option	openvpn.c	/^static int openvpn_option()$/;"	f	file:
+openvpn_refresh	openvpn.c	/^static void openvpn_refresh()$/;"	f	file:
+openvpn_write	openvpn.c	/^static void openvpn_write()$/;"	f	file:
+osub	setup.h	42;"	d
+otbl	setup.h	46;"	d
+otd	setup.h	48;"	d
+otext	setup.h	40;"	d
+otf	setup.h	16;"	d
+oth	setup.h	50;"	d
+otr	setup.h	52;"	d
+out_config	setup.h	64;"	d
+out_refresh_script	setup.h	56;"	d
+parse_query	setup.c	/^int parse_query()$/;"	f
+peer	cipe.c	/^    char *peer;$/;"	m	struct:cipe_vars	file:
+ping	cipe.c	/^    char *ping;$/;"	m	struct:cipe_vars	file:
+port	cipe.c	/^    char *port;$/;"	m	struct:cipe_vars	file:
+ptpaddr	cipe.c	/^    char *ptpaddr;$/;"	m	struct:cipe_vars	file:
+read_cfg	utils.c	/^int read_cfg (char *filename, char *keywords[], char sep, char *values[]) {$/;"	f
+read_cfg_value	utils.c	/^void read_cfg_value (char *keywords[], char sep, char *values[], char *line) {$/;"	f
+read_peer	cipe.c	/^static int read_peer(char *peer) {$/;"	f	file:
+readline	utils.c	/^int     readline(f, buffer, length)$/;"	f
+retrieve_cfg_value	utils.c	/^char *retrieve_cfg_value(char **keywords, int ix, char sep, char *line) {$/;"	f
+save_config	setup.c	/^int save_config() {$/;"	f
+sel	utils.c	/^char *sel(char *flags, char **arglist) {$/;"	f
+status	status.c	/^int status(char *arg)$/;"	f
+status_funcs	status.c	/^char *status_funcs[] = {$/;"	v
+status_menu	status.c	/^static int status_menu() {$/;"	f	file:
+status_option	status.c	/^static int status_option()$/;"	f	file:
+strcpos	utils.c	/^int strcpos(aa, cc)$/;"	f
+strrcpos	utils.c	/^int strrcpos(aa, cc)$/;"	f
+tabl	utils.c	/^char *tabl(char *arg)$/;"	f
+td	utils.c	/^char *td(char *s) {$/;"	f
+telnetd	telnetd.c	/^int telnetd(char *arg)$/;"	f
+telnetd_funcs	telnetd.c	/^char *telnetd_funcs[] = {$/;"	v
+telnetd_menu	telnetd.c	/^static int telnetd_menu() {$/;"	f	file:
+telnetd_option	telnetd.c	/^static int telnetd_option()$/;"	f	file:
+telnetd_write	telnetd.c	/^static int telnetd_write() {$/;"	f	file:
+th	utils.c	/^char *th(char *s) {$/;"	f
+top	setup.c	/^int top(char *arg) {$/;"	f
+tr	utils.c	/^char *tr(char *arg)$/;"	f
+tunnel_sel	openvpn.c	/^char *tunnel_sel=NULL;$/;"	v
+udhcpd	udhcpd.c	/^int udhcpd(char *arg)$/;"	f
+udhcpd_funcs	udhcpd.c	/^char *udhcpd_funcs[] = {$/;"	v
+udhcpd_menu	udhcpd.c	/^static int udhcpd_menu()$/;"	f	file:
+udhcpd_option	udhcpd.c	/^static int udhcpd_option()$/;"	f	file:
+udhcpd_write	udhcpd.c	/^static int udhcpd_write() {$/;"	f	file:
+ukw	udhcpd.c	/^char *ukw[UVK_NULL+1] = {$/;"	v
+uv	udhcpd.c	/^char *uv[UVK_NULL+1] = {$/;"	v
+wkw	wlan.c	/^char *wkw[WLK_NULL+1] = {$/;"	v
+wlan	wlan.c	/^int wlan(char *arg)$/;"	f
+wlan_funcs	wlan.c	/^static char *wlan_funcs[] = {$/;"	v	file:
+wlan_menu	wlan.c	/^static int wlan_menu() {$/;"	f	file:
+wlan_option	wlan.c	/^static int wlan_option()$/;"	f	file:
+wlan_write	wlan.c	/^static int wlan_write() {$/;"	f	file:
+wv	wlan.c	/^char *wv[WLK_NULL+1] = {$/;"	v

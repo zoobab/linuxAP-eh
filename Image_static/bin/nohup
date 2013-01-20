@@ -1,0 +1,4 @@
+#!/bin/ash
+
+trap "" 1
+exec $@ < /dev/null > /dev/null

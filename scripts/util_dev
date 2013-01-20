@@ -1,0 +1,41 @@
+#!/bin/sh
+#
+# util_dev
+#
+# Create the $(IMAGE_DIR)/dev directory with its contents
+#----------------------------------------------------------------------
+base=$1
+shift 1
+
+if [ ! -d "$base" ]
+then
+    mkdir $base
+fi
+
+# Each line of cat'ed input file (starting from $2) must have _always_ 4
+# parts, being each one of the next form (and traduced to):
+#      [cb]	major	minor	name : mknod $base/$4 $1 $2 $3
+#      p	0	0	name : mkfifo $base/$4
+#      l	0	to	from : ln -s $3 $base/$4
+#      d	0	0	name : mkdir $base/$4
+while [ ! -z $1 ]
+do
+    if [ "$1" = "p" ]
+    then
+	mkfifo $base/$4
+    elif [ "$1" = "l" ]
+    then
+	ln -s $3 $base/$4
+    elif [ "$1" = "d" ]
+    then
+	mkdir $base/$4
+    else
+	mknod $base/$4 $1 $2 $3
+    fi
+    if [ "$?" != "0" ]
+    then
+	exit 1
+    fi
+    shift 4
+done
+

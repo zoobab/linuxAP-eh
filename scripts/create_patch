@@ -1,0 +1,51 @@
+#!/bin/sh
+#
+# create_patch
+#
+# Build a New Patch File
+#
+
+backup=`date +%Y%m%d-%H%M%S`
+pkg=$1
+ver=$2
+platform=$3
+
+if [ "$platform" = "" ]
+then
+    platform=./
+fi
+
+folder=$pkg-$ver
+mv $folder $pkg.new
+
+for suffix in tar.gz tar.bz2
+do
+    file=tarfiles/$pkg-$ver.$suffix
+    if [ -f $file ]
+    then
+        case "$suffix" in
+          tar.gz)
+            tar xfz tarfiles/$pkg-$ver.$suffix
+            ;;
+          tar.bz2)
+            tar xfj tarfiles/$pkg-$ver.$suffix
+            ;;
+        esac
+        break
+    fi
+done
+
+ln -sf $folder $pkg
+
+if [ ! -d $platform/patches/$pkg ]
+then
+    mkdir -p $platform/patches/$pkg
+else
+    if [ -f $platform/patches/$pkg/$ver ]
+    then
+        mv $platform/patches/$pkg/$ver \
+            $platform/patches/$pkg/$backup-$ver
+    fi
+fi
+diff -urN $pkg $pkg.new > $platform/patches/$pkg/$ver
+rm -rf $pkg $folder $pkg-build $pkg-config $pkg-patch

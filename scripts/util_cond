@@ -1,0 +1,114 @@
+#!/bin/sh --debug
+#
+# conditional
+#
+# Apply/Remove conditional patches
+#
+# When in the case of having 'destp' package in need to be patched if,
+# an only if, 'cond' is also used, programs' both makefiles must be
+# modified
+# - Mk/condp.mk:
+#  o put "COND_DESTP += condp/$(CONDP_VERSION)" on the header to make destp
+#    know that a conditional patch must be used (will be applied after
+#    "standard" patches)
+#  o put "scripts/conditional - destp $(DESTP_VERSION) condp/$(CONDP_VERSION)"
+#    on the distclean rule, so the conditional patch will be reversed (and
+#    possibly add "make destp-clean" to force recompilation of package without
+#    conditional patch)
+# - Mk/destp.mk:
+#  o put "scripts/conditional + destp $(DESTP_VERSION) '$(COND_DESTP)' \
+#                >> /tmp/destp-config" on destp's config rule, just after the
+#    call to scripts/util_config, so all conditional patches will be searched
+#    on all of the following directories (in order) and applied:
+#        o patches/condp/destp
+#        o patches/condp/destp-$(DESTP_VERSION)
+#        o patches/condp/$(CONDP_VERSION)/destp
+#        o patches/condp/$(CONDP_VERSION)/destp-$(DESTP_VERSION)
+#        o $(AP_BUILD)/patches/condp/destp
+#        o $(AP_BUILD)/patches/condp/destp-$(DESTP_VERSION)
+#        o $(AP_BUILD)/patches/condp/$(CONDP_VERSION)/destp
+#        o $(AP_BUILD)/patches/condp/$(CONDP_VERSION)/destp-$(DESTP_VERSION)
+#
+# When called with '+' as first argument, patches will  be normally applied,
+# and being the first argument '-', patches will be reversely applied
+#----------------------------------------------------------------------
+doit () {
+    if [ -z $option ]
+    then
+	echo "Conditional patching from $pfile"
+    else
+	echo "Conditional unpatching from $pfile"
+    fi
+    patch -p1 $option < $pfile
+    didit=1
+}
+
+search () {
+    # patch from any version
+    pfile=`dirname $dir`/$utility
+    if [ -f $pfile ]
+    then
+	doit
+    fi
+    pfile=$pfile-$version
+    if [ -f $pfile ]
+    then
+	doit
+    fi
+    # patch from concrete version
+    pfile=$dir/$utility
+    if [ -f $pfile ]
+    then
+	doit
+    fi
+    pfile=$pfile-$version
+    if [ -f $pfile ]
+    then
+	doit
+    fi
+}
+
+# main
+if [ "$1" = "-" ]
+then
+    option=-R
+fi
+
+utility=$2
+version=$3
+conditional=$4
+
+echo "Conditional patching for $utility: $conditional"
+
+if [ ! -f "$conditional" ]
+then
+    if [ ! -d $utility ]
+    then
+	if [ -z $option ]
+	then
+	    echo "Need $utility's source tree to patch"
+	    exit 3
+	else
+	    exit 0
+	fi
+    fi
+    echo $conditional
+	cd $utility
+    for condition in $conditional
+    do
+	didit=0
+	dir=../patches/$condition
+
+	search
+	if [ ! "$AP_BUILD" = "." ]
+	then
+	    dir=../$AP_BUILD/patches/$condition
+	    search
+	fi
+	if [ "$didit" = "0" ]
+	then
+	    echo "Patch for $utility ($version) from `dirname $condition` (`basename $condition`) not found!!!"
+	    exit 4
+	fi
+    done
+fi

@@ -1,0 +1,15 @@
+#!/bin/sh
+#
+# route
+#
+
+[ -f $CFGD/netcfg ] && . $CFGD/netcfg
+[ -f /var/udhcpc.lease ] && . /var/udhcpc.lease
+
+case "$1" in
+    2|3|4)
+        if [ "$router" ]
+        then
+            route add default gw $router
+        fi
+esac

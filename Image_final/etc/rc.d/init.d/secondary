@@ -1,0 +1,50 @@
+#!/bin/sh
+#
+# secondary
+#
+
+[ -f $CFGD/netcfg ] && . $CFGD/netcfg
+
+#----------------------------------------------------------------------
+# CONFIG_SECONDARY
+# Configure $iface with fallback if dhcp
+#----------------------------------------------------------------------
+config_secondary()
+{
+    status=1
+    if [ "$s_dhcp" = "enabled" ]
+    then
+        udhcpc -n -i $iface
+        status=$?
+    fi
+    if [ $status -eq 1 -o "$s_dhcp" != "enabled" ]
+    then
+        if [ "$s_address" != "" ]
+        then
+            ifconfig $iface $s_address \
+                netmask $s_netmask broadcast $s_broadcast
+        fi
+    fi
+    sleep 2
+}
+
+case "$1" in
+# Router / Station Mode eth0 is secondary
+    2)
+        iface=eth0
+        config_secondary
+        echo "1" > /proc/sys/net/ipv4/ip_forward
+        ;;
+
+# Bridge / AP mode does nothing
+    3) : ;;
+# Router / AP Mode wlan0 is secondary
+    4)
+        iface=wlan0
+        config_secondary
+        echo "1" > /proc/sys/net/ipv4/ip_forward
+        ;;
+    stop|0|1|6)
+        ifconfig eth0 down
+        ;;
+esac

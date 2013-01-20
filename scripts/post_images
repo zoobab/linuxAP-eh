@@ -1,0 +1,29 @@
+#!/bin/sh
+#
+# post_images
+# Post the image with a date-stamp to a target directory
+#
+TARGET_DIR=/gw/tftpboot
+#TARGET_DIR2=/gw/www/openap/htdocs
+
+case "$1" in
+    pro*|-p*) dt=-`date +%Y-%m-%d` ;;
+    *) dt=-dev
+esac
+dt=
+for file in sram sram.md5 flash flash.md5
+do
+    if [ -f $file ]
+    then
+        case "$file" in
+        *.md5)
+            ext=.md5
+            file=`basename $file .md5`
+            ;;
+        *) ext=
+            ;;
+        esac
+        cp -va $file$ext $TARGET_DIR/$file$dt$ext
+#        cp -va $file$ext $TARGET_DIR2/$file$dt$ext
+    fi
+done

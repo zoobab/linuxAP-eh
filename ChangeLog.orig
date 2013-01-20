@@ -1,0 +1,311 @@
+2003-09-13
+    o Extensive work on the cgi/C setup.  Got some good stuff
+	  and some junk in there.  All is working except for the
+	  status page.  More importantly . . .  It's reasonably fast
+	  on the wl11000.  Roughly the same size, though I can think
+	  of a few things to improve that.
+	  
+2003-09-12
+    o New 'C' based cgi for setup :: Performance reasons
+	  got front menu and Network Menu working., CIPE menu is close
+	  still dinking with some of the functions and layout.
+	  
+2003-09-10
+    o Script cleanup for new dhcp vars
+    o Changes to busybox patches Mk and configuration
+    o hostap -> version 0.0.4
+    o Change some variable names to match udhcp
+    o More reflash cleanups, check for $tftpsrv
+    o udhcpd startup fix
+    o fixed wlan.i shutdown (Lluis <xscript@gmx.net>)
+        
+2003-09-09
+    o WL11000: reflash can pick up tftphost from /etc/rw
+    o Web page mods
+    o Add a bunch of value requests to udhcpc
+    o New dhcp script to keep values.  Should be able to pick
+      up various host info from dhcp instead of the way I'm
+      doing it now.
+    o add dhcp values pickup to scripts as override for predefines
+    o Cipe Configuration Menu (HTML)
+    o Create _html file with quick macro's, re-arrange some of the html
+      functionality in the cgi-bin directory
+      
+2003-09-08
+    o Added variables to wlan0 config screen and config
+      file for tweaking other formerly hard-coded values
+      rate/antsel_rx&tx
+    o rdate missing in soekris image --> globalized
+
+2003-09-03
+    o Fixed bug in config.in CF_ vars should not be defined.
+    o Fixed missing /tmp in soekris image
+    o Changed ./soekris/Image_static/bin/save_config
+    o New scripts/mkcf for Compact Flash Images
+    o libncurses is needed for kermit to function
+    o as is libgpm
+
+2003-08-29
+    o tweak dhcpd file
+    o fixed WL1100/2.4.20 patch of limits.h (Lluis <xscript@gmx.net>)
+    o Minor Changes to Configuration scripts, status now refreshes
+
+2003-08-28
+    o WL11000, Another alios patch.  Dump system into 'Low Speed' on
+      bootup *first thing!*
+
+2003-08-24
+    o Back tick in 05.copyright
+
+2003-06-17
+    o wlan.i not allowing WEP key, not loading crypt_wep
+
+2003-06-11
+    o wl11000: need /var/lib/misc for udhcpd.leases
+    o Image_Static/etc/rc.d/* tftpcfg to link in /2 /4
+      to init.d ..  Fix CFGD error
+    o endif -> fi in wl1100/Image_Static/bin/reflash
+
+2003-05-24
+    o iptables configuration fixes, use 1.27a && DESTDIR
+    o iproute2 added for traffic control on soekris
+    o wl11000 does not need LFS with 0.9.17
+    o glibc on soekris now works w/ busybox
+    o reflash script fix.
+
+2003-03-12
+    o --strip-debug only on kernel modules
+    o ./Image_static/etc/rc redirection
+    o Soekris only move /etc/conf
+
+2003-03-11
+    o gcc 2.95 build!
+    o Added in umsdos utility for soekris/itx cf partition
+    o pcmcia-cs build spewing to screen
+    o Modify global Image_static startups to allow more customization
+        of startup
+    o Soekris back to minix ramdisk
+    o scripts/cf_build 1 large umsdos filesystem.
+    o soekris script hacks
+
+2003-02-??
+    o Added support for multiple kernel versions
+    o wl11000/Image_static stepping on RL/4 patches
+    o busybox/ls may as well been echo * if your screen not 80 columns
+    o Must apply ipfilter patch before nbd
+    o iptables not compiling against the correct library.
+
+2003-02-05
+    o Oops, no route in wl11000 busybox config patch
+        (Felix Llorente <ccocc@wanadoo.cs>)
+    o Wipe $(IMAGE_DIR)/usr/share/man also in pcmcia (and wtools?)
+        (Felix Llorente <ccocc@wanadoo.cs>)
+    o Changed tools->aptools
+    o Soekris for uClibc boots now
+    o Multitple init configurations.
+    o ITX in config.in (Not Working)
+    o Use more vars in config.in to determined Mk/... includes
+    o Change/Split many $(CONFIG_WL11000) refs for $(CONFIG_UCLIBC)
+        so we can use them with SOEKRIS
+    o Remove more output during build
+    o Added in RL/4 Patches to ./Image_static
+        (Francois Gurin <matrix@spic.net>)
+    o More GLIBC/UCLIBC fixups (GLIBC not working yet)
+        need busybox init for uclibc
+    o Oops, iptables compiling with glibc
+        (Jorge Gonzales <jorgegv@wanadoo.es>)
+
+2003-02-03
+    o Got wl11000 stuff sorta working
+    o More bustouts and patch fixes
+    o Directory revamp
+    o More Makefile and Mk/* cleanups
+    o Image_static at base and by AP_BUILD
+    o Start GLIBC stuff
+
+2003-01-*
+    o Added in lxdialog configuration
+    o Complete revamp of build procedure
+    o Upgrade kernel to 2.4.20
+    o Bridge utils to 0.9.6
+    o udhcp to 0.9.8
+    o pcmcia-cs to 3.2.3
+    o hostap to 2002-10-12
+    o cipe to 1.5.4
+    o Busybox to 0.60.5 with patches.
+    o Eliminate misc directory
+    o Create scripts directory for scripts
+    o Combine misc pgms and erase into tools directory.
+      -- Alios should go here also, all are linuxAP specific
+
+2002-09-09 thru 2002-09-12
+    o New Web background for the new name from Richard Heurtley
+    o Soekris ATA/CF build integration
+    o Major makefile mods.  Got rid of much of the hard
+        coded path stuff
+    o Name to linuxAP
+    o Wireless Tools to version 25 -- NO_LIBM is *broken* in wtools
+    o Glen Engle's latest http patch to busybox
+    o Split cgi setup script into small pieces.
+    o Muy Patches and suggestions from Bruno && Glen
+    o New BG graphic from 
+
+2002-08-??
+    o Eradicated another Chicken & Egg issue with 'make install'
+    o Playing with NBI version
+    o Serious trim to /etc/protocols
+    o RL/4, route script mod.
+    o iptables was installing a man page :) (Thanks to Bruno LFC)
+    o Removed cardctl && probe from image. (Bruno on the former again)
+    o Clean up ==> bug in prism2_param shell script
+    o Start hacking in WDS stuff (mesh)
+    o Fixed another Web page problem with %xx translation, left
+      out the hex digits A-F,a-f ... Oops.
+
+2002-08-13
+    o update program will now reliably reboot the box *every*
+        time.  Coded in system call.
+    o A neato background graphic openap.png from Richard Heurtley
+      <richard@heurtley.com>, for the web page background.
+    o Other Web page beutification
+    o Status display for Web Page
+    o Built chr.c -> chr to process %xx for cgi script (2K)
+    o Fixed up fix_percents in cgi script
+    o Blue buttons for configuration items, hot select
+    o Fixed tftp configuration download script to not try if no
+      host
+    o Memory & performance are big issues, may need awk after all
+      dunno how much it would help.
+
+2002-08-10
+    o Per Jaron Wilks, Cleanup 21iptables script, forgot a POSTROUTING
+      flag.
+    o Added chmod to busybox.  RL/5 wants to see executables in
+      /etc/rw/5 directory.  Current set would have required dragging
+      it from elsewhere, or copying && modifying one of the scripts
+      already on the system.  Heheheh :)
+    o For JW: Added a call to 'tweak'.  If there is an 'x' called
+      rc.tweak in /etc/rw it will get run after everything else.
+    o Fixup's and cleanups to startup scripting.
+    o Cleanup somewhat && testing of web configuration.  Still ugly but
+      it works.
+    o Creation of 'diffs' for source tree to split out linux-2.4.17
+    o Elimintate deref of include/linux include/asm files from uclibc,
+      this eliminates the 'chicken & egg' of linux/autoconf.h for one.
+      of course wiping out the linux dir will be problematical :).
+    o Added --noinhibit-exec to arch/i386/Makefile ld string to get
+        around  errors with the new binutils.  -- Ugly Hack! Danger
+        Will Robinson, Danger.
+    o Added apply_patches script to patch kernel.
+    o Updated README . . . READ it.
+
+2002-07-15 Keith Smith <keith@ksmith.com>
+    o mini-httpd -- For configuration, created httpd scripts
+      for saving configuration
+    o uClibc updated to 0.9.12
+    o udhcpd updated to 0.9.7
+      and patched the end address bug ... again.
+    o bridge utils updated to 0.9.5
+    o phillipz@biscom.net -- init.d/primary should have
+      said p_... under rl2 with hardcoded #'s.
+    o Move RL5 to RL6 ... flash && reboot default for sram image
+    o Make dir for runlevel 5 a symlink to ../rw/5 this
+      will allow you to create a totally custom startup and
+      save it.
+    o Zero out and lower some vm numbers
+    o Re-arrange rc.d/2
+    o iptables support for NAT/MASQUERADE (only!)
+      there isn't enough memory now!
+    o Created some config examples
+
+2002-06-11 Keith Smith <keith@ksmith.com>
+    o Cleaned up runlevel 5
+    o Fixed 20.configfs to grab the correct offset/mtd device
+    o More configuration cleanups
+    o More Makefile changes
+        - distclean missed some stuff still
+
+2002-06-10 Keith Smith <keith@ksmith.com>
+    o Added "runlevel" 5 for auto reflashing from sram image
+    o Fixed (again) kernel_config.flasher for sram image
+        with additional MTD stuff
+    o tftp_bundle - Some example files for using tftp configuration
+        and nbd/swap
+    o re-worked the rc code to use single 'netcfg' file
+        with primary/secondary interface info in it
+    o Moved rw.default out of Image_static to RW.default
+        and plugged it into the build_flash.pl script
+    o Placed cramfs-patch and nfs-swap patch in misc
+
+2002-06-09 Keith Smith <keith@ksmith.com>
+    o Forked tree to opensta
+    o Worked over Makefile big time
+        - make distclean will actually clean everything
+    o Added README.CONFIGURE
+    o Major Tree Changes
+        - Image_static
+            o Modified inittab a bit
+                NOTE: new busybox wants 'console' not 'ttyS0' in
+                the tag field.
+            o Completely revamped with sort of fake "runlevels"
+                - Runlevel 2 is station mode
+                - Runlevel 3 is ap mode
+                - store default runlevel in /etc/rw/runlevel
+            o Create /bin/save_config script to copy /etc/rw to MTD
+            o Hacked the crap out of /bin/reflash
+            o Added '/bin/lf'
+            o /etc/rc* changed
+            o Added clock sync (rdate)
+        - busybox  updated to BusyBox v0.60.3-pre
+            o added telnetd stuff
+            o hacked telnetd to use /etc/telnetd.hosts as a
+                one line at a time access list with matching
+                to a octet dot
+            o added rdate
+            o removed wget
+            o Added tftp, it's less flexible but
+                < 1/3 the size (you can put it back in Config.h)
+            o reduced a buffer in syslog for filename to 128.
+            o Bunch of other config changes and small hacks
+        - ciped  hacked in CIPE-1.5.2
+            o Hacked into MakeFile, this is not working on
+                RH systems, and I don't know why ...
+        - erase
+            o Hacked out the "undef DEBUG" in update.c
+                I like it to be noisy.
+        - linux  still linux-2.4.17
+            o Modified copy in config to include /proc/sys support
+            o Modified cramfs magic checks to work around a problem with
+                my Piece of shit $200 MagicRAM card, that resets bytes
+                1 and 2 to 00 00.
+            o Lowered some buffer sizes for exec.  Not sure it matters
+            o MAX_NBD (linux/nbd.h) from 128 -> 4
+            o Added NFS swapping patch.
+        - misc
+            o Modified kernel_config files
+        - nbd  added nbd 2.0 utils
+        - pcmcia-cs
+            o Modified Links for new prism2 code
+        - prism2  updated to Prism2-2002-05-19
+            o updated to latest stable release with WEP support
+            o hacked in the wl11000 activity LED
+            o Copy over prism2_param script (calls iwpriv)
+        - udhcpc-0.9.6
+            o Fixed a problem with udhcpd giving out leases.
+                Simple range issue >= vs > type of problem
+                would not allow a 1 IP address range (from and
+                to the same IP), I think it was the last # listed
+                would never be given out.
+        - wireless_tools  updated to version 24
+            o Hacked Makefile as before
+            o install iwpriv also (for WEP prism2_param)
+
+2002-01-21 David Kimdon <dwhedon@instant802.com>
+
+  * remove obsolete prism2/modules-refactor directory (licensing).
+  * Don't build/install telnetd by default (security).
+
+2002-01-17 David Kimdon <dwhedon@instant802.com>
+
+  * Initial release.
+

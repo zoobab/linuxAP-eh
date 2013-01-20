@@ -1,0 +1,70 @@
+#! /bin/sh
+#
+# configfs
+#
+MTD0=/dev/mtd/0
+DEF=/RW.default
+CONF=/tmp/etc.tar.gz
+case "$1" in
+    start|S)
+	echo "Loading configuration"
+        cd /etc/rw
+# Load the defaults
+        if [ -f $DEF ]
+        then
+	    gunzip -c $DEF | tar xf - 2> /dev/null
+            echo "loaded default config."
+        fi
+        dd if=$MTD0 bs=8192 count=2 skip=124 of=$CONF
+        if [ -f $CONF ]
+        then
+	    if gunzip -t $CONF 2> /dev/null
+	    then
+		gunzip -c $CONF | tar xvf -
+		echo "loaded saved config."
+	    fi
+	    if tar xvf $CONF 2>/dev/null
+            then
+                echo "loaded saved config."
+            fi
+            rm -f $CONF
+        fi
+        echo "Done."
+        ;;
+    stop|1)
+        echo "Stopping $NAME: "
+        rm -rf /etc/rw/*
+        echo "Done."
+        ;;
+    commit)
+        echo "Committing $NAME: "
+        rm -f $CONF
+        cd /etc/rw
+        tar cvf /tmp/etc.tar *
+	gzip /tmp/etc.tar
+# erase
+        /sbin/update $MTD0 0xf8000 0x4000
+# write the new stuff
+        dd if=$CONF of=$MTD0 bs=8192 count=2 seek=124 conv=notrunc
+        rm -f $CONF
+        echo "Done."
+        ;;
+    clear)
+        echo -n "Clearing Configuration: "
+        /sbin/update $MTD0 0xf8000 0x4000
+        echo "Done."
+        ;;
+    restart)
+        $0 stop
+        sleep 1
+        $0 start
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart|commit|clear}" >&2
+        exit 1
+        ;;
+esac
+
+exit 0
+
+

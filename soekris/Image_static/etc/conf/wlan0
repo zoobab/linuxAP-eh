@@ -1,0 +1,9 @@
+#
+# wlan0
+#
+SSID=linuxAP
+# S/B one of 1,6,11
+CHANNEL=1
+wep=
+# Only for RL/3
+NWDS=0

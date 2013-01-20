@@ -1,0 +1,130 @@
+#!/bin/sh
+#
+# util_config
+#
+# Configure a utility sub:
+#
+# 1. Clear the folders
+# 2. .bz2 or .gz, Extract the tarball
+# 3. Create symlink
+# 4. Apply Patches
+#----------------------------------------------------------------------
+utility=$1
+version=$2
+archive=$3
+
+patch1=patches/$utility/$version
+patch2=$AP_BUILD/$patch1
+
+# Don't do nothing list (no delete,extract,patch sequence), useful to avoid
+# reextracting the kernel, which is a slow process on my machine
+# Add the list of $utility here sepparated by spaces
+donothing=""
+
+#----------------------------------------------------------------------
+# Search for an archive
+#----------------------------------------------------------------------
+ext_search()
+{
+    for ext in .tar.gz .tar.bz2 .tgz .tar
+    do
+        case "$ext" in
+          .tar.gz|.tgz) key=xvfz ;;
+          .tar.bz2) key=xvfj ;;
+          .tar) key=xvf ;;
+        esac
+        if [ -f $tarname$ext ]
+        then
+            echo $key $tarname$ext
+            return
+        fi
+    done
+    echo "FAIL"
+}
+
+
+#----------------------------------------------------------------------
+# EXTRACT_ARCHIVE
+#----------------------------------------------------------------------
+extract_archive()
+{
+    for pun in "-" "." "_" ""
+    do
+        if [ "$archive" ]
+        then
+            if [ ! -d "$archive" ]
+            then
+                echo -e "Bad Archive Folder $archive"
+                exit 1
+            fi
+            tarname=$archive/$utility$pun$version
+        else
+            tarname=$utility$pun$version
+        fi
+    
+        echo -e "Looking for Archive $tarname\n"
+        set `ext_search`
+        if [ $1 != "FAIL" ]
+        then
+            tarfile=$2
+            key=$1
+            break;
+        fi
+    done
+    if [ "$tarfile" = "" ]
+    then
+        echo "$0 failed, no archive file"
+        exit 2
+    fi
+    echo -e "Extracting from $tarfile"
+    tar $key $tarfile
+
+    if [ -d $utility ]
+    then
+        mv $utility $utility$pun$version
+    fi
+# Create the link
+    ln -s $utility$pun$version $utility
+
+}
+
+for nothing in $donothing
+do
+    if [ $utility = $nothing -a -d $utility ]
+    then
+       exit 0;
+    fi
+done
+
+# Remove what's there
+rm -rf $utility-$version $utility $utility-build $utility-config
+
+# Extract the archive
+extract_archive
+
+if [ -d "kernel-source-2.4.20" ]
+then
+    mv kernel-source-2.4.20 linux-2.4.20
+fi
+
+# Apply patches if any
+cd $utility
+for patch in ../$patch1 ../$patch2
+do
+    if [ -f $patch ]
+    then
+        echo "Patching from $patch"
+        patch -p1 < $patch
+    elif [ -d $patch ]
+    then
+        for pfile in $patch/*
+        do
+            echo "Patching from $pfile"
+            patch -p1 < $pfile
+        done
+    fi
+done
+if [ -f local_config ]
+then
+    /bin/sh ./local_config
+fi

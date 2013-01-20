@@ -1,0 +1,37 @@
+diff -urN ckermit/ckucmd.c ckermit.new/ckucmd.c
+--- ckermit/ckucmd.c	2002-10-19 10:03:49.000000000 -0700
++++ ckermit.new/ckucmd.c	2003-01-08 21:27:41.000000000 -0700
+@@ -7069,8 +7069,10 @@
+ #ifdef NOARROWKEYS
+     debug(F101,"cmdconchk NOARROWKEYS x","",0);
+ #else
+-    debug(F101,"cmdconchk stdin->_cnt","",stdin->_cnt);
+-    x = stdin->_cnt;
++//    debug(F101,"cmdconchk stdin->_cnt","",stdin->_cnt);
++//    x = stdin->_cnt;
++    x = (int) ((stdin->bufread) - (stdin->bufstart));
++    debug(F101,"cmdconchk _IO_file_flags","",x);
+ #endif /* NOARROWKEYS */
+ #endif /* VMS */
+     if (x == 0) x = conchk();
+diff -urN ckermit/makefile ckermit.new/makefile
+--- ckermit/makefile	2002-11-16 12:01:08.000000000 -0700
++++ ckermit.new/makefile	2003-01-08 22:27:43.000000000 -0700
+@@ -5197,6 +5197,17 @@
+ #grantpt() prototype in the header files.  Warning: uses a temporary file in
+ #the current directory.  Modified in 8.0.206 to allow for libraries that
+ #contain .so's but no .a's, e.g. Mandrake 9.0.
++uclinux:
++	@echo 'Making C-Kermit $(CKVER) for Linux 1.2 or later with uClibc...'
++	$(MAKE) xermit KTARGET=$${KTARGET:-$(@)} \
++	"CC = $(CROSS_COMPILE)gcc" \
++	"CC2 = $(CROSS_COMPILE)gcc" \
++	"CFLAGS = -O -DLINUX -pipe -funsigned-char \
++	-DPOSIX -DCK_POSIX_SIG -DNOCOTFMC \
++	-DNO_DNS_SRV -DNOARROWKEYS\
++	-DTCPSOCKET -DLINUXFSSTND $(KFLAGS)" \
++	"LNKFLAGS = $(LNKFLAGS)" "LIBS = -lcrypt -lresolv"
++
+ linux:
+ 	@if test \
+ 	`grep grantpt /usr/include/*.h /usr/include/sys/*.h | wc -l` -gt 0; \

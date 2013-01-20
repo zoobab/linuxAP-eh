@@ -1,0 +1,11 @@
+--- linux/.config	Mon Feb  3 16:42:58 2003
++++ linux.new/.config	Mon Feb  3 21:02:30 2003
+@@ -202,7 +202,7 @@
+ # CONFIG_BLK_DEV_DAC960 is not set
+ # CONFIG_BLK_DEV_UMEM is not set
+ # CONFIG_BLK_DEV_LOOP is not set
+-# CONFIG_BLK_DEV_NBD is not set
++CONFIG_BLK_DEV_NBD=y
+ # CONFIG_BLK_DEV_RAM is not set
+ # CONFIG_BLK_DEV_INITRD is not set
+ # CONFIG_BLK_STATS is not set

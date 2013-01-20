@@ -1,0 +1,13 @@
+#!/bin/sh
+#
+# save_config
+#
+mount -o remount -rw  /cf
+mkdir -p /cf/etc/conf
+for dir in /etc/conf
+do
+    cd $dir
+    tar cf - . | ( cd /cf$dir ; tar xvf - )
+done
+cd /
+mount -o remount -r /cf

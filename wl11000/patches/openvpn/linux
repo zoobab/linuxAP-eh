@@ -1,0 +1,11 @@
+--- linux.orig/.config	2003-09-11 12:01:34.000000000 +0200
++++ linux.new/.config	2003-09-11 12:00:35.000000000 +0200
+@@ -356,7 +356,7 @@
+ # CONFIG_DUMMY is not set
+ # CONFIG_BONDING is not set
+ # CONFIG_EQUALIZER is not set
+-# CONFIG_TUN is not set
++CONFIG_TUN=y
+ # CONFIG_ETHERTAP is not set
+ 
+ #

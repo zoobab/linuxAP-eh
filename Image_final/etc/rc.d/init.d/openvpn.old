@@ -1,0 +1,42 @@
+#!/bin/ash
+#
+# openvpn
+
+CFGDIR="/etc/rw/"
+
+tunnels=`ls $CFGDIR vpn-*.conf 2> /dev/null`
+if [ -z "$tunnels" ]
+then
+   echo "No tunnels to configure found"
+   exit 0
+fi
+
+set -e
+case "$1" in
+  start|2|3|4)
+    for tunnel in $tunnels
+    do
+        # already done
+	#echo 1 > /proc/sys/net/ipv4/ip_forward
+	openvpn --cd $CFGDIR --daemon --config $tunnel
+	echo "Up tunnel `echo \"$tunnel\" | sed s/\"vpn-\"// | sed s/\"\.conf\"//`."
+    done
+    echo "Done."
+  ;;
+  stop|0|1|6)
+    killall openvpn
+    echo "Done."
+  ;;
+  restart)
+    $0 stop
+    sleep 1
+    $0 start
+  ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}" >&2
+    exit 1
+  ;;
+esac
+
+exit 0
+

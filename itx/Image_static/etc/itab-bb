@@ -1,0 +1,5 @@
+console::wait:/etc/rc S
+console::wait:/etc/rc
+vc/1::askfirst:/bin/ash -s
+vc/2::askfirst:/bin/ash -s
+vc/3::askfirst:/bin/ash -s

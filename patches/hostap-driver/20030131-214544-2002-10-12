@@ -1,0 +1,32 @@
+diff -urN hostap/Makefile hostap.new/Makefile
+--- hostap/Makefile	Thu Sep 12 01:11:00 2002
++++ hostap.new/Makefile	Fri Jan 31 09:46:11 2003
+@@ -1,6 +1,6 @@
+ # Edit this path to match with your system (it should point to the root
+ # directory of the Linux kernel source)
+-KERNEL_PATH=/usr/src/linux
++KERNEL_PATH=/usr/src/linuxAP/linux
+ 
+ # Systems using external pcmcia-cs package (instead of kernel-tree pcmcia
+ # modules):
+@@ -9,9 +9,9 @@
+ # directory and compiling pcmcia-cs package or by configuring PCMCIA_PATH
+ # and using this Makefile with 'make pccard; make install_pccard'.
+ # Leave this blank for kernel-tree PCMCIA compilations (CONFIG_PCMCIA):
+-PCMCIA_PATH=
++PCMCIA_PATH=../pcmcia-cs
+ 
+-CC=gcc
++CC=$(CROSS_COMPILE)gcc
+ CFLAGS=-O2 -D__KERNEL__ -DMODULE -Wall -c $(EXTRA_CFLAGS)
+ 
+ VERFILE := $(KERNEL_PATH)/include/linux/version.h
+@@ -20,7 +20,7 @@
+ 	else uname -r; fi)
+ KERNELVER := $(shell echo "$(KERNELRELEASE)" | \
+ 	sed "s/\([0-9]*\.[0-9]*\.[0-9]*\).*/\1/")
+-MODPATH := /lib/modules/$(KERNELRELEASE)
++MODPATH := $(IMAGE_DIR)/lib/modules/$(KERNELRELEASE)
+ MODULE_CS := hostap_cs.o
+ MODULE_PLX := hostap_plx.o
+ MODULE_PCI := hostap_pci.o

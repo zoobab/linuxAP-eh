@@ -1,0 +1,112 @@
+--- wireless_tools/Makefile.orig	2002-07-13 02:47:32.000000000 +0200
++++ wireless_tools/Makefile	2003-10-27 19:26:34.000000000 +0100
+@@ -4,13 +4,16 @@
+ 
+ ## Installation directory. By default, go in /usr/local
+ ## Distributions should probably use /usr, but they probably know better...
+-PREFIX = /usr/local
++#PREFIX = /usr/local
++PREFIX = ../Image_final/usr
+ 
+ ## Compiler to use
+-CC = gcc
++# CC = gcc
++CC = $(CROSS_COMPILE)gcc
+ 
+ ## Uncomment this to build against this kernel
+-# KERNEL_SRC = /usr/src/linux
++KERNEL_SRC = ../linux
++WIRELESS_H = ../linux/include/linux/wireless.h
+ 
+ ## Uncomment this to force a particular version of wireless extensions.
+ ## This would use private copy of Wireless Extension definition instead
+@@ -20,7 +23,7 @@
+ # FORCE_WEXT_VERSION = 14
+ 
+ ## Uncomment this to build tools using dynamic version of the library
+-# BUILD_SHARED = y
++BUILD_SHARED = y
+ 
+ ## Uncomment this to build without using libm (less efficient)
+ ## This is mostly useful for embedded platforms
+@@ -33,7 +36,7 @@
+ # Targets to build
+ STATIC=libiw.a
+ DYNAMIC=libiw.so.25
+-PROGS= iwconfig iwlist iwpriv iwspy iwgetid iwevent
++PROGS= iwconfig iwpriv iwlist # iwspy iwgetid iwevent
+ MANPAGES8=iwconfig.8 iwlist.8 iwpriv.8 iwspy.8 iwgetid.8 iwevent.8
+ MANPAGES7=wireless.7
+ 
+@@ -75,15 +78,16 @@
+   LIBS=
+   WELIB_FLAG = -DWE_NOLIBM=y
+ else
+-  LIBS= -lm
++  LIBS= /usr/i386-linux-uclibc/lib/libm.a
++#  LIBS= -lm
+ endif
+ 
+ #CFLAGS=-O2 -W -Wall -Wstrict-prototypes -Wmissing-prototypes -Werror
+-CFLAGS=-O2 -W -Wall -Wstrict-prototypes
++CFLAGS=-Os -W -Wall -Wstrict-prototypes
+ XCFLAGS=$(CFLAGS) $(WARN) $(HEADERS) $(WEXT_FLAG) $(WELIB_FLAG) $(KERNEL_INCLUDES)
+ PICFLAG=-fPIC
+ 
+-all:: $(STATIC) $(DYNAMIC) $(PROGS)
++all:: $(WIRELESS_H) $(STATIC) $(DYNAMIC) $(PROGS)
+ 
+ %: %.o
+ 	$(CC) $(XCFLAGS) -o $@ $^ $(LIBS)
+@@ -92,6 +96,9 @@
+ %.so: %.c
+ 	$(CC) $(XCFLAGS) $(PICFLAG) -c -o $@ $<
+ 
++../linux/include/linux/wireless.h: ./wireless.h
++	cp wireless.h ../linux/include/linux/wireless.h
++
+ iwconfig: iwconfig.o $(IWLIB)
+ 
+ iwlist: iwlist.o $(IWLIB)
+@@ -108,7 +115,7 @@
+ 
+ # Compilation of the dynamic library
+ $(DYNAMIC): $(OBJS:.o=.so)
+-	$(CC) -shared -o $@ -Wl,-soname,$@ -lm -lc $^
++	$(CC) -shared -o $@ -Wl,-soname,$@ -lc $^
+ 
+ # Compilation of the static library
+ $(STATIC): $(OBJS)
+@@ -122,20 +129,25 @@
+ 	install -m 755 -d $(INSTALL_DIR)
+ 	install -m 755 $(PROGS) $(INSTALL_DIR)
+ 	install -m 755 -d $(INSTALL_LIB)
+-	install -m 644 $(STATIC) $(INSTALL_LIB)
++#	install -m 644 $(STATIC) $(INSTALL_LIB)
+ 	install -m 755 $(DYNAMIC) $(INSTALL_LIB)
+ 	ln -sfn $(DYNAMIC) $(INSTALL_LIB)/$(DYNAMIC_LINK)
+ 	echo "Don't forget to add $(INSTALL_LIB) to /etc/ld.so.conf, and run ldconfig."
+-	install -m 755 -d $(INSTALL_INC)
+-	install -m 644 iwlib.h $(INSTALL_INC)
+-	install -m 755 -d $(INSTALL_MAN)/man8/
+-	install -m 644 $(MANPAGES8) $(INSTALL_MAN)/man8/
+-	install -m 755 -d $(INSTALL_MAN)/man7/
+-	install -m 644 $(MANPAGES7) $(INSTALL_MAN)/man7/
++#	install -m 755 -d $(INSTALL_INC)
++#	install -m 644 iwlib.h $(INSTALL_INC)
++#	install -m 755 -d $(INSTALL_MAN)/man8/
++#	install -m 644 $(MANPAGES8) $(INSTALL_MAN)/man8/
++#	install -m 755 -d $(INSTALL_MAN)/man7/
++#	install -m 644 $(MANPAGES7) $(INSTALL_MAN)/man7/
+ 
+ clean::
+ 	$(RM_CMD) 
+ 
++
++distclean::
++	$(RM_CMD) 
++	$(RM) $(STATIC) $(DYNAMIC) $(PROGS) macaddr
++
+ realclean::
+ 	$(RM_CMD) 
+ 	$(RM) $(STATIC) $(DYNAMIC) $(PROGS) macaddr
