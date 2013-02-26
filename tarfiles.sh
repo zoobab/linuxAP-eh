@@ -12,5 +12,5 @@ echo "================================================================"
 for url in `cat ${TARFILES_URLS}`; do
 	TGZ="`basename $url`"
 	banner "Downloading $TGZ"
-	wget -c $url -O ${TARFILES_DIR}/`basename $url`
+	wget -q -c $url -O ${TARFILES_DIR}/`basename $url`
 done
